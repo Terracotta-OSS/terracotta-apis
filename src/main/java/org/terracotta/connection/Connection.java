@@ -1,8 +1,8 @@
 package org.terracotta.connection;
 
-import org.terracotta.toolkit.entity.Entity;
-import org.terracotta.toolkit.entity.EntityMaintenanceRef;
-import org.terracotta.toolkit.entity.EntityRef;
+import org.terracotta.connection.entity.Entity;
+import org.terracotta.connection.entity.EntityMaintenanceRef;
+import org.terracotta.connection.entity.EntityRef;
 
 import java.io.Closeable;
 import java.util.Collection;
