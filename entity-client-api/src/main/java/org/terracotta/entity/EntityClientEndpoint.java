@@ -2,13 +2,15 @@ package org.terracotta.entity;
 
 import org.terracotta.connection.entity.EntityConfiguration;
 
+import java.io.Serializable;
+
 /**
  * @author twu
  */
 public interface EntityClientEndpoint {
-  void setEntityConfiguration(EntityConfiguration entityConfiguration);
+  void setEntityConfiguration(Serializable entityConfiguration);
 
-  EntityConfiguration getEntityConfiguration();
+  Serializable getEntityConfiguration();
 
   String getTypeName();
 
