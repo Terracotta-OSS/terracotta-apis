@@ -4,6 +4,8 @@ import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityConfiguration;
 import org.terracotta.entity.EntityClientEndpoint;
 
+import java.io.Serializable;
+
 /**
  * @author twu
  */
@@ -23,5 +25,5 @@ public interface EntityClientService<T extends Entity> {
    * @param configuration entity specific configuration
    * @return entity
    */
-  T create(final EntityClientEndpoint endpoint, EntityConfiguration configuration);
+  T create(final EntityClientEndpoint endpoint, Serializable configuration);
 }
