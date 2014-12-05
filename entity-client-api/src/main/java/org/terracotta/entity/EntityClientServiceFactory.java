@@ -9,8 +9,12 @@ import java.util.ServiceLoader;
  */
 public class EntityClientServiceFactory {
   public static <T extends Entity> EntityClientService<T> creationServiceForType(Class<T> cls) {
+    return creationServiceForType(cls, EntityClientServiceFactory.class.getClassLoader());
+  }
+
+  public static <T extends Entity> EntityClientService<T> creationServiceForType(Class<T> cls, final ClassLoader classLoader) {
     ServiceLoader<EntityClientService> serviceLoader = ServiceLoader.load(EntityClientService.class,
-        EntityClientServiceFactory.class.getClassLoader());
+        classLoader);
     for (EntityClientService entityClientService : serviceLoader) {
       if (entityClientService.handlesEntityType(cls)) {
         return entityClientService;
