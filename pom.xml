@@ -12,17 +12,12 @@
   <artifactId>connection-api</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <properties>
-    <maven-forge-plugin.version>1.2.10</maven-forge-plugin.version>
-    <slf4j.version>1.7.7</slf4j.version>
-  </properties>
-
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.7</version>
+        <version>2.8</version>
         <executions>
           <execution>
             <phase>package</phase>
