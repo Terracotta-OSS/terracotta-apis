@@ -19,7 +19,7 @@ public interface ConnectionService {
    * Check if the given URI can be handled by this ConnectionService.
    *
    * @param uri uri to check
-   * @return true if yes
+   * @return true if supported
    */
   boolean handlesURI(URI uri);
 
@@ -30,7 +30,8 @@ public interface ConnectionService {
    * @param uri uri to connect to
    * @param disconnectHandler handler for connection loss
    * @param properties user specified implementation specific properties  @return established connection
-   * @throws ConnectionException
+   * @return established connection
+   * @throws ConnectionException on connection failure
    */
   Connection connect(URI uri, final DisconnectHandler disconnectHandler, final Properties properties) throws ConnectionException;
 }
