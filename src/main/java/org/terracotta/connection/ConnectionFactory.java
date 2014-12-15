@@ -13,12 +13,12 @@ import java.util.ServiceLoader;
 public final class ConnectionFactory {
   /**
    * Establish a connection based on the given uri. The method will attempt to look for the first suitable implementation
-   * of a {@see ConectionService} based on whether or not it handles the given URI.
+   * of a {@link org.terracotta.connection.ConnectionService} based on whether or not it handles the given URI.
    *
    * @param uri URI to connect to
    * @param properties any configurations to be applied (implementation specific)
    * @return an established connection
-   * @throws org.terracotta.connection.ConnectionException if there is an error while attempting to connect
+   * @throws ConnectionException if there is an error while attempting to connect
    */
   public static Connection connect(URI uri, final Properties properties) throws ConnectionException {
     return connect(uri, null, properties);
@@ -26,11 +26,12 @@ public final class ConnectionFactory {
 
   /**
    * Establish a connection based on the given uri. The method will attempt to look for the first suitable implementation
-   * of a {@see ConectionService} based on whether or not it handles the given URI.
+   * of a {@link org.terracotta.connection.ConnectionService} based on whether or not it handles the given URI.
    *
    * @param uri URI to connect to
    * @param disconnectHandler handler for when the connection is irrecoverably lost
    * @param properties any configurations to be applied (implementation specific)  @return an established connection
+   * @return established connection
    * @throws ConnectionException if there is an error while attempting to connect
    */
   public static Connection connect(URI uri, final DisconnectHandler disconnectHandler, final Properties properties) throws ConnectionException {
