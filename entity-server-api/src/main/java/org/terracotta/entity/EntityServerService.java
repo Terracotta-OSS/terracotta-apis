@@ -17,10 +17,20 @@ public interface EntityServerService<T extends ServerEntity> {
   /**
    * create an instance of the specified server entity
    *
-   * TODO: add access to the server services
-   *
+   * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
-   * @return server entity
+   * @return server side entity
    */
-  T createEntity(Serializable configuration);
+  T createEntity(ServiceRegistry registry, Serializable configuration);
+
+  /**
+   * Get an existing entity
+   *
+   * TODO: Add some mechanism for the entity to deserialize its metadata out of object db?
+   *
+   * @param registry service registry provided by the server
+   * @param configuration entity specific configuration
+   * @return server side entity
+   */
+  T getEntity(ServiceRegistry registry, Serializable configuration);
 }
