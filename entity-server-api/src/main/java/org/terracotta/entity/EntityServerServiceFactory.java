@@ -6,14 +6,14 @@ import java.util.ServiceLoader;
  * @author twu
  */
 public class EntityServerServiceFactory {
-  public static <T extends EntityServerService<? extends ServerEntity>> T getService(String typeName) {
+  public static <T extends ServerEntityService<? extends ServerEntity>> T getService(String typeName) {
     return getService(typeName, EntityServerServiceFactory.class.getClassLoader());
   }
 
-  public static <T extends EntityServerService<? extends ServerEntity>> T getService(String typeName, ClassLoader classLoader) {
-    ServiceLoader<EntityServerService> serviceLoader = ServiceLoader.load(EntityServerService.class,
+  public static <T extends ServerEntityService<? extends ServerEntity>> T getService(String typeName, ClassLoader classLoader) {
+    ServiceLoader<ServerEntityService> serviceLoader = ServiceLoader.load(ServerEntityService.class,
         classLoader);
-    for (EntityServerService serverService : serviceLoader) {
+    for (ServerEntityService serverService : serviceLoader) {
       if (serverService.handlesEntityType(typeName)) {
         return (T) serverService;
       }

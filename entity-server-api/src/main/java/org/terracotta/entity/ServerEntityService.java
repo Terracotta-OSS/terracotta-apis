@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * @author twu
  */
-public interface EntityServerService<T extends ServerEntity> {
+public interface ServerEntityService<T extends ServerEntity> {
   /**
    * Check if this service handles the given type
    *
