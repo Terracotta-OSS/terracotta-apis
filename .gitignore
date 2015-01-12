@@ -1,3 +1,8 @@
-*.swp
-target/
-*.iml
+**/target/
+
+**/.project
+**/.classpath
+**/*.settings
+
+**/*.iml
+**/.idea
