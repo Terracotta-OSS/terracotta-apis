@@ -1,8 +1,5 @@
 package org.terracotta.entity;
 
-import java.io.IOException;
-import java.io.ObjectOutput;
-
 /**
  * @author twu
  */
