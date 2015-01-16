@@ -10,7 +10,7 @@ public interface Service<T> {
    *
    * @return service type
    */
-  Class<T> getServiceType();
+  Class<? extends T> getServiceType();
 
   /**
    * Initialize the service

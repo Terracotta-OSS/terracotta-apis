@@ -1,6 +1,7 @@
 package org.terracotta.entity;
 
-import com.tc.io.TCSerializable;
+import java.io.IOException;
+import java.io.ObjectOutput;
 
 /**
  * @author twu
@@ -13,4 +14,9 @@ public interface ServerEntity {
    * @return possible return value
    */
   byte[] invoke(byte[] arg);
+
+  /**
+   * Destroy all state associated with this entity
+   */
+  void destroy();
 }
