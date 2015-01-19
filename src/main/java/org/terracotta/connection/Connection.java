@@ -12,7 +12,7 @@ import java.util.Collection;
  *
  * @author twu
  */
-public interface Connection extends Closeable {
+public interface Connection extends AutoCloseable {
   /**
    * Get a reference to the given entity. The entity may or may not yet exist. This is a pointer to the spot where the
    * entity would be if it did exist.
