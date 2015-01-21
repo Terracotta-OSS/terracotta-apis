@@ -4,7 +4,6 @@ import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityMaintenanceRef;
 import org.terracotta.connection.entity.EntityRef;
 
-import java.io.Closeable;
 import java.util.Collection;
 
 /**

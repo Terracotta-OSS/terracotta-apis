@@ -30,5 +30,6 @@ public interface EntityMaintenanceRef<T extends Entity> extends AutoCloseable {
   /**
    * Release this maintenance mode reference.
    */
+  @Override
   void close();
 }
