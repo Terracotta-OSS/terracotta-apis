@@ -12,10 +12,11 @@ public class EntityClientServiceFactory {
     return creationServiceForType(cls, EntityClientServiceFactory.class.getClassLoader());
   }
 
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   public static <T extends Entity> EntityClientService<T> creationServiceForType(Class<T> cls, final ClassLoader classLoader) {
     ServiceLoader<EntityClientService> serviceLoader = ServiceLoader.load(EntityClientService.class,
         classLoader);
-    for (EntityClientService entityClientService : serviceLoader) {
+    for (EntityClientService<T> entityClientService : serviceLoader) {
       if (entityClientService.handlesEntityType(cls)) {
         return entityClientService;
       }
