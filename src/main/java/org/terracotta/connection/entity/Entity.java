@@ -8,5 +8,6 @@ public interface Entity extends AutoCloseable {
   /**
    * Release this handle on the entity. The instance will be unusable after this call.
    */
+  @Override
   void close();
 }
