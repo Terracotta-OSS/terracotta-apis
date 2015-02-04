@@ -23,6 +23,7 @@
     <module>entity-client-api</module>
     <module>entity-server-api</module>
     <module>entity-test-lib</module>
+    <module>test-entity</module>
   </modules>
 
   <dependencyManagement>
