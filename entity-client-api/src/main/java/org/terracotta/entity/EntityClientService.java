@@ -24,5 +24,5 @@ public interface EntityClientService<T extends Entity> {
    * @param configuration entity specific configuration
    * @return entity
    */
-  T create(final EntityClientEndpoint endpoint, Serializable configuration);
+  T create(EntityClientEndpoint endpoint, Serializable configuration);
 }

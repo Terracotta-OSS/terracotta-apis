@@ -12,7 +12,7 @@ public abstract class AbstractDecodingServerEntity<I, O> implements ServerEntity
   protected abstract O invoke(I input);
 
   @Override
-  public final byte[] invoke(final byte[] arg) {
+  public final byte[] invoke(byte[] arg) {
     return encodeOutput(invoke(decodeInput(arg)));
   }
 }

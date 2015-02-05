@@ -13,7 +13,7 @@ public class EntityClientServiceFactory {
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  public static <T extends Entity> EntityClientService<T> creationServiceForType(Class<T> cls, final ClassLoader classLoader) {
+  public static <T extends Entity> EntityClientService<T> creationServiceForType(Class<T> cls, ClassLoader classLoader) {
     ServiceLoader<EntityClientService> serviceLoader = ServiceLoader.load(EntityClientService.class,
         classLoader);
     for (EntityClientService<T> entityClientService : serviceLoader) {
