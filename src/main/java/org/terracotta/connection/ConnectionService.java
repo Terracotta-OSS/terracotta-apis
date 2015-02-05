@@ -33,5 +33,5 @@ public interface ConnectionService {
    * @return established connection
    * @throws ConnectionException on connection failure
    */
-  Connection connect(URI uri, final DisconnectHandler disconnectHandler, final Properties properties) throws ConnectionException;
+  Connection connect(URI uri, DisconnectHandler disconnectHandler, Properties properties) throws ConnectionException;
 }

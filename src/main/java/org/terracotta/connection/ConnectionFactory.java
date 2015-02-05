@@ -20,7 +20,7 @@ public final class ConnectionFactory {
    * @return an established connection
    * @throws ConnectionException if there is an error while attempting to connect
    */
-  public static Connection connect(URI uri, final Properties properties) throws ConnectionException {
+  public static Connection connect(URI uri, Properties properties) throws ConnectionException {
     return connect(uri, null, properties);
   }
 
@@ -34,7 +34,7 @@ public final class ConnectionFactory {
    * @return established connection
    * @throws ConnectionException if there is an error while attempting to connect
    */
-  public static Connection connect(URI uri, final DisconnectHandler disconnectHandler, final Properties properties) throws ConnectionException {
+  public static Connection connect(URI uri, DisconnectHandler disconnectHandler, Properties properties) throws ConnectionException {
     ServiceLoader<ConnectionService> serviceLoader = ServiceLoader.load(ConnectionService.class,
         ConnectionFactory.class.getClassLoader());
     for (ConnectionService connectionService : serviceLoader) {

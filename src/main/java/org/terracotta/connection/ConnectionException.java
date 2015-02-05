@@ -4,7 +4,7 @@ package org.terracotta.connection;
  * @author twu
  */
 public class ConnectionException extends Exception {
-  public ConnectionException(final Throwable cause) {
+  public ConnectionException(Throwable cause) {
     super(cause);
   }
 }

@@ -12,5 +12,5 @@ public interface DisconnectHandler {
    *
    * @param uri uri of the lost connection
    */
-  void connectionLost(final URI uri);
+  void connectionLost(URI uri);
 }
