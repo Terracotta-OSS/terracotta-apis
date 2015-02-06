@@ -10,6 +10,10 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>test-entity-distribution</artifactId>
 
+  <properties>
+    <maven-forge-plugin.version>1.2.18</maven-forge-plugin.version>
+  </properties>]
+
   <dependencies>
     <dependency>
       <groupId>org.terracotta</groupId>
@@ -35,7 +39,6 @@
       <plugin>
         <groupId>org.terracotta</groupId>
         <artifactId>maven-forge-plugin</artifactId>
-        <version>1.2.18</version>
         <executions>
           <execution>
             <id>process-client-embeddedjars</id>
