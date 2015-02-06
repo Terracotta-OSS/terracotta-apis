@@ -1,12 +1,18 @@
+target
+target/*
+**/target
 **/target/*
 
 .project
 .classpath
+.settings
 .settings/*
-
 **/.project
 **/.classpath
+**/.settings
 **/.settings/*
 
+*.iml
+.idea
 **/*.iml
 **/.idea
