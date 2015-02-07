@@ -12,7 +12,7 @@
 
   <properties>
     <maven-forge-plugin.version>1.2.18</maven-forge-plugin.version>
-  </properties>]
+  </properties>
 
   <dependencies>
     <dependency>
