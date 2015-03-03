@@ -7,6 +7,14 @@ import java.util.concurrent.Future;
  */
 public interface InvocationBuilder {
 
+  InvocationBuilder ackReceipt();
+  
+  InvocationBuilder ackReplicated();
+  
+  InvocationBuilder ackLogged();
+  
+  InvocationBuilder ackCompleted();
+  
   InvocationBuilder returnsValue(boolean returnsValue);
 
   InvocationBuilder payload(byte[] payload);
