@@ -25,4 +25,15 @@ public interface Service<T> {
    * @return unwrapped instance of the service
    */
   T get();
+
+  /**
+   * Get a sandboxed subservice of the current service with the given name.
+   *  
+   * Ideally, this should return a sandboxed view of the service. However it is ultimately up to services to 
+   * decide what is the best way to sandbox.
+   *
+   * @param name name of the sub-service
+   * @return sub service
+   */
+  Service<T> subService(String name);
 }
