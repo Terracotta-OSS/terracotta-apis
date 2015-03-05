@@ -3,7 +3,7 @@ package org.terracotta.connection.entity;
 /**
  * @author twu
  */
-public interface EntityRef<T extends Entity> {
+public interface EntityRef<T extends Entity, C> {
   /**
    * Gets the entity pointed to by this reference. Can return null if no entity exists
    *
@@ -19,7 +19,7 @@ public interface EntityRef<T extends Entity> {
    * @return entity if it exists and matches the configuration
    * @throws ConfigurationMismatchException thrown if an entity exists with a conflicting configuration.
    */
-  T acquireEntity(EntityConfiguration configuration) throws ConfigurationMismatchException;
+  T acquireEntity(C configuration) throws ConfigurationMismatchException;
 
   /**
    * Gets the name of the entity
