@@ -1,6 +1,5 @@
 package org.terracotta.entity;
 
-import java.io.Serializable;
 import java.util.ServiceLoader;
 
 /**
@@ -20,17 +19,5 @@ public class ServerEntityFactory {
       }
     }
     throw new IllegalArgumentException("Can't handle entity type " + typeName);
-  }
-
-  @SuppressWarnings("unchecked")
-  public static <T extends ServerEntity> T getEntity(String typeName, ClassLoader classLoader,
-                                                     ServiceRegistry serviceRegistry) {
-    return (T) getService(typeName, classLoader).getEntity(serviceRegistry);
-  }
-
-  @SuppressWarnings("unchecked")
-  public static <T extends ServerEntity> T createEntity(String typeName, ClassLoader classLoader,
-                                                        ServiceRegistry serviceRegistry, Serializable configuration) {
-    return (T) getService(typeName, classLoader).createEntity(serviceRegistry, configuration);
   }
 }

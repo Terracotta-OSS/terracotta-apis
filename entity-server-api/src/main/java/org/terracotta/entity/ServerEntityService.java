@@ -1,7 +1,5 @@
 package org.terracotta.entity;
 
-import java.io.Serializable;
-
 /**
  * @author twu
  */
@@ -21,7 +19,7 @@ public interface ServerEntityService<T extends ServerEntity> {
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  T createEntity(ServiceRegistry registry, Serializable configuration);
+  T createEntity(ServiceRegistry registry, byte[] configuration);
 
   /**
    * Get an existing entity

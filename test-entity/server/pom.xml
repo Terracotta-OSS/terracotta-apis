@@ -13,6 +13,11 @@
   <dependencies>
     <dependency>
       <groupId>org.terracotta</groupId>
+      <artifactId>test-entity-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.terracotta</groupId>
       <artifactId>entity-server-api</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
