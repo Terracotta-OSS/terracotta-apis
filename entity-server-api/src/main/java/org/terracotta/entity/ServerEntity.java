@@ -4,6 +4,14 @@ package org.terracotta.entity;
  * @author twu
  */
 public interface ServerEntity {
+
+  /**
+   * Get configuration for given entity
+   *
+   * @return serialized byte array
+   */
+  byte[] getConfig();
+  
   /**
    * Invoke a call on the given entity.
    *

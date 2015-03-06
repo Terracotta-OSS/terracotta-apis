@@ -15,9 +15,7 @@ public interface InvocationBuilder {
   
   InvocationBuilder ackCompleted();
   
-  InvocationBuilder returnsValue(boolean returnsValue);
-
   InvocationBuilder payload(byte[] payload);
 
-  Future<?> invoke();
+  Future<byte[]> invoke();
 }

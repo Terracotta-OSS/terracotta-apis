@@ -1,7 +1,5 @@
 package org.terracotta;
 
-import org.terracotta.TestEntity;
-
 /**
  * @author twu
  */
