@@ -21,7 +21,7 @@ public interface Connection extends AutoCloseable {
    * @param <T> entity type
    * @return reference to the entity
    */
-  <T extends Entity> EntityRef<T> getEntityRef(Class<T> cls, String name);
+  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, String name);
 
   /**
    * Grab a maintenance mode reference to the specified entity of given type. This reference grants exclusive access.
@@ -33,7 +33,7 @@ public interface Connection extends AutoCloseable {
    * @param <T> entity type
    * @return exclusive reference to the entity
    */
-  <T extends Entity> EntityMaintenanceRef<T> acquireMaintenanceModeRef(Class<T> cls, String name);
+  <T extends Entity, C> EntityMaintenanceRef<T, C> acquireMaintenanceModeRef(Class<T> cls, String name);
 
   /**
    * Get references to all the existing entities of the given type.
@@ -45,5 +45,5 @@ public interface Connection extends AutoCloseable {
    * @param <T> entity type
    * @return collection of entity references that were live at the time of the call.
    */
-  <T extends Entity> Collection<EntityRef<T>> getEntityRefsOfType(Class<T> cls);
+  <T extends Entity, C> Collection<EntityRef<T, C>> getEntityRefsOfType(Class<T> cls);
 }

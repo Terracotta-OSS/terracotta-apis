@@ -3,7 +3,7 @@ package org.terracotta.connection.entity;
 /**
  * @author twu
  */
-public interface EntityMaintenanceRef<T extends Entity> extends AutoCloseable {
+public interface EntityMaintenanceRef<T extends Entity, C> extends AutoCloseable {
 
   /**
    * Get the entity referred to by this mmode reference. Can return null if it doesn't exist.
@@ -25,7 +25,7 @@ public interface EntityMaintenanceRef<T extends Entity> extends AutoCloseable {
    *
    * @param configuration configuration to be applied to the entity
    */
-  void create(EntityConfiguration configuration);
+  void create(C configuration);
 
   /**
    * Release this maintenance mode reference.
