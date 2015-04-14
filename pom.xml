@@ -24,6 +24,7 @@
     <module>entity-server-api</module>
     <module>entity-test-lib</module>
     <module>test-entity</module>
+    <module>standard-cluster-services</module>
   </modules>
 
   <dependencyManagement>

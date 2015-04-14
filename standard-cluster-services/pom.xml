@@ -12,5 +12,12 @@
 
   <artifactId>standard-cluster-services</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.terracotta</groupId>
+      <artifactId>entity-server-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 
 </project>
