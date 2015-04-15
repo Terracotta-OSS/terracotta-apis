@@ -1,18 +1,18 @@
 package org.terracotta;
 
 import org.terracotta.entity.ServerEntity;
-import org.terracotta.entity.SourceID;
+import org.terracotta.entity.ClientID;
 
 /**
  * @author twu
  */
 public class TestServerEntity implements ServerEntity {
   @Override
-  public void connected(SourceID sourceID) {
+  public void connected(ClientID clientID) {
   }
 
   @Override
-  public void disconnected(SourceID sourceID) {
+  public void disconnected(ClientID clientID) {
   }
 
   @Override
@@ -21,7 +21,7 @@ public class TestServerEntity implements ServerEntity {
   }
 
   @Override
-  public byte[] invoke(SourceID sourceID, byte[] arg) {
+  public byte[] invoke(ClientID clientID, byte[] arg) {
     return arg;
   }
 

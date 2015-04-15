@@ -6,18 +6,18 @@ package org.terracotta.entity;
 public interface ServerEntity {
 
   /**
-   * Indicate that the given sourceID (usually a client) is now connected up to this ServerEntity.
+   * Indicate that the given client is now connected up to this ServerEntity.
    *
-   * @param sourceID opaque identifier for the source
+   * @param clientID opaque identifier for the client
    */
-  void connected(SourceID sourceID);
+  void connected(ClientID clientID);
 
   /**
-   * Notify the ServerEntity that the given source has disconnected.
+   * Notify the ServerEntity that the given client has disconnected.
    *
-   * @param sourceID opaque source identifier
+   * @param clientID opaque client identifier
    */
-  void disconnected(SourceID sourceID);
+  void disconnected(ClientID clientID);
 
   /**
    * Get configuration for given entity
@@ -29,11 +29,11 @@ public interface ServerEntity {
   /**
    * Invoke a call on the given entity.
    *
-   * @param sourceID source from which the invocation originates.
+   * @param clientID source from which the invocation originates.
    * @param arg entity specific invocation info
    * @return possible return value
    */
-  byte[] invoke(SourceID sourceID, byte[] arg);
+  byte[] invoke(ClientID clientID, byte[] arg);
 
   /**
    * Destroy all state associated with this entity
