@@ -1,7 +1,5 @@
 package org.terracotta.entity;
 
-import java.lang.Object;
-
 /**
  * @author twu
  */
@@ -19,7 +17,7 @@ public interface Service<T> {
    *
    * TODO: Add configuration
    */
-  void initialize(Object configuration);
+  void initialize();
 
   /**
    * Get the service
