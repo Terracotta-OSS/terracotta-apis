@@ -9,10 +9,10 @@ public abstract class AbstractDecodingServerEntity<I, O> implements ServerEntity
 
   protected abstract byte[] encodeOutput(O o);
 
-  protected abstract O invoke(I input);
+  protected abstract O invoke(ClientID clientID, I input);
 
   @Override
-  public final byte[] invoke(byte[] arg) {
-    return encodeOutput(invoke(decodeInput(arg)));
+  public final byte[] invoke(ClientID clientID, byte[] arg) {
+    return encodeOutput(invoke(clientID, decodeInput(arg)));
   }
 }

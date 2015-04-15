@@ -32,6 +32,9 @@ public class PassthroughEndpoint implements EntityClientEndpoint {
     return new InvocationBuilderImpl();
   }
 
+  private class FakeClientID implements ClientID {
+  }
+
   private class InvocationBuilderImpl implements InvocationBuilder {
     private byte[] payload = null;
     private final Set<Request.Acks> acks = EnumSet.noneOf(Request.Acks.class);
@@ -69,7 +72,7 @@ public class PassthroughEndpoint implements EntityClientEndpoint {
     @Override
     public Future<byte[]> invoke() {
       try {
-        return Futures.immediateFuture(entity.invoke(payload));
+        return Futures.immediateFuture(entity.invoke(new FakeClientID(), payload));
       } catch (Exception e) {
         return Futures.immediateFailedCheckedFuture(e);
       }
