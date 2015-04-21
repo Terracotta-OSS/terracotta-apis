@@ -1,9 +1,18 @@
 package org.terracotta.entity;
 
+import java.util.Optional;
+
 /**
  * @author twu
  */
 public interface ServerEntity {
+
+  /**
+   * Get the sharding strategy to be used for this server entity.
+   *
+   * @return shard strategy
+   */
+  ShardingStrategy getShardingStrategy();
 
   /**
    * Indicate that the given client is now connected up to this ServerEntity.
