@@ -15,9 +15,9 @@ public interface Service<T> {
   /**
    * Initialize the service
    *
-   * TODO: Add configuration
+   *
    */
-  void initialize();
+  void initialize(Object configuration);
 
   /**
    * Get the service
