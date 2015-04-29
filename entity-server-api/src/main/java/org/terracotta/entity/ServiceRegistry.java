@@ -23,4 +23,13 @@ public interface ServiceRegistry {
    * @return sub registry
    */
   ServiceRegistry subRegistry(String name);
+
+  /**
+   * Destroy this ServiceRegistry and all its state.
+   *
+   * Destruction is cascaded down to sub-registries via Services. That is, when destroy is called on a service registry,
+   * it will result in destroy() being called on each contained Service. Services will be expected to destroy created
+   * sub-services.
+   */
+  void destroy();
 }

@@ -36,4 +36,11 @@ public interface Service<T> {
    * @return sub service
    */
   Service<T> subService(String name);
+
+  /**
+   * Destroy the state of this service.
+   *
+   * If any subServices were created from this Service instance, they should be destroyed as well.
+   */
+  void destroy();
 }
