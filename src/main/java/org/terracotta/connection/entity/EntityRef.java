@@ -27,4 +27,11 @@ public interface EntityRef<T extends Entity, C> {
    * @return name
    */
   String getName();
+
+  /**
+   * Called to release the entity acquired via an "acquireEntity" call, above.
+   * 
+   * @param entity
+   */
+  void releaseEntity(T entity);
 }
