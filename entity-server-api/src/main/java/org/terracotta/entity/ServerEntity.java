@@ -1,6 +1,5 @@
 package org.terracotta.entity;
 
-import java.util.Optional;
 
 /**
  * @author twu
@@ -17,16 +16,16 @@ public interface ServerEntity {
   /**
    * Indicate that the given client is now connected up to this ServerEntity.
    *
-   * @param clientID opaque identifier for the client
+   * @param clientDescriptor client-side instance which connected
    */
-  void connected(ClientID clientID);
+  void connected(ClientDescriptor clientDescriptor);
 
   /**
    * Notify the ServerEntity that the given client has disconnected.
    *
-   * @param clientID opaque client identifier
+   * @param clientDescriptor client-side instance which disconnected
    */
-  void disconnected(ClientID clientID);
+  void disconnected(ClientDescriptor clientDescriptor);
 
   /**
    * Get configuration for given entity
@@ -38,11 +37,11 @@ public interface ServerEntity {
   /**
    * Invoke a call on the given entity.
    *
-   * @param clientID source from which the invocation originates.
+   * @param clientDescriptor source instance from which the invocation originates.
    * @param arg entity specific invocation info
    * @return possible return value
    */
-  byte[] invoke(ClientID clientID, byte[] arg);
+  byte[] invoke(ClientDescriptor clientDescriptor, byte[] arg);
 
   /**
    * Destroy all state associated with this entity
