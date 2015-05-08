@@ -12,17 +12,17 @@ public interface ClientCommunicator {
   /**
    * Send a message to the client-side of an entity.
    *
-   * @param clientID client to send to
+   * @param clientDescriptor The client side instance to send to
    * @param payload bytes to send
    */
-  void sendNoResponse(ClientID clientID, byte[] payload);
+  void sendNoResponse(ClientDescriptor clientDescriptor, byte[] payload);
 
   /**
    * Send a message getting an async completion back.
    *
-   * @param clientID client to send to
+   * @param clientDescriptor The client side instance to send to
    * @param payload bytes to send
    * @return Future representing when the client finishes with and acknowledges the sent message.
    */
-  Future<Void> send(ClientID clientID, byte[] payload);
+  Future<Void> send(ClientDescriptor clientDescriptor, byte[] payload);
 }
