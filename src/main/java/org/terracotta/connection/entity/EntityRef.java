@@ -9,7 +9,7 @@ public interface EntityRef<T extends Entity, C> {
    *
    * @return entity
    */
-  T acquireEntity();
+  T fetchEntity();
 
   /**
    * Gets the entity with the specified configuration. If the entity does not yet exist, return null. If the entity exists
@@ -27,11 +27,4 @@ public interface EntityRef<T extends Entity, C> {
    * @return name
    */
   String getName();
-
-  /**
-   * Called to release the entity acquired via an "acquireEntity" call, above.
-   * 
-   * @param entity
-   */
-  void releaseEntity(T entity);
 }
