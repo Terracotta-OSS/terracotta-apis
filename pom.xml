@@ -14,10 +14,60 @@
 
   <properties>
     <java.build.version>1.8</java.build.version>
+    <asciidoctor.version>1.5.2</asciidoctor.version>
+    <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>rubygems-proxy-releases</id>
+      <name>RubyGems.org Proxy (Releases)</name>
+      <url>http://rubygems-proxy.torquebox.org/releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>rubygems</groupId>
+      <artifactId>coderay</artifactId>
+      <version>1.1.0</version>
+      <type>gem</type>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+    
   <build>
     <plugins>
+      <plugin>
+        <groupId>de.saumya.mojo</groupId>
+        <artifactId>gem-maven-plugin</artifactId>
+        <version>1.0.5</version>
+        <configuration>
+          <!-- align JRuby version with AsciidoctorJ to avoid redundant downloading -->
+          <jrubyVersion>1.7.9</jrubyVersion>
+          <gemHome>${project.build.directory}/gems</gemHome>
+          <gemPath>${project.build.directory}/gems</gemPath>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>initialize</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>        
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -47,7 +97,88 @@
           <skipNexusStagingDeployMojo>${skipDeploy}</skipNexusStagingDeployMojo>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>${asciidoctor.version}</version>
+        <executions>
+          <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+              <sourceHighlighter>coderay</sourceHighlighter>
+              <preserveDirectories>true</preserveDirectories>
+              <backend>html5</backend>
+              <attributes>
+                <toc/>
+                <sectanchors>true</sectanchors>
+                <toclevels>3</toclevels>
+                <linkattrs>true</linkattrs>
+              </attributes>
+              <gemPath>${project.build.directory}/gems-provided</gemPath>
+              <requires>
+                <require>coderay</require>
+              </requires>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven-assembly-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+         </execution>
+        </executions>
+        <configuration>
+          <finalName>${project.artifactId}-${project.version}</finalName>
+          <descriptors>
+            <descriptor>src/assembly/docs.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
     </plugins>
+    <pluginManagement>
+    	<plugins>
+    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+    		<plugin>
+    			<groupId>org.eclipse.m2e</groupId>
+    			<artifactId>lifecycle-mapping</artifactId>
+    			<version>1.0.0</version>
+    			<configuration>
+    				<lifecycleMappingMetadata>
+    					<pluginExecutions>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>de.saumya.mojo</groupId>
+    								<artifactId>
+    									gem-maven-plugin
+    								</artifactId>
+    								<versionRange>
+    									[1.0.5,)
+    								</versionRange>
+    								<goals>
+    									<goal>initialize</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+    							<action>
+    								<ignore></ignore>
+    							</action>
+    						</pluginExecution>
+    					</pluginExecutions>
+    				</lifecycleMappingMetadata>
+    			</configuration>
+    		</plugin>
+    	</plugins>
+    </pluginManagement>
   </build>
 
   <distributionManagement>
