@@ -1,0 +1,22 @@
+<assembly>
+  <id>docs</id>
+  
+  <formats>
+    <format>zip</format>
+  </formats>
+  
+  <includeBaseDirectory>false</includeBaseDirectory>
+  
+  <fileSets>
+    <fileSet>
+      <directory>${project.build.directory}/generated-docs</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes/>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/apidocs</directory>
+      <outputDirectory>/apidocs</outputDirectory>
+      <includes/>
+    </fileSet>
+  </fileSets>
+</assembly>
