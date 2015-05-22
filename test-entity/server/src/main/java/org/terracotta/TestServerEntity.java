@@ -1,17 +1,17 @@
 package org.terracotta;
 
 import org.terracotta.entity.ClientDescriptor;
-import org.terracotta.entity.NoShardingStrategy;
+import org.terracotta.entity.ConcurrencyStrategy;
+import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.ServerEntity;
-import org.terracotta.entity.ShardingStrategy;
 
 /**
  * @author twu
  */
 public class TestServerEntity implements ServerEntity {
   @Override
-  public ShardingStrategy getShardingStrategy() {
-    return new NoShardingStrategy();
+  public ConcurrencyStrategy getConcurrencyStrategy() {
+    return new NoConcurrencyStrategy();
   }
 
   @Override
