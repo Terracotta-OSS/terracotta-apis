@@ -7,11 +7,11 @@ package org.terracotta.entity;
 public interface ServerEntity {
 
   /**
-   * Get the sharding strategy to be used for this server entity.
+   * Get the concurrency strategy to be used for this server entity.
    *
-   * @return shard strategy
+   * @return concurrency strategy
    */
-  ShardingStrategy getShardingStrategy();
+  ConcurrencyStrategy getConcurrencyStrategy();
 
   /**
    * Indicate that the given client is now connected up to this ServerEntity.
