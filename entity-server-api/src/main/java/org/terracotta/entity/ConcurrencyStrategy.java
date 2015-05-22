@@ -15,5 +15,5 @@ public interface ConcurrencyStrategy {
    * @param payload request payload passed in from a client
    * @return integer key
    */
-  int shardKey(byte[] payload);
+  int concurrencyKey(byte[] payload);
 }

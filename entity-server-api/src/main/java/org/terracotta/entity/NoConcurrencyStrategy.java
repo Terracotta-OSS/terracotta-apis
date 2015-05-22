@@ -8,7 +8,7 @@ package org.terracotta.entity;
  */
 public class NoConcurrencyStrategy implements ConcurrencyStrategy {
   @Override
-  public int shardKey(byte[] payload) {
+  public int concurrencyKey(byte[] payload) {
     return 0;
   }
 }
