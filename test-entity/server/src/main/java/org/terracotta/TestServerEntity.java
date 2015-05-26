@@ -3,12 +3,12 @@ package org.terracotta;
 import org.terracotta.entity.ClientDescriptor;
 import org.terracotta.entity.ConcurrencyStrategy;
 import org.terracotta.entity.NoConcurrencyStrategy;
-import org.terracotta.entity.ServerEntity;
+import org.terracotta.entity.ActiveServerEntity;
 
 /**
  * @author twu
  */
-public class TestServerEntity implements ServerEntity {
+public class TestServerEntity implements ActiveServerEntity {
   @Override
   public ConcurrencyStrategy getConcurrencyStrategy() {
     return new NoConcurrencyStrategy();
@@ -30,6 +30,14 @@ public class TestServerEntity implements ServerEntity {
   @Override
   public byte[] invoke(ClientDescriptor clientDescriptor, byte[] arg) {
     return arg;
+  }
+
+  @Override
+  public void createNew() {
+  }
+
+  @Override
+  public void loadExisting() {
   }
 
   @Override

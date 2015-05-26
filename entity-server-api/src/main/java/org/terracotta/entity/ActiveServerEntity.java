@@ -2,10 +2,10 @@ package org.terracotta.entity;
 
 
 /**
- * @author twu
+ * The methods specifically supported by active entities.  As the active is responsible for "driving" much of the
+ *  interaction, it has more capabilities than the corresponding passive.
  */
-public interface ServerEntity {
-
+public interface ActiveServerEntity extends CommonServerEntity {
   /**
    * Get the concurrency strategy to be used for this server entity.
    *
@@ -42,9 +42,4 @@ public interface ServerEntity {
    * @return possible return value
    */
   byte[] invoke(ClientDescriptor clientDescriptor, byte[] arg);
-
-  /**
-   * Destroy all state associated with this entity
-   */
-  void destroy();
 }

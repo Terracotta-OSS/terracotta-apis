@@ -3,7 +3,7 @@ package org.terracotta.entity;
 /**
  * @author twu
  */
-public abstract class AbstractDecodingServerEntity<I, O> implements ServerEntity {
+public abstract class AbstractDecodingServerEntity<I, O> implements ActiveServerEntity {
 
   protected abstract I decodeInput(byte[] bytes);
 
