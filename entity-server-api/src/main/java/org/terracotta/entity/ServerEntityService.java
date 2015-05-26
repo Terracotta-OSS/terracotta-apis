@@ -3,7 +3,7 @@ package org.terracotta.entity;
 /**
  * @author twu
  */
-public interface ServerEntityService<T extends ServerEntity> {
+public interface ServerEntityService<A extends ActiveServerEntity, P extends PassiveServerEntity> {
   /**
    * Check if this service handles the given type
    *
@@ -13,19 +13,20 @@ public interface ServerEntityService<T extends ServerEntity> {
   boolean handlesEntityType(String typeName);
 
   /**
-   * create an instance of the specified server entity
+   * Create an instance of the specified server entity in active mode.
    *
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  T createEntity(ServiceRegistry registry, byte[] configuration);
+  A createActiveEntity(ServiceRegistry registry, byte[] configuration);
 
   /**
-   * Get an existing entity
+   * Create an instance of the specified server entity in passive mode.
    *
-   * @param registry service registry provided by the server
+   * @param registry registry of services provided by the server
+   * @param configuration entity specific configuration object
    * @return server side entity
    */
-  T getEntity(ServiceRegistry registry);
+  P createPassiveEntity(ServiceRegistry registry, byte[] configuration);
 }
