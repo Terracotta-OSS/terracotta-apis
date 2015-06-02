@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.terracotta.forge</groupId>
     <artifactId>forge-parent</artifactId>
-    <version>3.18</version>
+    <version>3.19</version>
   </parent>
 
   <groupId>org.terracotta</groupId>
@@ -16,7 +16,7 @@
   <properties>
     <java.build.version>1.8</java.build.version>
     <connection-api.version>1.0-SNAPSHOT</connection-api.version>
-    <tc-messaging.version>1.1.0-SNAPSHOT</tc-messaging.version>
+    <tc-messaging.version>2.0.0-SNAPSHOT</tc-messaging.version>
   </properties>
 
   <modules>
@@ -86,5 +86,10 @@
        <url>${terracotta-ee-snapshots-url}</url>
     </snapshotRepository>
   </distributionManagement>
+
+  <scm>
+    <connection>ssh://git@irepo.eur.ad.sag:7999/tab/entity-api.git</connection>
+    <developerConnection>ssh://git@irepo.eur.ad.sag:7999/tab/entity-api.git</developerConnection>
+  </scm>
 
 </project>
