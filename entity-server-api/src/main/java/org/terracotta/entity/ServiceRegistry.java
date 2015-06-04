@@ -1,28 +1,26 @@
 package org.terracotta.entity;
 
+import com.tc.object.EntityID;
+
 import java.util.Optional;
 
 /**
+ * Registry which Entities interact with list of services provided by the platform. Services provided to entity might
+ * be namespaced or not, depending on  service provider.
+ *
  * @author twu
  */
 public interface ServiceRegistry {
 
   /**
    * Get the unwrapped service instance of a given type.
-   *
-   * @param type type of the service to get
-   * @param <T> type of service
-   * @return instance of the service if it exists
+   * @param configuration With which service should be provisioned
+   * @param <K> Unwrapped platform resource
+   * @param <S> Service type which wraps the Underlying platform resource
+   * @param <SC> Service configuration type used by service provider
+   * @return
    */
-  <T> Optional<T> getService(Class<T> type);
-
-  /**
-   * Get a sandboxed sub registry below the current one.
-   *
-   * @param name name of the subregistry to get
-   * @return sub registry
-   */
-  ServiceRegistry subRegistry(String name);
+  <K, S extends Service<K>, SC extends ServiceConfiguration<S>> Optional<K> getService(SC configuration);
 
   /**
    * Destroy this ServiceRegistry and all its state.
@@ -32,4 +30,21 @@ public interface ServiceRegistry {
    * sub-services.
    */
   void destroy();
+
+  /**
+   * Gets the entity id associated to a particular registry
+   *
+   * @return id of entity associated to registry
+   */
+  EntityID getEntityID();
+
+  /**
+   * Destroys a given service instance. This method takes care of passing information to service provider so clean up
+   * at service provider can be performed.
+   *
+   *
+   * @param service instance to be destroyed
+   */
+  void destroy(Service service);
+
 }

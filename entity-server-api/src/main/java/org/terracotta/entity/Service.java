@@ -6,18 +6,11 @@ package org.terracotta.entity;
 public interface Service<T> {
 
   /**
-   * The type of service provided by this instance
-   *
-   * @return service type
-   */
-  Class<? extends T> getServiceType();
-
-  /**
    * Initialize the service
    *
-   *
+   * @param configuration type of configuration which is used to initialize the configuration
    */
-  void initialize(Object configuration);
+  void initialize(ServiceConfiguration<?> configuration);
 
   /**
    * Get the service
@@ -26,21 +19,11 @@ public interface Service<T> {
    */
   T get();
 
-  /**
-   * Get a sandboxed subservice of the current service with the given name.
-   *  
-   * Ideally, this should return a sandboxed view of the service. However it is ultimately up to services to 
-   * decide what is the best way to sandbox.
-   *
-   * @param name name of the sub-service
-   * @return sub service
-   */
-  Service<T> subService(String name);
 
   /**
    * Destroy the state of this service.
    *
-   * If any subServices were created from this Service instance, they should be destroyed as well.
+   * This is to be invoked from the service registry level not to be invoked by entity directly.
    */
   void destroy();
 }
