@@ -1,5 +1,6 @@
 package org.terracotta;
 
+import com.tc.object.EntityID;
 import org.terracotta.entity.PassiveServerEntity;
 import org.terracotta.entity.ServerEntityService;
 import org.terracotta.entity.ServiceRegistry;
@@ -14,12 +15,12 @@ public class TestServerEntityService implements ServerEntityService<TestServerEn
   }
 
   @Override
-  public TestServerEntity createActiveEntity(ServiceRegistry registry, byte[] configuration) {
+  public TestServerEntity createActiveEntity(EntityID id, ServiceRegistry registry, byte[] configuration) {
     return new TestServerEntity();
   }
 
   @Override
-  public PassiveServerEntity createPassiveEntity(ServiceRegistry registry, byte[] configuration) {
+  public PassiveServerEntity createPassiveEntity(EntityID id, ServiceRegistry registry, byte[] configuration) {
     throw new UnsupportedOperationException();
   }
 }

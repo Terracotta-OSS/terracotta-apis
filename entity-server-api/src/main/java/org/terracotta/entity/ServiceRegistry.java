@@ -1,7 +1,5 @@
 package org.terracotta.entity;
 
-import com.tc.object.EntityID;
-
 import java.util.Optional;
 
 /**
@@ -30,13 +28,6 @@ public interface ServiceRegistry {
    * sub-services.
    */
   void destroy();
-
-  /**
-   * Gets the entity id associated to a particular registry
-   *
-   * @return id of entity associated to registry
-   */
-  EntityID getEntityID();
 
   /**
    * Destroys a given service instance. This method takes care of passing information to service provider so clean up
