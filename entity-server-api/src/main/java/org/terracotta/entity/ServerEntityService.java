@@ -1,5 +1,7 @@
 package org.terracotta.entity;
 
+import com.tc.object.EntityID;
+
 /**
  * @author twu
  */
@@ -19,7 +21,7 @@ public interface ServerEntityService<A extends ActiveServerEntity, P extends Pas
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  A createActiveEntity(ServiceRegistry registry, byte[] configuration);
+  A createActiveEntity(EntityID id, ServiceRegistry registry, byte[] configuration);
 
   /**
    * Create an instance of the specified server entity in passive mode.
@@ -28,5 +30,5 @@ public interface ServerEntityService<A extends ActiveServerEntity, P extends Pas
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  P createPassiveEntity(ServiceRegistry registry, byte[] configuration);
+  P createPassiveEntity(EntityID id, ServiceRegistry registry, byte[] configuration);
 }

@@ -44,6 +44,11 @@
         <artifactId>guava</artifactId>
         <version>18.0</version>
       </dependency>
+      <dependency>
+        <groupId>org.terracotta</groupId>
+        <artifactId>tc-config-parser</artifactId>
+        <version>9.2-SNAPSHOT</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
