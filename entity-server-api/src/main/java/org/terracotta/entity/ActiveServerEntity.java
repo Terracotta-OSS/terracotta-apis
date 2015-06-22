@@ -1,5 +1,7 @@
 package org.terracotta.entity;
 
+import java.util.Collections;
+
 
 /**
  * The methods specifically supported by active entities.  As the active is responsible for "driving" much of the
@@ -42,4 +44,13 @@ public interface ActiveServerEntity extends CommonServerEntity {
    * @return possible return value
    */
   byte[] invoke(ClientDescriptor clientDescriptor, byte[] arg);
+  /**
+   * Provide an iterable of payloads to be synced to a newly connected passive node.
+   * 
+   * @param concurrency - the concurrency key to be sync'd
+   * @return - an iterable of payloads that will be serially sync'd to a new passive node.
+   */
+  default Iterable<byte[]> sync(int concurrency) {
+    return Collections.emptyList();
+  }
 }
