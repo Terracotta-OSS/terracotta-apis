@@ -5,7 +5,7 @@ package org.terracotta.entity;
  * interface are iterable which should provide a complete set of concurrency keys that are expected to be used
  * in the lifetime of this strategy.  These keys will be walked during passive sync of entities
  */
-public interface ConcurrencyStrategy extends Iterable<Integer> {
+public interface ConcurrencyStrategy {
   /**
    * UNIVERSAL_KEY is a negative key that indicates a request requires no order and can be run concurrently with any
    * other entity operation
