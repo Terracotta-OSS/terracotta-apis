@@ -1,5 +1,6 @@
 package org.terracotta.entity;
 
+
 /**
  * The methods specifically supported by active entities.  As the active is responsible for "driving" much of the
  *  interaction, it has more capabilities than the corresponding passive.
