@@ -7,8 +7,12 @@ package org.terracotta.entity;
  * @author twu
  */
 public class NoConcurrencyStrategy implements ConcurrencyStrategy {
+  
+  public NoConcurrencyStrategy() {
+  }
+
   @Override
   public int concurrencyKey(byte[] payload) {
-    return 0;
+    return ConcurrencyStrategy.MANAGEMENT_KEY;
   }
 }
