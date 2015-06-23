@@ -1,9 +1,7 @@
 package org.terracotta.entity;
 
 /**
- * The concurrency strategy is used to manage and control this entity.  Implementations of this
- * interface are iterable which should provide a complete set of concurrency keys that are expected to be used
- * in the lifetime of this strategy.  These keys will be walked during passive sync of entities
+ * The concurrency strategy is used to manage and control this entity.  
  */
 public interface ConcurrencyStrategy {
   /**
