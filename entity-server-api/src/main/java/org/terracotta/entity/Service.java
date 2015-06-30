@@ -2,6 +2,7 @@ package org.terracotta.entity;
 
 /**
  * @author twu
+ * @param <T> the type interface of this service
  */
 public interface Service<T> {
 

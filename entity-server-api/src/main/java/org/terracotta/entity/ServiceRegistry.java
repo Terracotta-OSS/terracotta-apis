@@ -11,9 +11,10 @@ import java.util.Optional;
 public interface ServiceRegistry {
 
   /**
-   * Get the unwrapped service instance of a given type.
+   * Get the service instance of a given type.
+   * @param <T> type interface of the requested service
    * @param configuration With which service should be provisioned
-   * @return
+   * @return an instance of service which will provide the requested interface
    */
   <T> Optional<Service<T>> getService(ServiceConfiguration<T> configuration);
 

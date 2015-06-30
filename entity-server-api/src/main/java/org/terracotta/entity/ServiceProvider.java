@@ -6,6 +6,7 @@ import org.terracotta.config.TcConfiguration;
  * Service Provider which are provided at the platform level. Each of the service provisions its chunk of service by
  * in an appropriate configuration. The decision of namespacing a service is left upto the provider.
  *
+ * @param <T> type interface of the service requested
  */
 public interface ServiceProvider<T> {
 
@@ -19,7 +20,7 @@ public interface ServiceProvider<T> {
   /**
    * Get an instance of service from the provider.
    *
-   * @param configuration Service configuratino which is to be used
+   * @param configuration Service configuration which is to be used
    * @return service instance
    */
   Service<T> getService(ServiceConfiguration<T> configuration);
