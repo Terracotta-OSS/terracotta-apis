@@ -13,12 +13,9 @@ public interface ServiceRegistry {
   /**
    * Get the unwrapped service instance of a given type.
    * @param configuration With which service should be provisioned
-   * @param <K> Unwrapped platform resource
-   * @param <S> Service type which wraps the Underlying platform resource
-   * @param <SC> Service configuration type used by service provider
    * @return
    */
-  <K, S extends Service<K>, SC extends ServiceConfiguration<S>> Optional<K> getService(SC configuration);
+  <T> Optional<Service<T>> getService(ServiceConfiguration<T> configuration);
 
   /**
    * Destroy this ServiceRegistry and all its state.
