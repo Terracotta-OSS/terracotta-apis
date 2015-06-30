@@ -1,16 +1,15 @@
 package org.terracotta.entity;
 
-import com.tc.object.EntityID;
-
 /**
  * Configuration which is used to configure the given service instance
+ * @param <T> type interface of the service being configured
  */
-public interface ServiceConfiguration<T extends Service> {
+public interface ServiceConfiguration<T> {
 
   /**
    * Gets the type of service object which configuration is supposed to configure
-   * @return type of service
+   * @return type interface of service
    */
-  Class<? extends T> getServiceType();
+  Class<T> getServiceType();
 
 }

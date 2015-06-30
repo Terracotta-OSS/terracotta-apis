@@ -11,14 +11,12 @@ import java.util.Optional;
 public interface ServiceRegistry {
 
   /**
-   * Get the unwrapped service instance of a given type.
+   * Get the service instance of a given type.
+   * @param <T> type interface of the requested service
    * @param configuration With which service should be provisioned
-   * @param <K> Unwrapped platform resource
-   * @param <S> Service type which wraps the Underlying platform resource
-   * @param <SC> Service configuration type used by service provider
-   * @return
+   * @return an instance of service which will provide the requested interface
    */
-  <K, S extends Service<K>, SC extends ServiceConfiguration<S>> Optional<K> getService(SC configuration);
+  <T> Optional<Service<T>> getService(ServiceConfiguration<T> configuration);
 
   /**
    * Destroy this ServiceRegistry and all its state.
@@ -28,14 +26,5 @@ public interface ServiceRegistry {
    * sub-services.
    */
   void destroy();
-
-  /**
-   * Destroys a given service instance. This method takes care of passing information to service provider so clean up
-   * at service provider can be performed.
-   *
-   *
-   * @param service instance to be destroyed
-   */
-  void destroy(Service service);
 
 }

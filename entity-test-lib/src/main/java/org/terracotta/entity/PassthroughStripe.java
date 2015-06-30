@@ -80,7 +80,7 @@ public class PassthroughStripe implements Service<ClientCommunicator>, ClientCom
   }
 
   @Override
-  public void initialize(ServiceConfiguration<?> configuration) {
+  public void initialize(ServiceConfiguration<? extends ClientCommunicator> configuration) {
     //do nothing
   }
 
@@ -97,19 +97,30 @@ public class PassthroughStripe implements Service<ClientCommunicator>, ClientCom
 
   private class FakeServiceRegistry implements ServiceRegistry {
     @Override
-    public <K, S extends Service<K>, SC extends ServiceConfiguration<S>> Optional<K> getService(SC configuration) {
-      return (Optional<K>) Optional.of(PassthroughStripe.this);
+    public Optional getService(ServiceConfiguration configuration) {
+      return Optional.of(new Service() {
+
+        @Override
+        public Object get() {
+          return PassthroughStripe.this;
+        }
+
+        @Override
+        public void initialize(ServiceConfiguration configuration) {
+
+        }
+
+        @Override
+        public void destroy() {
+
+        }  
+      });
     }
 
     @Override
     public void destroy() {
       // Not implemented for this test.
       Assert.fail();
-    }
-
-    @Override
-    public void destroy(Service service) {
-      //not required
     }
   }
   
