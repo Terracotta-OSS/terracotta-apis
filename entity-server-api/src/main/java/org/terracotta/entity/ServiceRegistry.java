@@ -27,13 +27,4 @@ public interface ServiceRegistry {
    */
   void destroy();
 
-  /**
-   * Destroys a given service instance. This method takes care of passing information to service provider so clean up
-   * at service provider can be performed.
-   *
-   *
-   * @param service instance to be destroyed
-   */
-  void destroy(Service service);
-
 }

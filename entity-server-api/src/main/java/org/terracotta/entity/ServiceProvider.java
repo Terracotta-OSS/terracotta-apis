@@ -31,11 +31,4 @@ public interface ServiceProvider<T> {
    * @return type of service
    */
   Class<T> getServiceType();
-
-  /**
-   * Destroys a given service instance.
-   *
-   * @param service instance to be destroyed
-   */
-  void destroy(Service<T> service);
 }
