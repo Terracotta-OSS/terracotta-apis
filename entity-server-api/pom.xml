@@ -13,14 +13,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.terracotta</groupId>
-      <artifactId>tc-messaging</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.terracotta</groupId>
-      <artifactId>tc-config-parser</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>

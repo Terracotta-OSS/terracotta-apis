@@ -1,11 +1,10 @@
 package org.terracotta.entity;
 
-import com.tc.object.EntityID;
 
 /**
  * @author twu
  */
-public interface ServerEntityService<A extends ActiveServerEntity, P extends PassiveServerEntity> {
+public interface ServerEntityService<ID, A extends ActiveServerEntity, P extends PassiveServerEntity> {
   /**
    * Check if this service handles the given type
    *
@@ -17,18 +16,20 @@ public interface ServerEntityService<A extends ActiveServerEntity, P extends Pas
   /**
    * Create an instance of the specified server entity in active mode.
    *
+   * @param id identifier for a given entity
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  A createActiveEntity(EntityID id, ServiceRegistry registry, byte[] configuration);
+  A createActiveEntity(ID id, ServiceRegistry registry, byte[] configuration);
 
   /**
    * Create an instance of the specified server entity in passive mode.
    *
+   * @param id identifier for a given entity
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  P createPassiveEntity(EntityID id, ServiceRegistry registry, byte[] configuration);
+  P createPassiveEntity(ID id, ServiceRegistry registry, byte[] configuration);
 }

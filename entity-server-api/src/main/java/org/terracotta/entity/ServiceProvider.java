@@ -1,6 +1,5 @@
 package org.terracotta.entity;
 
-import org.terracotta.config.TcConfiguration;
 
 /**
  * Service Provider which are provided at the platform level. Each of the service provisions its chunk of service by
@@ -8,14 +7,14 @@ import org.terracotta.config.TcConfiguration;
  *
  * @param <T> type interface of the service requested
  */
-public interface ServiceProvider<T> {
+public interface ServiceProvider<T, C> {
 
   /**
    * The platform configuration based on which the Service provider can choose to initalize itself.
    *
    * @param configuration platform configuration
    */
-  void initialize(TcConfiguration configuration);
+  void initialize(C configuration);
 
   /**
    * Get an instance of service from the provider.
