@@ -7,7 +7,7 @@ package org.terracotta.entity;
  *
  * @param <T> type interface of the service requested
  */
-public interface ServiceProvider<T, C> {
+public interface ServiceProvider<T, C extends ServiceProviderConfiguration> {
 
   /**
    * The platform configuration based on which the Service provider can choose to initalize itself.
@@ -30,4 +30,13 @@ public interface ServiceProvider<T, C> {
    * @return type of service
    */
   Class<T> getServiceType();
+
+  /**
+   * Type of the service configuration to be used while configuring service provider.
+   *
+   * @return type of service provider configuration
+   */
+
+  Class<C> getServiceProviderConfigurationType();
+
 }
