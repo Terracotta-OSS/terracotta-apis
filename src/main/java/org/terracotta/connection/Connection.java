@@ -17,11 +17,12 @@ public interface Connection extends AutoCloseable {
    * entity would be if it did exist.
    *
    * @param cls entity class
+   * @param version version of the entity implementation
    * @param name name of the entity
    * @param <T> entity type
    * @return reference to the entity
    */
-  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, String name);
+  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, long version, String name);
 
   /**
    * Grab a maintenance mode reference to the specified entity of given type. This reference grants exclusive access.
@@ -29,11 +30,12 @@ public interface Connection extends AutoCloseable {
    * acquisition to block.
    *
    * @param cls entity class
+   * @param version version of the entity implementation
    * @param name name of the entity
    * @param <T> entity type
    * @return exclusive reference to the entity
    */
-  <T extends Entity, C> EntityMaintenanceRef<T, C> acquireMaintenanceModeRef(Class<T> cls, String name);
+  <T extends Entity, C> EntityMaintenanceRef<T, C> acquireMaintenanceModeRef(Class<T> cls, long version, String name);
 
   /**
    * Get references to all the existing entities of the given type.
@@ -42,8 +44,9 @@ public interface Connection extends AutoCloseable {
    * dead by the time they are examined.
    *
    * @param cls entity class
+   * @param version version of the entity implementation
    * @param <T> entity type
    * @return collection of entity references that were live at the time of the call.
    */
-  <T extends Entity, C> Collection<EntityRef<T, C>> getEntityRefsOfType(Class<T> cls);
+  <T extends Entity, C> Collection<EntityRef<T, C>> getEntityRefsOfType(Class<T> cls, long version);
 }

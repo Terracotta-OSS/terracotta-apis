@@ -9,7 +9,6 @@ import java.util.Properties;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.terracotta.connection.entity.ConfigurationMismatchException;
 import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityMaintenanceRef;
 import org.terracotta.connection.entity.EntityRef;
@@ -35,7 +34,7 @@ public class BasicConnectTest {
     // tag::create[]
     // Get an maintenance reference on the entity name
     EntityMaintenanceRef<Example, ExampleConfiguration> maintenanceRef =
-        connection.acquireMaintenanceModeRef(Example.class, "foo");
+        connection.acquireMaintenanceModeRef(Example.class, Example.VERSION, "foo");
 
     // Check if it’s already there
     if (maintenanceRef.doesExist()) {
@@ -62,7 +61,7 @@ public class BasicConnectTest {
     // Get the entity, this locks out someone attempting to enter maintenance
     // mode, it’s blocked by an existing maintenance mode hold.
     EntityRef<Example, ExampleConfiguration> entityRef =
-        connection.getEntityRef(Example.class, "foo");
+        connection.getEntityRef(Example.class, Example.VERSION, "foo");
     Example e = entityRef.fetchEntity();
 
     // do some stuff
@@ -75,11 +74,11 @@ public class BasicConnectTest {
   public void testDestroy() throws ConnectionException, URISyntaxException {
     Connection connection = getConnection();
     EntityMaintenanceRef<Example, ExampleConfiguration> maintenanceRef =
-        connection.acquireMaintenanceModeRef(Example.class, "foo");
+        connection.acquireMaintenanceModeRef(Example.class, Example.VERSION, "foo");
 
     // tag::destroy[]
     // same as above...
-    maintenanceRef = connection.acquireMaintenanceModeRef(Example.class, "foo");
+    maintenanceRef = connection.acquireMaintenanceModeRef(Example.class, Example.VERSION, "foo");
 
     if (maintenanceRef.doesExist()) {
       maintenanceRef.destroy();
@@ -90,13 +89,11 @@ public class BasicConnectTest {
   @Test
   @Ignore
   public void testConnectionLoss() throws ConnectionException, URISyntaxException {
-    Connection connection;
     Properties properties = new Properties();
-    URI uri;
 
     // tag::handleConnectionLoss[]
-    uri = new URI("terracotta://localhost:1234");
-    connection = ConnectionFactory.connect(uri, new DisconnectHandler() {
+    URI uri = new URI("terracotta://localhost:1234");
+    ConnectionFactory.connect(uri, new DisconnectHandler() {
       @Override
       public void connectionLost(URI uri) {
         // Umm... don't do this.
@@ -107,6 +104,8 @@ public class BasicConnectTest {
   }
 
   interface Example extends Entity {
+    public static final long VERSION = 1;
+    
     void doSomeMaintenance();
 
     void doSomeNonMaintenanceStuff();
