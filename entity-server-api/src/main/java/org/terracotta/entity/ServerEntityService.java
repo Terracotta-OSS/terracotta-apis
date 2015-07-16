@@ -1,7 +1,6 @@
 package org.terracotta.entity;
 
-
-public interface ServerEntityService<ID, A extends ActiveServerEntity, P extends PassiveServerEntity> {
+public interface ServerEntityService<A extends ActiveServerEntity, P extends PassiveServerEntity> {
   /**
    * Used for ensuring that the entity version implementation version is consistent between server and client,
    * active and passive, and pre-restart and post-restart.
@@ -24,20 +23,18 @@ public interface ServerEntityService<ID, A extends ActiveServerEntity, P extends
   /**
    * Create an instance of the specified server entity in active mode.
    *
-   * @param id identifier for a given entity
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  A createActiveEntity(ID id, ServiceRegistry registry, byte[] configuration);
+  A createActiveEntity(ServiceRegistry registry, byte[] configuration);
 
   /**
    * Create an instance of the specified server entity in passive mode.
    *
-   * @param id identifier for a given entity
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  P createPassiveEntity(ID id, ServiceRegistry registry, byte[] configuration);
+  P createPassiveEntity(ServiceRegistry registry, byte[] configuration);
 }
