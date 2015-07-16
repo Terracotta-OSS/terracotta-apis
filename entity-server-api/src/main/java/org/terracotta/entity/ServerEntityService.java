@@ -1,8 +1,5 @@
 package org.terracotta.entity;
 
-/**
- * @author twu
- */
 public interface ServerEntityService<A extends ActiveServerEntity, P extends PassiveServerEntity> {
   /**
    * Used for ensuring that the entity version implementation version is consistent between server and client,
@@ -26,7 +23,6 @@ public interface ServerEntityService<A extends ActiveServerEntity, P extends Pas
   /**
    * Create an instance of the specified server entity in active mode.
    *
-   * @param id identifier for a given entity
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity
@@ -36,7 +32,6 @@ public interface ServerEntityService<A extends ActiveServerEntity, P extends Pas
   /**
    * Create an instance of the specified server entity in passive mode.
    *
-   * @param id identifier for a given entity
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity

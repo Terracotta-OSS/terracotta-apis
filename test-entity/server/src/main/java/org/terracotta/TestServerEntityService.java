@@ -4,9 +4,6 @@ import org.terracotta.entity.PassiveServerEntity;
 import org.terracotta.entity.ServerEntityService;
 import org.terracotta.entity.ServiceRegistry;
 
-/**
- * @author twu
- */
 public class TestServerEntityService implements ServerEntityService<TestServerEntity, PassiveServerEntity> {
 
   @Override
