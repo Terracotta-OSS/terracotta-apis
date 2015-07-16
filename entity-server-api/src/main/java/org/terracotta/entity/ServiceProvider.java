@@ -8,13 +8,15 @@ import java.util.Collection;
  * services to interact with its underlying implementation in response to platform requests.  While the services are
  * generally used by entities, they are also used by the platform, itself.
  */
-public interface ServiceProvider<C extends ServiceProviderConfiguration> {
+public interface ServiceProvider<T> {
+
   /**
    * The platform configuration based on which the Service provider can choose to initialize itself.
    *
    * @param configuration platform configuration
+   * @return true if provider has successfully been initialized with the provided configuration
    */
-  void initialize(C configuration);
+  boolean initialize(ServiceProviderConfiguration configuration);
 
   /**
    * Get an instance of service from the provider.
@@ -33,12 +35,5 @@ public interface ServiceProvider<C extends ServiceProviderConfiguration> {
    * @return A collection of the types of services which can be returned by the receiver.
    */
   Collection<Class<?>> getProvidedServiceTypes();
-
-  /**
-   * Type of the service configuration to be used while configuring service provider.
-   *
-   * @return type of service provider configuration
-   */
-  Class<C> getServiceProviderConfigurationType();
 
 }
