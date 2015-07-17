@@ -10,7 +10,7 @@ package org.terracotta.entity;
 public interface ServiceProvider<T, C extends ServiceProviderConfiguration> {
 
   /**
-   * The platform configuration based on which the Service provider can choose to initalize itself.
+   * The platform configuration based on which the Service provider can choose to initialize itself.
    *
    * @param configuration platform configuration
    */
@@ -19,10 +19,11 @@ public interface ServiceProvider<T, C extends ServiceProviderConfiguration> {
   /**
    * Get an instance of service from the provider.
    *
+   * @param consumerID The unique ID used to name-space the returned service
    * @param configuration Service configuration which is to be used
    * @return service instance
    */
-  Service<T> getService(ServiceConfiguration<T> configuration);
+  Service<T> getService(long consumerID, ServiceConfiguration<T> configuration);
 
   /**
    * Type of service which is provided by the service provider
