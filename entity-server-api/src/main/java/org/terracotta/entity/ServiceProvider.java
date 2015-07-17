@@ -19,6 +19,7 @@ public interface ServiceProvider<C extends ServiceProviderConfiguration> {
   /**
    * Get an instance of service from the provider.
    *
+   * @param serviceType The type of service requested (should be one of getProvidedServiceTypes())
    * @param consumerID The unique ID used to name-space the returned service
    * @param configuration Service configuration which is to be used
    * @return service instance
