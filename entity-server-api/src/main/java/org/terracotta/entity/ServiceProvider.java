@@ -1,14 +1,14 @@
 package org.terracotta.entity;
 
+import java.util.Collection;
+
 
 /**
- * Service Provider which are provided at the platform level. Each of the service provisions its chunk of service by
- * in an appropriate configuration. The decision of namespacing a service is left upto the provider.
- *
- * @param <T> type interface of the service requested
+ * Service Provider which are provided at the platform level.  A service provider is responsible for instantiating the
+ * services to interact with its underlying implementation in response to platform requests.  While the services are
+ * generally used by entities, they are also used by the platform, itself.
  */
-public interface ServiceProvider<T, C extends ServiceProviderConfiguration> {
-
+public interface ServiceProvider<C extends ServiceProviderConfiguration> {
   /**
    * The platform configuration based on which the Service provider can choose to initialize itself.
    *
@@ -19,25 +19,26 @@ public interface ServiceProvider<T, C extends ServiceProviderConfiguration> {
   /**
    * Get an instance of service from the provider.
    *
+   * @param serviceType The type of service requested (should be one of getProvidedServiceTypes())
    * @param consumerID The unique ID used to name-space the returned service
    * @param configuration Service configuration which is to be used
    * @return service instance
    */
-  Service<T> getService(long consumerID, ServiceConfiguration<T> configuration);
+  <T> Service<T> getService(Class<T> serviceType, long consumerID, ServiceConfiguration<T> configuration);
 
   /**
-   * Type of service which is provided by the service provider
+   * Since a service provider can know how to build more than one type of service, this method allows the platform to query
+   * the extent of that capability.  Returned is a collection of service types which can be returned by getService.
    *
-   * @return type of service
+   * @return A collection of the types of services which can be returned by the receiver.
    */
-  Class<T> getServiceType();
+  Collection<Class<?>> getProvidedServiceTypes();
 
   /**
    * Type of the service configuration to be used while configuring service provider.
    *
    * @return type of service provider configuration
    */
-
   Class<C> getServiceProviderConfigurationType();
 
 }
