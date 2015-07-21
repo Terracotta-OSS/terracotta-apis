@@ -8,7 +8,7 @@ import java.util.Collection;
  * services to interact with its underlying implementation in response to platform requests.  While the services are
  * generally used by entities, they are also used by the platform, itself.
  */
-public interface ServiceProvider {
+public interface ServiceProvider extends AutoCloseable {
 
   /**
    * The platform configuration based on which the Service provider can choose to initialize itself.
@@ -21,7 +21,6 @@ public interface ServiceProvider {
   /**
    * Get an instance of service from the provider.
    *
-   * @param serviceType The type of service requested (should be one of getProvidedServiceTypes())
    * @param consumerID The unique ID used to name-space the returned service
    * @param configuration Service configuration which is to be used
    * @return service instance
