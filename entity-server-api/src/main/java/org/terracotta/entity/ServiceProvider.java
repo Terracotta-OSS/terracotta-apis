@@ -8,7 +8,7 @@ import java.util.Collection;
  * services to interact with its underlying implementation in response to platform requests.  While the services are
  * generally used by entities, they are also used by the platform, itself.
  */
-public interface ServiceProvider<T> {
+public interface ServiceProvider {
 
   /**
    * The platform configuration based on which the Service provider can choose to initialize itself.
@@ -26,7 +26,7 @@ public interface ServiceProvider<T> {
    * @param configuration Service configuration which is to be used
    * @return service instance
    */
-  <T> Service<T> getService(Class<T> serviceType, long consumerID, ServiceConfiguration<T> configuration);
+  <T> Service<T> getService(long consumerID, ServiceConfiguration<T> configuration);
 
   /**
    * Since a service provider can know how to build more than one type of service, this method allows the platform to query
