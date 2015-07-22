@@ -14,11 +14,10 @@ public interface ServiceRegistry {
    * Get the service instance of a given serviceType subject to the constraints of the given configuration.
    * 
    * @param <T> type interface of the requested service
-   * @param serviceType The class of the underlying service to request
    * @param configuration With which service should be provisioned
    * @return an instance of service which will provide the requested interface
    */
-  <T> Optional<Service<T>> getService(Class<T> serviceType, ServiceConfiguration<T> configuration);
+  <T> Service<T> getService(ServiceConfiguration<T> configuration);
 
   /**
    * Destroy this ServiceRegistry and all its state.
