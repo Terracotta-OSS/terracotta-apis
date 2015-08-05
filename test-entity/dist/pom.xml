@@ -44,32 +44,27 @@
       <artifactId>test-entity-client</artifactId>
       <groupId>org.terracotta</groupId>
       <version>${project.version}</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>test-entity-server</artifactId>
       <version>${project.version}</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
     <plugins>
       <plugin>
-        <groupId>org.terracotta</groupId>
-        <artifactId>maven-forge-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4</version>
         <executions>
           <execution>
-            <id>process-client-embeddedjars</id>
-            <phase>prepare-package</phase>
+            <phase>package</phase>
             <goals>
-              <goal>packageClusteredEntity</goal>
+              <goal>shade</goal>
             </goals>
             <configuration>
-              <serverArtifact>org.terracotta:test-entity-server:${project.version}</serverArtifact>
-              <clientArtifact>org.terracotta:test-entity-client:${project.version}</clientArtifact>
-              <apiArtifact>org.terracotta:test-entity-api:${project.version}</apiArtifact>
-              <attachJavadoc>false</attachJavadoc>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
         </executions>
