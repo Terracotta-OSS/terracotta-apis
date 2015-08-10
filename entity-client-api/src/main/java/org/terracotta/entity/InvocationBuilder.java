@@ -21,20 +21,15 @@ package org.terracotta.entity;
 
 import java.util.concurrent.Future;
 
-/**
- * @author twu
- */
+
 public interface InvocationBuilder {
+  public InvocationBuilder ackReceived();
 
-  InvocationBuilder ackReceipt();
-  
-  InvocationBuilder ackReplicated();
-  
-  InvocationBuilder ackLogged();
-  
-  InvocationBuilder ackCompleted();
-  
-  InvocationBuilder payload(byte[] payload);
+  public InvocationBuilder ackCompleted();
 
-  Future<byte[]> invoke();
+  public InvocationBuilder replicate(boolean requiresReplication);
+
+  public InvocationBuilder payload(byte[] payload);
+
+  public Future<byte[]> invoke();
 }
