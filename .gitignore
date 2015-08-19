@@ -1,15 +1,10 @@
-**/target/
+target/
 
 .project
 .classpath
-.settings/*
+.settings/
 
-**/.project
-**/.classpath
-**/.settings
-
-**/*.iml
-**/.idea
-/target/
+*.iml
+.idea/
 /bin/
 *~

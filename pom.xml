@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~  The contents of this file are subject to the Terracotta Public License Version
+  ~  2.0 (the "License"); You may not use this file except in compliance with the
+  ~  License. You may obtain a copy of the License at
+  ~
+  ~  http://terracotta.org/legal/terracotta-public-license.
+  ~
+  ~  Software distributed under the License is distributed on an "AS IS" basis,
+  ~  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+  ~  the specific language governing rights and limitations under the License.
+  ~
+  ~  The Covered Software is Entity API.
+  ~
+  ~  The Initial Developer of the Covered Software is
+  ~  Terracotta, Inc., a Software AG company
+  ~
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.terracotta.forge</groupId>
+    <artifactId>forge-parent</artifactId>
+    <version>3.19</version>
+  </parent>
+
+  <groupId>org.terracotta</groupId>
+  <artifactId>entity-api-root</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <java.build.version>1.8</java.build.version>
+    <connection-api.version>1.0-SNAPSHOT</connection-api.version>
+  </properties>
+
+  <modules>
+    <module>entity-client-api</module>
+    <module>entity-server-api</module>
+    <module>entity-test-lib</module>
+    <module>test-entity</module>
+    <module>standard-cluster-services</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.terracotta</groupId>
+        <artifactId>connection-api</artifactId>
+        <version>${connection-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>18.0</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.1</version>
+          <extensions>true</extensions>
+          <configuration>
+            <!-- The Base URL of Nexus instance where we want to stage -->
+            <nexusUrl>http://nexus.terracotta.eur.ad.sag</nexusUrl>
+            <!-- The server "id" element from settings to use authentication from -->
+            <serverId>terracotta-nexus-staging</serverId>
+            <skipNexusStagingDeployMojo>${skipDeploy}</skipNexusStagingDeployMojo>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <distributionManagement>
+    <repository>
+      <id>terracotta-os-releases</id>
+      <name>Terracotta OS Releases Repository</name>
+      <url>${terracotta-os-releases-url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>terracotta-os-snapshots</id>
+      <uniqueVersion>false</uniqueVersion>
+      <name>Terracotta OS Snapshots Repository</name>
+      <url>${terracotta-os-snapshots-url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <scm>
+    <connection>ssh://git@irepo.eur.ad.sag:7999/tab/entity-api.git</connection>
+    <developerConnection>ssh://git@irepo.eur.ad.sag:7999/tab/entity-api.git</developerConnection>
+  </scm>
+
+</project>

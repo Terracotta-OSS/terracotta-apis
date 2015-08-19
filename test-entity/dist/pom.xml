@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~  The contents of this file are subject to the Terracotta Public License Version
+  ~  2.0 (the "License"); You may not use this file except in compliance with the
+  ~  License. You may obtain a copy of the License at
+  ~
+  ~  http://terracotta.org/legal/terracotta-public-license.
+  ~
+  ~  Software distributed under the License is distributed on an "AS IS" basis,
+  ~  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+  ~  the specific language governing rights and limitations under the License.
+  ~
+  ~  The Covered Software is Entity API.
+  ~
+  ~  The Initial Developer of the Covered Software is
+  ~  Terracotta, Inc., a Software AG company
+  ~
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>test-entity</artifactId>
+    <groupId>org.terracotta</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>test-entity-distribution</artifactId>
+
+  <properties>
+    <maven-forge-plugin.version>1.2.18</maven-forge-plugin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.terracotta</groupId>
+      <artifactId>test-entity-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>test-entity-client</artifactId>
+      <groupId>org.terracotta</groupId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.terracotta</groupId>
+      <artifactId>test-entity-server</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
