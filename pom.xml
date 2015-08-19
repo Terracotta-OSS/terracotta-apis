@@ -28,16 +28,16 @@
   </parent>
 
   <groupId>org.terracotta</groupId>
-  <artifactId>entity-api-root</artifactId>
+  <artifactId>terracotta-apis-root</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
     <java.build.version>1.8</java.build.version>
-    <connection-api.version>1.0-SNAPSHOT</connection-api.version>
   </properties>
 
   <modules>
+    <module>connection-api</module>
     <module>entity-client-api</module>
     <module>entity-server-api</module>
     <module>entity-test-lib</module>
@@ -47,11 +47,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.terracotta</groupId>
-        <artifactId>connection-api</artifactId>
-        <version>${connection-api.version}</version>
-      </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
@@ -107,8 +102,8 @@
   </distributionManagement>
 
   <scm>
-    <connection>ssh://git@irepo.eur.ad.sag:7999/tab/entity-api.git</connection>
-    <developerConnection>ssh://git@irepo.eur.ad.sag:7999/tab/entity-api.git</developerConnection>
+    <connection>ssh://git@irepo.eur.ad.sag:7999/tab/terracotta-apis.git</connection>
+    <developerConnection>ssh://git@irepo.eur.ad.sag:7999/tab/terracotta-apis.git</developerConnection>
   </scm>
 
 </project>

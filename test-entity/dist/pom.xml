@@ -22,8 +22,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>test-entity</artifactId>
     <groupId>org.terracotta</groupId>
+    <artifactId>test-entity</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -41,8 +41,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>test-entity-client</artifactId>
       <groupId>org.terracotta</groupId>
+      <artifactId>test-entity-client</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

@@ -22,17 +22,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.terracotta.forge</groupId>
-    <artifactId>forge-parent</artifactId>
-    <version>3.19</version>
+    <groupId>org.terracotta</groupId>
+    <artifactId>terracotta-apis-root</artifactId>
+    <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.terracotta</groupId>
   <artifactId>connection-api</artifactId>
-  <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <java.build.version>1.8</java.build.version>
     <asciidoctor.version>1.5.2</asciidoctor.version>
     <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
   </properties>
@@ -55,7 +52,6 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -102,19 +98,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.1</version>
-        <extensions>true</extensions>
-        <configuration>
-          <!-- The Base URL of Nexus instance where we want to stage -->
-          <nexusUrl>http://nexus.terracotta.eur.ad.sag</nexusUrl>
-          <!-- The server "id" element from settings to use authentication from -->
-          <serverId>terracotta-nexus-staging</serverId>
-          <skipNexusStagingDeployMojo>${skipDeploy}</skipNexusStagingDeployMojo>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.asciidoctor</groupId>
@@ -166,19 +149,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <distributionManagement>
-    <repository>
-      <id>terracotta-os-releases</id>
-      <name>Terracotta OS Releases Repository</name>
-      <url>${terracotta-os-releases-url}</url>
-    </repository>
-    <snapshotRepository>
-      <id>terracotta-os-snapshots</id>
-      <uniqueVersion>false</uniqueVersion>
-      <name>Terracotta OS Snapshots Repository</name>
-      <url>${terracotta-os-snapshots-url}</url>
-    </snapshotRepository>
-  </distributionManagement>
 
 </project>
