@@ -1,0 +1,69 @@
+= Getting Started with the Voltron Connection API
+Gary Keim
+v0.1, {docdatetime}
+
+:sourcedir: ../../test/java
+
+== Establishing a Connection
+
+Relatively straightforward. There’ll be a simple service discovery mechanism with
+connections happening through a ConnectionFactory:
+
+[source,java,indent=0]
+----
+include::{sourcedir}/org/terracotta/connection/BasicConnectTest.java[tags=connect]
+----
+
+Properties could be passed through to the connection implementation. This is an
+actual properties object instead of pulling out properties from the URI query
+string because we need to pass through things like classloaders apparently…
+
+== Creating an Entity
+
+[source,java,indent=0]
+----
+include::{sourcedir}/org/terracotta/connection/BasicConnectTest.java[tags=create]
+----
+
+== Using an Entity
+
+You might want to actually use a created and maintained entity, here’s how you might do it.
+
+[source,java,indent=0]
+----
+include::{sourcedir}/org/terracotta/connection/BasicConnectTest.java[tags=using]
+----
+
+== Destroying an Entity
+
+[source,java,indent=0]
+----
+include::{sourcedir}/org/terracotta/connection/BasicConnectTest.java[tags=destroy]
+----
+
+== Handling Connection Loss (Rejoin)
+
+For simplicity’s sake, the platform will not attempt to clear its state and
+rejoin transparently. Applications built on top of the platform will need to
+figure out what they want to do. To that end on creating the connection, there
+will be an option to register a DisconnectHandler like so.
+
+[source,java,indent=0]
+----
+include::{sourcedir}/org/terracotta/connection/BasicConnectTest.java[tags=handleConnectionLoss]
+----
+
+== API Reference
+
+link:./apidocs/index.html[Overview]
+
+link:./apidocs/org/terracotta/connection/Connection.html[org.terracotta.connection.Connection] +
+link:./apidocs/org/terracotta/connection/ConnectionException.html[org.terracotta.connection.ConnectionException] +
+link:./apidocs/org/terracotta/connection/ConnectionFactory.html[org.terracotta.connection.ConnectionFactory] +
+link:./apidocs/org/terracotta/connection/ConnectionService.html[org.terracotta.connection.ConnectionService] +
+link:./apidocs/org/terracotta/connection/DisconnectHandler.html[org.terracotta.connection.DisconnectHandler] +
+
+link:./apidocs/org/terracotta/connection/entity/ConfigurationMismatchException.html[org.terracotta.connection.entity.ConfigurationMismatchException] +
+link:./apidocs/org/terracotta/connection/entity/Entity.html[org.terracotta.connection.entity.Entity] +
+link:./apidocs/org/terracotta/connection/entity/EntityMaintenanceRef.html[org.terracotta.connection.entity.EntityMaintenanceRef] +
+link:./apidocs/org/terracotta/connection/entity/EntityRef.html[org.terracotta.connection.entity.EntityRef] +

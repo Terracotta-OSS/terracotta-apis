@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~  The contents of this file are subject to the Terracotta Public License Version
+  ~  2.0 (the "License"); You may not use this file except in compliance with the
+  ~  License. You may obtain a copy of the License at
+  ~
+  ~  http://terracotta.org/legal/terracotta-public-license.
+  ~
+  ~  Software distributed under the License is distributed on an "AS IS" basis,
+  ~  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+  ~  the specific language governing rights and limitations under the License.
+  ~
+  ~  The Covered Software is Connection API.
+  ~
+  ~  The Initial Developer of the Covered Software is
+  ~  Terracotta, Inc., a Software AG company
+  ~
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.terracotta.forge</groupId>
+    <artifactId>forge-parent</artifactId>
+    <version>3.19</version>
+  </parent>
+
+  <groupId>org.terracotta</groupId>
+  <artifactId>connection-api</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <java.build.version>1.8</java.build.version>
+    <asciidoctor.version>1.5.2</asciidoctor.version>
+    <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>rubygems-proxy-releases</id>
+      <name>RubyGems.org Proxy (Releases)</name>
+      <url>http://rubygems-proxy.torquebox.org/releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>rubygems</groupId>
+      <artifactId>coderay</artifactId>
+      <version>1.1.0</version>
+      <type>gem</type>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+    
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>de.saumya.mojo</groupId>
+        <artifactId>gem-maven-plugin</artifactId>
+        <version>1.0.5</version>
+        <configuration>
+          <!-- align JRuby version with AsciidoctorJ to avoid redundant downloading -->
+          <jrubyVersion>1.7.9</jrubyVersion>
+          <gemHome>${project.build.directory}/gems</gemHome>
+          <gemPath>${project.build.directory}/gems</gemPath>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>initialize</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>        
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.8</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <quiet>true</quiet>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.1</version>
+        <extensions>true</extensions>
+        <configuration>
+          <!-- The Base URL of Nexus instance where we want to stage -->
+          <nexusUrl>http://nexus.terracotta.eur.ad.sag</nexusUrl>
+          <!-- The server "id" element from settings to use authentication from -->
+          <serverId>terracotta-nexus-staging</serverId>
+          <skipNexusStagingDeployMojo>${skipDeploy}</skipNexusStagingDeployMojo>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>${asciidoctor.version}</version>
+        <executions>
+          <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+              <sourceHighlighter>coderay</sourceHighlighter>
+              <preserveDirectories>true</preserveDirectories>
+              <backend>html5</backend>
+              <attributes>
+                <toc2/>
+                <sectanchors>true</sectanchors>
+                <toclevels>3</toclevels>
+                <linkattrs>true</linkattrs>
+              </attributes>
+              <gemPath>${project.build.directory}/gems-provided</gemPath>
+              <requires>
+                <require>coderay</require>
+              </requires>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven-assembly-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+         </execution>
+        </executions>
+        <configuration>
+          <finalName>${project.artifactId}-${project.version}</finalName>
+          <descriptors>
+            <descriptor>src/assembly/docs.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <distributionManagement>
+    <repository>
+      <id>terracotta-os-releases</id>
+      <name>Terracotta OS Releases Repository</name>
+      <url>${terracotta-os-releases-url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>terracotta-os-snapshots</id>
+      <uniqueVersion>false</uniqueVersion>
+      <name>Terracotta OS Snapshots Repository</name>
+      <url>${terracotta-os-snapshots-url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+</project>
