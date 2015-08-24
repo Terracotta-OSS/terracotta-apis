@@ -19,10 +19,12 @@
 
 package org.terracotta.connection.entity;
 
+import java.io.Closeable;
+
 /**
  * @author twu
  */
-public interface EntityMaintenanceRef<T extends Entity, C> extends AutoCloseable {
+public interface EntityMaintenanceRef<T extends Entity, C> extends Closeable {
   /**
    * @return True if the underlying entity actually exists.
    */

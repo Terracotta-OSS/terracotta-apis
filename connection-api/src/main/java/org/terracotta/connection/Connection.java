@@ -19,6 +19,7 @@
 
 package org.terracotta.connection;
 
+import java.io.Closeable;
 import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityMaintenanceRef;
 import org.terracotta.connection.entity.EntityRef;
@@ -30,7 +31,7 @@ import java.util.Collection;
  *
  * @author twu
  */
-public interface Connection extends AutoCloseable {
+public interface Connection extends Closeable {
   /**
    * Get a reference to the given entity. The entity may or may not yet exist. This is a pointer to the spot where the
    * entity would be if it did exist.
