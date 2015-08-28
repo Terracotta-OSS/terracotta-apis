@@ -61,4 +61,14 @@ public interface ActiveServerEntity extends CommonServerEntity {
    * @return possible return value
    */
   byte[] invoke(ClientDescriptor clientDescriptor, byte[] arg);
+
+  /**
+   * Called during client reconnect to allow the client to pass arbitrary extra data to the server-side entity so it can
+   * rebuild any in-memory state it had, related to the connected client.
+   * Note that this is called AFTER connected() is called for this clientDescriptor.
+   * 
+   * @param clientDescriptor The client-side instance which reconnected
+   * @param extendedReconnectData Arbitrary data sent by the client-side instance to rebuild the server-side in-memory state 
+   */
+  void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData);
 }

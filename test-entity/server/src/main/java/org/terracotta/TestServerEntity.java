@@ -24,9 +24,7 @@ import org.terracotta.entity.ConcurrencyStrategy;
 import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.ActiveServerEntity;
 
-/**
- * @author twu
- */
+
 public class TestServerEntity implements ActiveServerEntity {
   @Override
   public ConcurrencyStrategy getConcurrencyStrategy() {
@@ -35,6 +33,11 @@ public class TestServerEntity implements ActiveServerEntity {
 
   @Override
   public void connected(ClientDescriptor clientDescriptor) {
+  }
+
+  @Override
+  public void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData) {
+    // Do nothing.
   }
 
   @Override

@@ -19,9 +19,7 @@
 
 package org.terracotta.entity;
 
-/**
- * @author twu
- */
+
 public interface EntityClientEndpoint extends AutoCloseable {
 
   byte[] getEntityConfiguration();
@@ -29,7 +27,22 @@ public interface EntityClientEndpoint extends AutoCloseable {
   void registerListener(EndpointListener listener);
 
   InvocationBuilder beginInvoke();
-  
+
+  /**
+   * Sets the reconnect handler for this end-point, to be called when the end-point is reconnected.  Note that setting this
+   * will replace any previous value.
+   * @param handler The handler to call on reconnect
+   */
+  void setReconnectHandler(EntityClientReconnectHandler handler);
+
+  /**
+   * Called when constructing the reconnect handshake, when the connection under this endpoint is re-established after
+   * restart or fail-over in order to ask if the entity on top of the endpoint has registered any special data to be sent
+   * to the server-side entity.
+   * @return A non-null array of bytes to send.
+   */
+  byte[] getExtendedReconnectData();
+
   /**
    * The instance will be unusable after this call.
    */
