@@ -55,17 +55,4 @@ public interface Connection extends AutoCloseable {
    * @return exclusive reference to the entity
    */
   <T extends Entity, C> EntityMaintenanceRef<T, C> acquireMaintenanceModeRef(Class<T> cls, long version, String name);
-
-  /**
-   * Get references to all the existing entities of the given type.
-   *
-   * Note: it may be possible that the references will be
-   * dead by the time they are examined.
-   *
-   * @param cls entity class
-   * @param version version of the entity implementation
-   * @param <T> entity type
-   * @return collection of entity references that were live at the time of the call.
-   */
-  <T extends Entity, C> Collection<EntityRef<T, C>> getEntityRefsOfType(Class<T> cls, long version);
 }
