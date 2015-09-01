@@ -1,7 +1,6 @@
 package org.terracotta.passthrough;
 
 import java.io.DataInputStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,7 @@ import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityMaintenanceRef;
 import org.terracotta.connection.entity.EntityRef;
 import org.terracotta.entity.EntityClientService;
-import org.terracotta.passthrough.PassthroughMessageCodec.Type;
+import org.terracotta.passthrough.PassthroughMessage.Type;
 
 
 /**
@@ -64,8 +63,7 @@ public class PassthroughConnection implements Connection {
   /**
    * This entry-point is specifically used for entity-defined action messages.
    */
-  public Future<byte[]> invokeActionAndWaitForAcks(Class<?> entityClass, String entityName, long clientInstanceID, boolean shouldWaitForReceived, boolean shouldWaitForCompleted, boolean shouldReplicate, byte[] payload) {
-    PassthroughMessage message = PassthroughMessageCodec.createInvokeMessage(entityClass, entityName, clientInstanceID, payload);
+  public Future<byte[]> invokeActionAndWaitForAcks(PassthroughMessage message, boolean shouldWaitForReceived, boolean shouldWaitForCompleted) {
     return invokeAndWait(message, shouldWaitForReceived, shouldWaitForCompleted);
   }
 
@@ -100,6 +98,7 @@ public class PassthroughConnection implements Connection {
   }
   
   private synchronized void runClientThread() {
+    Thread.currentThread().setName("Client thread");
     while (this.isRunning) {
       if (!this.messageQueue.isEmpty()) {
         byte[] message = this.messageQueue.remove(0);
@@ -115,11 +114,7 @@ public class PassthroughConnection implements Connection {
   }
 
   private void clientThreadHandleMessage(byte[] message) {
-    PassthroughMessageCodec.Decoder<Void> decoder = (DataInputStream input) -> {
-      // Decode the usual, transactionID followed by type ordinal.
-      long transactionID = input.readLong();
-      int ordinal = input.readInt();
-      Type type = PassthroughMessageCodec.Type.values()[ordinal];
+    PassthroughMessageCodec.Decoder<Void> decoder = (Type type, boolean shouldReplicate, long transactionID, DataInputStream input) -> {
       switch (type) {
         case ACK_FROM_SERVER:
           handleAck(transactionID);
