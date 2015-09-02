@@ -19,8 +19,6 @@
 
 package org.terracotta.entity;
 
-import java.util.Optional;
-
 /**
  * Registry which Entities interact with list of services provided by the platform. Services provided to entity might
  * be namespaced or not, depending on  service provider.

@@ -19,8 +19,9 @@
 
 package org.terracotta.entity;
 
+import java.io.Closeable;
 
-public interface EntityClientEndpoint extends AutoCloseable {
+public interface EntityClientEndpoint extends Closeable {
 
   byte[] getEntityConfiguration();
 

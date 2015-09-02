@@ -19,10 +19,12 @@
 
 package org.terracotta.connection.entity;
 
+import java.io.Closeable;
+
 /**
  * @author twu
  */
-public interface Entity extends AutoCloseable {
+public interface Entity extends Closeable {
 
   /**
    * Release this handle on the entity. The instance will be unusable after this call.

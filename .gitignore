@@ -8,3 +8,5 @@ target/
 .idea/
 /bin/
 *~
+
+nb-configuration.xml
