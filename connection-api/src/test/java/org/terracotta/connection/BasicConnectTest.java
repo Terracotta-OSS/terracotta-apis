@@ -75,7 +75,7 @@ public class BasicConnectTest {
     // tag::using[]
     // Get the entity, this locks out someone attempting to enter maintenance
     // mode, it’s blocked by an existing maintenance mode hold.
-    EntityRef<Example, ExampleConfiguration> entityRef =
+    EntityRef<Example> entityRef =
         connection.getEntityRef(Example.class, Example.VERSION, "foo");
     Example e = entityRef.fetchEntity();
 

@@ -24,7 +24,6 @@ import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityMaintenanceRef;
 import org.terracotta.connection.entity.EntityRef;
 
-import java.util.Collection;
 
 /**
  * Represents a connection to a cluster
@@ -42,7 +41,7 @@ public interface Connection extends Closeable {
    * @param <T> entity type
    * @return reference to the entity
    */
-  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, long version, String name);
+  <T extends Entity> EntityRef<T> getEntityRef(Class<T> cls, long version, String name);
 
   /**
    * Grab a maintenance mode reference to the specified entity of given type. This reference grants exclusive access.

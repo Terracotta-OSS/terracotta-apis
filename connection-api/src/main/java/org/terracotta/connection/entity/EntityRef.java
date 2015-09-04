@@ -22,7 +22,7 @@ package org.terracotta.connection.entity;
 /**
  * @author twu
  */
-public interface EntityRef<T extends Entity, C> {
+public interface EntityRef<T extends Entity> {
   /**
    * Gets the entity pointed to by this reference. Can return null if no entity exists
    *
