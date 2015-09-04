@@ -1,5 +1,7 @@
 package org.terracotta.passthrough;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +11,12 @@ import org.terracotta.entity.ActiveServerEntity;
 import org.terracotta.entity.CommonServerEntity;
 import org.terracotta.entity.PassiveServerEntity;
 import org.terracotta.entity.ServerEntityService;
+import org.terracotta.entity.Service;
+import org.terracotta.entity.ServiceConfiguration;
 import org.terracotta.entity.ServiceProvider;
 import org.terracotta.passthrough.PassthroughServerMessageDecoder.MessageHandler;
+import org.terracotta.persistence.IPersistentStorage;
+import org.terracotta.persistence.KeyValueStorage;
 
 
 /**
@@ -32,6 +38,9 @@ public class PassthroughServerProcess implements MessageHandler {
   private final Map<PassthroughEntityTuple, PassiveServerEntity> passiveEntities;
   private final Map<Class<?>, ServiceProvider> serviceProviderMap;
   private PassthroughServerProcess downstreamPassive;
+  private long nextConsumerID;
+  private PassthroughServiceRegistry platformServiceRegistry;
+  private KeyValueStorage<Long, EntityData> persistedEntitiesByConsumerID;
   
   public PassthroughServerProcess(boolean isActiveMode) {
     this.isRunning = true;
@@ -47,9 +56,39 @@ public class PassthroughServerProcess implements MessageHandler {
     this.activeEntities = (isActiveMode ? new HashMap<PassthroughEntityTuple, ActiveServerEntity>() : null);
     this.passiveEntities = (isActiveMode ? null : new HashMap<PassthroughEntityTuple, PassiveServerEntity>());
     this.serviceProviderMap = new HashMap<Class<?>, ServiceProvider>();
+    // Consumer IDs start at 0 since that is the one the platform gives itself.
+    this.nextConsumerID = 0;
   }
   
   public void start() {
+    // We can now get the service registry for the platform.
+    this.platformServiceRegistry = getNextServiceRegistry();
+    // See if we have persistence support.
+    ServiceConfiguration<IPersistentStorage> persistenceConfiguration = new ServiceConfiguration<IPersistentStorage>() {
+      @Override
+      public Class<IPersistentStorage> getServiceType() {
+        return IPersistentStorage.class;
+      }
+    };
+    Service<IPersistentStorage> persistentStorageService = this.platformServiceRegistry.getService(persistenceConfiguration);
+    if (null != persistentStorageService) {
+      IPersistentStorage persistentStorage = persistentStorageService.get();
+      try {
+        persistentStorage.open();
+      } catch (IOException e) {
+        // Fall back to creating a new one since this probably means it doesn't exist and the Persitor has no notion of which
+        // mode (open/create) it should prefer.
+        try {
+          persistentStorage.create();
+        } catch (IOException e1) {
+          // We are not expecting both to fail.
+          Assert.unexpected(e1);
+        }
+      }
+      // Note that we may want to persist the version, as well, but we currently have no way of exposing that difference, within the passthrough system, and it would require the creation of an almost completely-redundant container class.
+      this.persistedEntitiesByConsumerID = persistentStorage.getKeyValueStorage("entities", Long.class, EntityData.class);
+    }
+    // And start the server thread.
     this.serverThread.start();
   }
 
@@ -63,6 +102,7 @@ public class PassthroughServerProcess implements MessageHandler {
   }
   
   public void shutdown() {
+    // TODO:  Find a way to cut the connections of any current task so that they can't send a response to the client.
     synchronized(this) {
       this.isRunning = false;
       this.notifyAll();
@@ -218,26 +258,22 @@ public class PassthroughServerProcess implements MessageHandler {
       || ((null != this.passiveEntities) && this.passiveEntities.containsKey(entityTuple))) {
       throw new Exception("Already exists");
     }
-    ServerEntityService<?, ?> service = getEntityServiceForClassName(entityClassName);
-    if (service.getVersion() != version) {
-      throw new Exception("Version mis-match");
-    }
-    // TODO:  Make this ID real.
-    long consumerID = 0;
-    CommonServerEntity newEntity = null;
-    if (null != this.activeEntities) {
-      PassthroughServiceRegistry registry = new PassthroughServiceRegistry(consumerID, this.serviceProviderMap);
-      ActiveServerEntity entity = service.createActiveEntity(registry, serializedConfiguration);
-      this.activeEntities.put(entityTuple, entity);
-      newEntity = entity;
-    } else {
-      PassthroughServiceRegistry registry = new PassthroughServiceRegistry(consumerID, this.serviceProviderMap);
-      PassiveServerEntity entity = service.createPassiveEntity(registry, serializedConfiguration);
-      this.passiveEntities.put(entityTuple, entity);
-      newEntity = entity;
-    }
+    // Capture which consumerID we will use for this entity.
+    long consumerID = this.nextConsumerID;
+    ServerEntityService<?, ?> service = getServerEntityServiceForVersion(entityClassName, version);
+    PassthroughServiceRegistry registry = getNextServiceRegistry();
+    CommonServerEntity newEntity = createAndStoreEntity(serializedConfiguration, entityTuple, service, registry);
     // Tell the entity to create itself as something new.
     newEntity.createNew();
+    // If we have a persistence layer, record this.
+    if (null != this.persistedEntitiesByConsumerID) {
+      EntityData data = new EntityData();
+      data.className = entityClassName;
+      data.version = version;
+      data.entityName = entityName;
+      data.configuration = serializedConfiguration;
+      this.persistedEntitiesByConsumerID.put(consumerID, data);
+    }
   }
 
   @Override
@@ -265,6 +301,36 @@ public class PassthroughServerProcess implements MessageHandler {
     this.lockManager.releaseWriteLock(entityTuple, sender.getClientOrigin());
   }
 
+  @Override
+  public void reconnect(final IMessageSenderWrapper sender, final long clientInstanceID, final String entityClassName, final String entityName) {
+    final PassthroughEntityTuple entityTuple = new PassthroughEntityTuple(entityClassName, entityName);
+    
+    // We need to get the lock, but we can't fail or wait, during the reconnect, so we handle that internally.
+    // NOTE:  This use of "didRun" is a somewhat ugly way to avoid creating an entirely new Runnable class so we could ask
+    // for the result but we are only using this in an assert, within this method, so it does maintain clarity.
+    final boolean[] didRun = new boolean[1];
+    Runnable onAcquire = new Runnable() {
+      @Override
+      public void run() {
+        // Fetch the entity now that we have the read lock on the name.
+        // Fetch should never be replicated and only handled on the active.
+        Assert.assertTrue(null != PassthroughServerProcess.this.activeEntities);
+        ActiveServerEntity entity = PassthroughServerProcess.this.activeEntities.get(entityTuple);
+        if (null != entity) {
+          PassthroughClientDescriptor clientDescriptor = sender.clientDescriptorForID(clientInstanceID);
+          entity.connected(clientDescriptor);
+          didRun[0] = true;
+        } else {
+          Assert.unexpected(new Exception("Entity not found in reconnect"));
+          lockManager.releaseReadLock(entityTuple, sender.getClientOrigin(), clientInstanceID);
+        }
+      }
+    };
+    // The onAcquire callback will fetch the entity asynchronously.
+    this.lockManager.acquireReadLock(entityTuple, sender.getClientOrigin(), clientInstanceID, onAcquire);
+    Assert.assertTrue(didRun[0]);
+  }
+
 
   private ServerEntityService<?, ?> getEntityServiceForClassName(String entityClassName) {
     ServerEntityService<?, ?> foundService = null;
@@ -288,9 +354,77 @@ public class PassthroughServerProcess implements MessageHandler {
     this.downstreamPassive = serverProcess;
   }
 
+  /**
+   * Called upon restart to reload our entities from disk.
+   * Note that this will do nothing if the server was not persistent.
+   */
+  @SuppressWarnings("deprecation")
+  public void reloadEntities() {
+    if (null != this.persistedEntitiesByConsumerID) {
+      for (long consumerID : this.persistedEntitiesByConsumerID.keySet()) {
+        // Create the registry for the entity.
+        PassthroughServiceRegistry registry = new PassthroughServiceRegistry(consumerID, this.serviceProviderMap);
+        // Construct the entity.
+        EntityData entityData = this.persistedEntitiesByConsumerID.get(consumerID);
+        ServerEntityService<?, ?> service = null;
+        try {
+          service = getServerEntityServiceForVersion(entityData.className, entityData.version);
+        } catch (Exception e) {
+          // We don't expect a version mismatch here or other failure in this test system.
+          Assert.unexpected(e);
+        }
+        PassthroughEntityTuple entityTuple = new PassthroughEntityTuple(entityData.className, entityData.entityName);
+        CommonServerEntity newEntity = createAndStoreEntity(entityData.configuration, entityTuple, service, registry);
+        // Tell the entity to load itself from storage.
+        newEntity.loadExisting();
+        
+        // See if we need to bump up the next consumerID for future entities.
+        if (consumerID >= this.nextConsumerID) {
+          this.nextConsumerID = consumerID + 1;
+        }
+      }
+    }
+  }
+
+  private PassthroughServiceRegistry getNextServiceRegistry() {
+    long thisConsumerID = this.nextConsumerID;
+    this.nextConsumerID += 1;
+    return new PassthroughServiceRegistry(thisConsumerID, this.serviceProviderMap);
+  }
+
+  private ServerEntityService<?, ?> getServerEntityServiceForVersion(String entityClassName, long version) throws Exception {
+    ServerEntityService<?, ?> service = getEntityServiceForClassName(entityClassName);
+    if (service.getVersion() != version) {
+      throw new Exception("Version mis-match");
+    }
+    return service;
+  }
+
+  private CommonServerEntity createAndStoreEntity(byte[] serializedConfiguration, PassthroughEntityTuple entityTuple, ServerEntityService<?, ?> service, PassthroughServiceRegistry registry) {
+    CommonServerEntity newEntity = null;
+    if (null != this.activeEntities) {
+      ActiveServerEntity entity = service.createActiveEntity(registry, serializedConfiguration);
+      this.activeEntities.put(entityTuple, entity);
+      newEntity = entity;
+    } else {
+      PassiveServerEntity entity = service.createPassiveEntity(registry, serializedConfiguration);
+      this.passiveEntities.put(entityTuple, entity);
+      newEntity = entity;
+    }
+    return newEntity;
+  }
+
 
   private static class MessageContainer {
     public IMessageSenderWrapper sender;
     public byte[] message;
+  }
+
+  private static class EntityData implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public String className;
+    public long version;
+    public String entityName;
+    public byte[] configuration;
   }
 }
