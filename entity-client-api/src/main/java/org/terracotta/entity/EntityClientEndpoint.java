@@ -37,6 +37,13 @@ public interface EntityClientEndpoint extends Closeable {
   void setReconnectHandler(EntityClientReconnectHandler handler);
 
   /**
+   * Sets the handler for unexpected disconnects on this end-point, to be called when the end-point has disconnected via
+   * other means other than a close() call.  Note that setting this will replace any previous value.
+   * @param handler The handler to call on reconnect
+   */
+  void setUnexpectedDisconnectHandler(EntityClientDisconnectHandler handler);
+
+  /**
    * Called when constructing the reconnect handshake, when the connection under this endpoint is re-established after
    * restart or fail-over in order to ask if the entity on top of the endpoint has registered any special data to be sent
    * to the server-side entity.
@@ -49,4 +56,12 @@ public interface EntityClientEndpoint extends Closeable {
    */
   @Override
   void close();
+
+  /**
+   * Called if the receiver was closed unexpectedly in a way which can't be reconnected.  This can be due to a failure to
+   * reconnect within the window, the restart of a non-persistent server, or client shutdown without previously having
+   * called close().
+   * The receiver is considered to be invalid, once this call is received.
+   */
+  void didCloseUnexpectedly();
 }
