@@ -100,23 +100,6 @@ public class BasicConnectTest {
     }
     // end::destroy[]
   }
-  
-  @Test
-  @Ignore
-  public void testConnectionLoss() throws ConnectionException, URISyntaxException {
-    Properties properties = new Properties();
-
-    // tag::handleConnectionLoss[]
-    URI uri = new URI("terracotta://localhost:1234");
-    ConnectionFactory.connect(uri, new DisconnectHandler() {
-      @Override
-      public void connectionLost(URI uri) {
-        // Umm... don't do this.
-        System.exit(1);
-      }
-    }, properties);
-    // end::handleConnectionLoss[]
-  }
 
   interface Example extends Entity {
     public static final long VERSION = 1;

@@ -47,10 +47,9 @@ public interface ConnectionService {
    * prior to connect(). Calling connect() on an unverified URI can lead to unspecified behavior.
    *
    * @param uri uri to connect to
-   * @param disconnectHandler handler for connection loss
    * @param properties user specified implementation specific properties  @return established connection
    * @return established connection
    * @throws ConnectionException on connection failure
    */
-  Connection connect(URI uri, DisconnectHandler disconnectHandler, Properties properties) throws ConnectionException;
+  Connection connect(URI uri, Properties properties) throws ConnectionException;
 }
