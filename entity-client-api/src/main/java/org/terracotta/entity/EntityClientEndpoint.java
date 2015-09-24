@@ -21,27 +21,19 @@ package org.terracotta.entity;
 
 import java.io.Closeable;
 
+
 public interface EntityClientEndpoint extends Closeable {
 
   byte[] getEntityConfiguration();
 
-  void registerListener(EndpointListener listener);
+  /**
+   * Sets the delegate for events originating within the end-point.
+   * Note that this value can only be set once.
+   * @param delegate The delegate to use for events originating within the receiver.
+   */
+  void setDelegate(EndpointDelegate delegate);
 
   InvocationBuilder beginInvoke();
-
-  /**
-   * Sets the reconnect handler for this end-point, to be called when the end-point is reconnected.  Note that setting this
-   * will replace any previous value.
-   * @param handler The handler to call on reconnect
-   */
-  void setReconnectHandler(EntityClientReconnectHandler handler);
-
-  /**
-   * Sets the handler for unexpected disconnects on this end-point, to be called when the end-point has disconnected via
-   * other means other than a close() call.  Note that setting this will replace any previous value.
-   * @param handler The handler to call on reconnect
-   */
-  void setUnexpectedDisconnectHandler(EntityClientDisconnectHandler handler);
 
   /**
    * Called when constructing the reconnect handshake, when the connection under this endpoint is re-established after
