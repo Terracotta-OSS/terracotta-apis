@@ -21,15 +21,17 @@ package org.terracotta.entity;
 
 
 /**
- * The interface which must be implemented by any object wishing to handle the end-point reconnect to provide additional
- * extended reconnect data.
- * Typically, this is the entity which exists on top of the end-point.
- * 
- * Note that this interface is called on the thread handling the reconnect, not the thread running the user code.  This means
- * that is it possible for the reconnect data request to run concurrently with the user code which might change its meaning.
- * Implementors must be aware of the concerns that this represents.
+ * The interface associated with an EntityClientEndpoint to handle the events which enter the system at that object.
+ * Typically, the implementor is the Entity associated with the end-point (hence Entity extends this interface).
  */
-public interface EntityClientReconnectHandler {
+public interface EndpointDelegate {
+  /**
+   * Handle a message coming from the clustered implementation of the Entity
+   *
+   * @param payload serialized message
+   */
+  public void handleMessage(byte[] payload);
+
   /**
    * Called on the thread handling the reconnect to ask if any additional data should be provided to the server-side entity,
    * upon reconnect from this entity.  Note that the value returned here will be provided to the server-side entity via
@@ -37,4 +39,10 @@ public interface EntityClientReconnectHandler {
    * @return Arbitrary data to send the server-side entity when handling the reconnect of this end-point
    */
   public byte[] createExtendedReconnectData();
+
+  /**
+   * Called when the end-point unexpectedly (and unrecoverably) disconnected from the remote side.
+   * Called on the thread which realized the disconnect.
+   */
+  public void didDisconnectUnexpectedly();
 }
