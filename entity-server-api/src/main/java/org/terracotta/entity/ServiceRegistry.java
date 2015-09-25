@@ -34,7 +34,7 @@ public interface ServiceRegistry {
    * @param configuration With which service should be provisioned
    * @return an instance of service which will provide the requested interface
    */
-  <T> Service<T> getService(ServiceConfiguration<T> configuration);
+  <T> T getService(ServiceConfiguration<T> configuration);
 
   /**
    * Destroy this ServiceRegistry and all its state.
@@ -43,6 +43,10 @@ public interface ServiceRegistry {
    * it will result in destroy() being called on each contained Service. Services will be expected to destroy created
    * sub-services.
    */
+  /**
+   * do we need this?  comment out to test
   void destroy();
+   */
+
 
 }

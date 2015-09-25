@@ -45,7 +45,7 @@ public interface ServiceProvider extends Closeable {
    * @param configuration Service configuration which is to be used
    * @return service instance
    */
-  <T> Service<T> getService(long consumerID, ServiceConfiguration<T> configuration);
+  <T> T getService(long consumerID, ServiceConfiguration<T> configuration);
 
   /**
    * Since a service provider can know how to build more than one type of service, this method allows the platform to query
