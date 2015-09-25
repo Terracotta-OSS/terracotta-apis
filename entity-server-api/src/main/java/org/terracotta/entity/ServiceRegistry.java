@@ -34,15 +34,6 @@ public interface ServiceRegistry {
    * @param configuration With which service should be provisioned
    * @return an instance of service which will provide the requested interface
    */
-  <T> Service<T> getService(ServiceConfiguration<T> configuration);
-
-  /**
-   * Destroy this ServiceRegistry and all its state.
-   *
-   * Destruction is cascaded down to sub-registries via Services. That is, when destroy is called on a service registry,
-   * it will result in destroy() being called on each contained Service. Services will be expected to destroy created
-   * sub-services.
-   */
-  void destroy();
+  <T> T getService(ServiceConfiguration<T> configuration);
 
 }
