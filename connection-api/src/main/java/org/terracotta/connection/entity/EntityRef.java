@@ -26,6 +26,18 @@ package org.terracotta.connection.entity;
  */
 public interface EntityRef<T extends Entity, C> {
   /**
+   * Create the entity with the given configuration
+   *
+   * @param configuration configuration to be applied to the entity
+   */
+  void create(C configuration);
+
+  /**
+   * Destroy the entity pointed to by this reference.
+   */
+  void destroy();
+
+  /**
    * Gets the entity pointed to by this reference. Can return null if no entity exists
    *
    * @return entity

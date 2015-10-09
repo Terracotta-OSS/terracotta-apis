@@ -25,11 +25,10 @@ import java.util.Properties;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.terracotta.connection.entity.Entity;
-import org.terracotta.connection.entity.EntityMaintenanceRef;
 import org.terracotta.connection.entity.EntityRef;
 
-public class BasicConnectTest {
 
+public class BasicConnectTest {
   public Connection getConnection() throws ConnectionException, URISyntaxException {
     // tag::connect[]
     Properties properties = new Properties();
@@ -47,23 +46,11 @@ public class BasicConnectTest {
     Connection connection = getConnection();
     
     // tag::create[]
-    // Get an maintenance reference on the entity name
-    EntityMaintenanceRef<Example, ExampleConfiguration> maintenanceRef =
-        connection.acquireMaintenanceModeRef(Example.class, Example.VERSION, "foo");
-
-    // Check if it’s already there
-    if (maintenanceRef.doesExist()) {
-      // hey, it already exists!
-      // either check if it’s actually the one you want, or fail at the fact
-      // that there already is something you’re attempting to create, or
-      // whatever
-    }
+    // Get a reference on the entity name
+    EntityRef<Example, ExampleConfiguration> ref = connection.getEntityRef(Example.class, Example.VERSION, "foo");
     ExampleConfiguration configuration = new ExampleConfiguration();
     // Create it
-    maintenanceRef.create(configuration);
-
-    // drop maintenance reference
-    maintenanceRef.close();
+    ref.create(configuration);
     // end::create[]
   }
   
@@ -75,12 +62,12 @@ public class BasicConnectTest {
     // tag::using[]
     // Get the entity, this locks out someone attempting to enter maintenance
     // mode, it’s blocked by an existing maintenance mode hold.
-    EntityRef<Example, ExampleConfiguration> entityRef =
-        connection.getEntityRef(Example.class, Example.VERSION, "foo");
+    EntityRef<Example, ExampleConfiguration> entityRef = connection.getEntityRef(Example.class, Example.VERSION, "foo");
     Example e = entityRef.fetchEntity();
-
     // do some stuff
     e.doStuff();
+    // Close.
+    e.close();
     // end::using[]
   }
   
@@ -88,16 +75,11 @@ public class BasicConnectTest {
   @Ignore
   public void testDestroy() throws ConnectionException, URISyntaxException {
     Connection connection = getConnection();
-    EntityMaintenanceRef<Example, ExampleConfiguration> maintenanceRef =
-        connection.acquireMaintenanceModeRef(Example.class, Example.VERSION, "foo");
+    EntityRef<Example, ExampleConfiguration> ref = connection.getEntityRef(Example.class, Example.VERSION, "foo");
 
     // tag::destroy[]
-    // same as above...
-    maintenanceRef = connection.acquireMaintenanceModeRef(Example.class, Example.VERSION, "foo");
-
-    if (maintenanceRef.doesExist()) {
-      maintenanceRef.destroy();
-    }
+    // See if we can destroy the entity.
+    ref.destroy();
     // end::destroy[]
   }
 
