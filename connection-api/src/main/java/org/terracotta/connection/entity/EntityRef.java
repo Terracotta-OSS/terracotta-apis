@@ -19,10 +19,12 @@
 
 package org.terracotta.connection.entity;
 
+
 /**
- * @author twu
+ * @param <T> The entity type underlying this reference.
+ * @param <C> The configuration type to use when creating this entity.
  */
-public interface EntityRef<T extends Entity> {
+public interface EntityRef<T extends Entity, C> {
   /**
    * Gets the entity pointed to by this reference. Can return null if no entity exists
    *
