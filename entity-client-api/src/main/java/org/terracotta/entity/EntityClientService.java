@@ -22,11 +22,7 @@ package org.terracotta.entity;
 import org.terracotta.connection.entity.Entity;
 import org.terracotta.entity.EntityClientEndpoint;
 
-import java.io.Serializable;
 
-/**
- * @author twu
- */
 public interface EntityClientService<T extends Entity, C> {
   /**
    * Check if this service handles the given entity type.

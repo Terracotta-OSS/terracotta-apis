@@ -21,14 +21,11 @@ package org.terracotta.connection;
 
 import java.io.Closeable;
 import org.terracotta.connection.entity.Entity;
-import org.terracotta.connection.entity.EntityMaintenanceRef;
 import org.terracotta.connection.entity.EntityRef;
 
 
 /**
  * Represents a connection to a cluster
- *
- * @author twu
  */
 public interface Connection extends Closeable {
   /**
@@ -39,20 +36,8 @@ public interface Connection extends Closeable {
    * @param version version of the entity implementation
    * @param name name of the entity
    * @param <T> entity type
+   * @param <C> configuration type
    * @return reference to the entity
    */
-  <T extends Entity> EntityRef<T> getEntityRef(Class<T> cls, long version, String name);
-
-  /**
-   * Grab a maintenance mode reference to the specified entity of given type. This reference grants exclusive access.
-   * Attempting to get a maintenance mode reference while outstanding holds exist will cause maintenance mode reference
-   * acquisition to block.
-   *
-   * @param cls entity class
-   * @param version version of the entity implementation
-   * @param name name of the entity
-   * @param <T> entity type
-   * @return exclusive reference to the entity
-   */
-  <T extends Entity, C> EntityMaintenanceRef<T, C> acquireMaintenanceModeRef(Class<T> cls, long version, String name);
+  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, long version, String name);
 }
