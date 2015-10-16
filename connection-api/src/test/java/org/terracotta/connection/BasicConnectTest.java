@@ -26,6 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityRef;
+import org.terracotta.exception.EntityException;
 
 
 public class BasicConnectTest {
@@ -42,7 +43,7 @@ public class BasicConnectTest {
   
   @Test
   @Ignore
-  public void testCreate() throws ConnectionException, URISyntaxException {
+  public void testCreate() throws ConnectionException, URISyntaxException, EntityException {
     Connection connection = getConnection();
     
     // tag::create[]
@@ -56,7 +57,7 @@ public class BasicConnectTest {
   
   @Test
   @Ignore
-  public void testUsing() throws ConnectionException, URISyntaxException {
+  public void testUsing() throws ConnectionException, URISyntaxException, EntityException {
     Connection connection = getConnection();
 
     // tag::using[]
@@ -73,7 +74,7 @@ public class BasicConnectTest {
   
   @Test
   @Ignore
-  public void testDestroy() throws ConnectionException, URISyntaxException {
+  public void testDestroy() throws ConnectionException, URISyntaxException, EntityException {
     Connection connection = getConnection();
     EntityRef<Example, ExampleConfiguration> ref = connection.getEntityRef(Example.class, Example.VERSION, "foo");
 

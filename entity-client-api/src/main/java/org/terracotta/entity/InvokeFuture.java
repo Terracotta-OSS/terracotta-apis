@@ -19,14 +19,15 @@
 
 package org.terracotta.entity;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import org.terracotta.exception.EntityException;
 
 
 public interface InvokeFuture<T> {
   public boolean isDone();
-  public T get() throws InterruptedException, ExecutionException;
-  public T getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
+  public T get() throws InterruptedException, EntityException;
+  public T getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, EntityException, TimeoutException;
   public void interrupt();
 }

@@ -19,6 +19,8 @@
 
 package org.terracotta.connection.entity;
 
+import org.terracotta.exception.EntityException;
+
 
 /**
  * @param <T> The entity type underlying this reference.
@@ -30,19 +32,19 @@ public interface EntityRef<T extends Entity, C> {
    *
    * @param configuration configuration to be applied to the entity
    */
-  void create(C configuration);
+  void create(C configuration) throws EntityException;
 
   /**
    * Destroy the entity pointed to by this reference.
    */
-  void destroy();
+  void destroy() throws EntityException;
 
   /**
    * Gets the entity pointed to by this reference. Can return null if no entity exists
    *
    * @return entity
    */
-  T fetchEntity();
+  T fetchEntity() throws EntityException;
 
   /**
    * Gets the name of the entity
