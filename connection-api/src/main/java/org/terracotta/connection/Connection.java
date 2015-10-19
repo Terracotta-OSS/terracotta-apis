@@ -22,7 +22,7 @@ package org.terracotta.connection;
 import java.io.Closeable;
 import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityRef;
-import org.terracotta.exception.EntityException;
+import org.terracotta.exception.EntityNotProvidedException;
 
 
 /**
@@ -40,5 +40,5 @@ public interface Connection extends Closeable {
    * @param <C> configuration type
    * @return reference to the entity
    */
-  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, long version, String name) throws EntityException;
+  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, long version, String name) throws EntityNotProvidedException;
 }

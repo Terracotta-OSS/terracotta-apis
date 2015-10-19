@@ -19,7 +19,10 @@
 
 package org.terracotta.connection.entity;
 
-import org.terracotta.exception.EntityException;
+import org.terracotta.exception.EntityAlreadyExistsException;
+import org.terracotta.exception.EntityNotFoundException;
+import org.terracotta.exception.EntityNotProvidedException;
+import org.terracotta.exception.EntityVersionMismatchException;
 
 
 /**
@@ -32,19 +35,19 @@ public interface EntityRef<T extends Entity, C> {
    *
    * @param configuration configuration to be applied to the entity
    */
-  void create(C configuration) throws EntityException;
+  void create(C configuration) throws EntityNotProvidedException, EntityAlreadyExistsException, EntityVersionMismatchException;
 
   /**
    * Destroy the entity pointed to by this reference.
    */
-  void destroy() throws EntityException;
+  void destroy() throws EntityNotProvidedException, EntityNotFoundException;
 
   /**
    * Gets the entity pointed to by this reference. Can return null if no entity exists
    *
    * @return entity
    */
-  T fetchEntity() throws EntityException;
+  T fetchEntity() throws EntityNotFoundException, EntityVersionMismatchException;
 
   /**
    * Gets the name of the entity
