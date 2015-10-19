@@ -34,11 +34,17 @@ public interface EntityRef<T extends Entity, C> {
    * Create the entity with the given configuration
    *
    * @param configuration configuration to be applied to the entity
+   * @throws EntityNotProvidedException The service providing T doesn't exist on either the client or the server
+   * @throws EntityAlreadyExistsException An entity with this type and name already exists
+   * @throws EntityVersionMismatchException No entity exists but the client and server providing services for T don't have the same version numbers
    */
   void create(C configuration) throws EntityNotProvidedException, EntityAlreadyExistsException, EntityVersionMismatchException;
 
   /**
    * Destroy the entity pointed to by this reference.
+   * 
+   * @throws EntityNotProvidedException The service providing T doesn't exist on either the client or the server
+   * @throws EntityNotFoundException No entity with this type and name could be found
    */
   void destroy() throws EntityNotProvidedException, EntityNotFoundException;
 
@@ -46,6 +52,8 @@ public interface EntityRef<T extends Entity, C> {
    * Gets the entity pointed to by this reference. Can return null if no entity exists
    *
    * @return entity
+   * @throws EntityNotFoundException No entity with this type and name could be found
+   * @throws EntityVersionMismatchException The entity exists but the client and server providing services for T don't have the same version numbers
    */
   T fetchEntity() throws EntityNotFoundException, EntityVersionMismatchException;
 
