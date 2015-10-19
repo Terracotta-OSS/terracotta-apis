@@ -25,6 +25,8 @@ import java.util.concurrent.Future;
 
 import com.google.common.util.concurrent.Futures;
 import org.junit.Assert;
+import org.terracotta.exception.EntityException;
+import org.terracotta.exception.EntityUserException;
 
 
 /**
@@ -92,7 +94,6 @@ public class PassthroughStripe implements ClientCommunicator {
   }
 
   private class FakeServiceRegistry implements ServiceRegistry {
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T getService(ServiceConfiguration<T> configuration) {
       return configuration.getServiceType().cast(PassthroughStripe.this);
@@ -207,14 +208,15 @@ public class PassthroughStripe implements ClientCommunicator {
     }
 
     @Override
-    public Future<byte[]> invoke() {
+    public InvokeFuture<byte[]> invoke() {
+      byte[] result = null;
+      EntityException error = null;
       try {
-        Future<byte[]> activeResult = Futures.immediateFuture(activeServerEntity.invoke(clientDescriptor, payload));
-        passiveServerEntity.invoke(payload);
-        return activeResult;
+        result = activeServerEntity.invoke(clientDescriptor, payload);
       } catch (Exception e) {
-        return Futures.immediateFailedCheckedFuture(e);
+        error = new EntityUserException(null, null, e);
       }
+      return new ImmediateInvokeFuture<byte[]>(result, error);
     }
   }
 }

@@ -19,15 +19,15 @@
 
 package org.terracotta.entity;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-public interface InvocationBuilder {
-  public InvocationBuilder ackReceived();
+import org.terracotta.exception.EntityException;
 
-  public InvocationBuilder ackCompleted();
 
-  public InvocationBuilder replicate(boolean requiresReplication);
-
-  public InvocationBuilder payload(byte[] payload);
-
-  public InvokeFuture<byte[]> invoke();
+public interface InvokeFuture<T> {
+  public boolean isDone();
+  public T get() throws InterruptedException, EntityException;
+  public T getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, EntityException, TimeoutException;
+  public void interrupt();
 }
