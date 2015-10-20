@@ -29,7 +29,7 @@ public interface EntityConnection extends Connection {
    * @return the requested entity. It may have been created in the processing of this call
    * @throws EntityException exception the occurred in the fetching or creation of the entity
    */
-  <T extends Entity, C extends EntityConstructor<T>> T createEntity(C params) throws EntityException;
+  <T extends Entity, C extends EntityConstructor<T>> T fetchOrCreateEntity(C params) throws EntityException;
   /**
    * destroyEntity is called directly on connection as it requires exclusive access to the entity.  
    * only if the desired entity is not referenced by any clients is the entity able to unload and 

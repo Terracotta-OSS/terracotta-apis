@@ -70,7 +70,7 @@ public final class EntityConnectionFactory {
     }
 
     @Override
-    public <T extends Entity, C extends EntityConstructor<T>> T createEntity(C params) throws EntityException {
+    public <T extends Entity, C extends EntityConstructor<T>> T fetchOrCreateEntity(C params) throws EntityException {
       EntityRef<T, C> entityRef = connection.getEntityRef(params.type(), params.version(), params.name());
       while (true) {
         try {
