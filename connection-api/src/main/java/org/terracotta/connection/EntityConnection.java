@@ -20,8 +20,9 @@ public interface EntityConnection extends Connection {
    * client instances of this entity.  On the server, if the name/type 
    * combination designated by the {@link} org.terracotta.connection.entity.EntityConstructor
    * is already in existence, then the existing entity wiring will be returned.  If the
-   * entity needs construction, the {@link} org.terracotta.connection.entity.EntityConstructor
+   * entity needs construction on the server, the {@link} org.terracotta.connection.entity.EntityConstructor
    * will be passed to the server for construction.  
+   * 
    * @param <T> type of the entity being wired
    * @param <C> type of the {@link} org.terracotta.connection.entity.EntityConstructor
    * @param params Information used to wire the entity {@link} org.terracotta.connection.entity.EntityConstructor
@@ -32,7 +33,8 @@ public interface EntityConnection extends Connection {
   /**
    * destroyEntity is called directly on connection as it requires exclusive access to the entity.  
    * only if the desired entity is not referenced by any clients is the entity able to unload and 
-   * be destroyed.
+   * be destroyed.  Only call this method to remove all traces of this entity from clients and servers.
+   * 
    * @param <T> Type of entity being destroyed
    * @param <C> type of the {@link} org.terracotta.connection.entity.EntityConstructor
    * @param params Information used to destroy the entity {@link} org.terracotta.connection.entity.EntityConstructor
