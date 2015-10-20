@@ -22,7 +22,7 @@ package org.terracotta.connection;
 import java.io.Closeable;
 import org.terracotta.connection.entity.Entity;
 import org.terracotta.connection.entity.EntityRef;
-import org.terracotta.exception.EntityException;
+import org.terracotta.exception.EntityNotProvidedException;
 
 
 /**
@@ -39,6 +39,7 @@ public interface Connection extends Closeable {
    * @param <T> entity type
    * @param <C> configuration type
    * @return reference to the entity
+   * @throws EntityNotProvidedException There is no client-side service providing entities of type T
    */
-  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, long version, String name) throws EntityException;
+  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, long version, String name) throws EntityNotProvidedException;
 }
