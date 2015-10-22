@@ -23,7 +23,7 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 
 /**
- * Factory for generating connections to clusters (or pretend connections to pretend clusters).
+ * Factory for generating connections to stripe.
  */
 public final class ConnectionFactory {
   /**
