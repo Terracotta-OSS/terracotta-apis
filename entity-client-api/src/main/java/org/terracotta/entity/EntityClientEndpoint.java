@@ -22,6 +22,10 @@ package org.terracotta.entity;
 import java.io.Closeable;
 
 
+/**
+ * The common connection point between client-side entity instances and the underlying connection to the server.
+ * Note that instances of this class become invalid after close() and will throw IllegalStateException on access.
+ */
 public interface EntityClientEndpoint extends Closeable {
 
   byte[] getEntityConfiguration();
