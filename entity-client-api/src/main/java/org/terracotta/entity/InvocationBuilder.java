@@ -21,6 +21,8 @@ package org.terracotta.entity;
 
 
 public interface InvocationBuilder {
+  public InvocationBuilder ackSent();
+
   public InvocationBuilder ackReceived();
 
   public InvocationBuilder ackCompleted();
