@@ -25,13 +25,13 @@ package org.terracotta.entity;
  *
  * @author twu
  */
-public class NoConcurrencyStrategy implements ConcurrencyStrategy {
+public class NoConcurrencyStrategy<M extends EntityMessage> implements ConcurrencyStrategy<M> {
   
   public NoConcurrencyStrategy() {
   }
 
   @Override
-  public int concurrencyKey(byte[] payload) {
+  public int concurrencyKey(M payload) {
     return ConcurrencyStrategy.MANAGEMENT_KEY;
   }
 }

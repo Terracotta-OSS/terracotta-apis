@@ -23,7 +23,7 @@ import org.terracotta.entity.PassiveServerEntity;
 import org.terracotta.entity.ServerEntityService;
 import org.terracotta.entity.ServiceRegistry;
 
-public class TestServerEntityService implements ServerEntityService<TestServerEntity, PassiveServerEntity> {
+public class TestServerEntityService implements ServerEntityService<TestServerEntity, PassiveServerEntity<?>> {
 
   @Override
   public long getVersion() {
@@ -41,7 +41,7 @@ public class TestServerEntityService implements ServerEntityService<TestServerEn
   }
 
   @Override
-  public PassiveServerEntity createPassiveEntity(ServiceRegistry registry, byte[] configuration) {
+  public PassiveServerEntity<?> createPassiveEntity(ServiceRegistry registry, byte[] configuration) {
     throw new UnsupportedOperationException();
   }
 }

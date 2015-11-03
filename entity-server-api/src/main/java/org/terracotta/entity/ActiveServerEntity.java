@@ -24,13 +24,13 @@ package org.terracotta.entity;
  * The methods specifically supported by active entities.  As the active is responsible for "driving" much of the
  *  interaction, it has more capabilities than the corresponding passive.
  */
-public interface ActiveServerEntity extends CommonServerEntity {
+public interface ActiveServerEntity<M extends EntityMessage> extends CommonServerEntity<M> {
   /**
    * Get the concurrency strategy to be used for this server entity.
    *
    * @return concurrency strategy
    */
-  ConcurrencyStrategy getConcurrencyStrategy();
+  ConcurrencyStrategy<M> getConcurrencyStrategy();
 
   /**
    * Indicate that the given client is now connected up to this ServerEntity.
@@ -57,10 +57,10 @@ public interface ActiveServerEntity extends CommonServerEntity {
    * Invoke a call on the given entity.
    *
    * @param clientDescriptor source instance from which the invocation originates.
-   * @param arg entity specific invocation info
+   * @param message The message from the client
    * @return possible return value
    */
-  byte[] invoke(ClientDescriptor clientDescriptor, byte[] arg);
+  byte[] invoke(ClientDescriptor clientDescriptor, M message);
 
   /**
    * Called during client reconnect to allow the client to pass arbitrary extra data to the server-side entity so it can

@@ -21,14 +21,38 @@ package org.terracotta;
 
 import org.terracotta.entity.ClientDescriptor;
 import org.terracotta.entity.ConcurrencyStrategy;
+import org.terracotta.entity.EntityMessage;
+import org.terracotta.entity.MessageDeserializer;
 import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.ActiveServerEntity;
 
 
-public class TestServerEntity implements ActiveServerEntity {
+public class TestServerEntity implements ActiveServerEntity<TestServerEntity.TestMessage> {
+  public static class TestMessage implements EntityMessage {
+    private final byte[] payload;
+
+    public TestMessage(byte[] payload) {
+      this.payload = payload;
+    }
+
+    public byte[] getPayload() {
+      return this.payload;
+    }
+  }
+
   @Override
-  public ConcurrencyStrategy getConcurrencyStrategy() {
-    return new NoConcurrencyStrategy();
+  public MessageDeserializer<TestMessage> getMessageDeserializer() {
+    return new MessageDeserializer<TestMessage>() {
+      @Override
+      public TestMessage deserialize(byte[] payload) {
+        return new TestMessage(payload);
+      }
+    };
+  }
+
+  @Override
+  public ConcurrencyStrategy<TestMessage> getConcurrencyStrategy() {
+    return new NoConcurrencyStrategy<TestMessage>();
   }
 
   @Override
@@ -50,8 +74,8 @@ public class TestServerEntity implements ActiveServerEntity {
   }
 
   @Override
-  public byte[] invoke(ClientDescriptor clientDescriptor, byte[] arg) {
-    return arg;
+  public byte[] invoke(ClientDescriptor clientDescriptor, TestMessage message) {
+    return message.getPayload();
   }
 
   @Override

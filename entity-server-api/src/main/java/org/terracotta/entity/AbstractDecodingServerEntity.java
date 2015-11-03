@@ -19,19 +19,14 @@
 
 package org.terracotta.entity;
 
-/**
- * @author twu
- */
-public abstract class AbstractDecodingServerEntity<I, O> implements ActiveServerEntity {
 
-  protected abstract I decodeInput(byte[] bytes);
-
+public abstract class AbstractDecodingServerEntity<M extends EntityMessage, O> implements ActiveServerEntity<M> {
   protected abstract byte[] encodeOutput(O o);
 
-  protected abstract O invoke(ClientDescriptor clientDescriptor, I input);
+  protected abstract O invokeHighLevel(ClientDescriptor clientDescriptor, M input);
 
   @Override
-  public final byte[] invoke(ClientDescriptor clientDescriptor, byte[] arg) {
-    return encodeOutput(invoke(clientDescriptor, decodeInput(arg)));
+  public final byte[] invoke(ClientDescriptor clientDescriptor, M message) {
+    return encodeOutput(invokeHighLevel(clientDescriptor, message));
   }
 }

@@ -22,8 +22,18 @@ package org.terracotta.entity;
 
 /**
  * The methods common to both active and passive entities.
+ * @param <M> The high-level message type used by the active and passive server-side entities.  This type is created by the
+ * implementation's MessageDeserializer and also read by the ConcurrencyStrategy.
  */
-public interface CommonServerEntity {
+public interface CommonServerEntity<M extends EntityMessage> {
+  /**
+   * Gets the message deserializer which will be used to convert any byte[] messages destined for this entity into
+   * higher-level objects.
+   *
+   * @return message deserializer
+   */
+  MessageDeserializer<M> getMessageDeserializer();
+  
   /**
    * Called when a client asks that an entity be explicitly created.
    */
