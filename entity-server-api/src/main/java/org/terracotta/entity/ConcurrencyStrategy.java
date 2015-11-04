@@ -21,8 +21,9 @@ package org.terracotta.entity;
 
 /**
  * The concurrency strategy is used to manage and control this entity.  
+ * @param <M> The message type expected by the implementation.
  */
-public interface ConcurrencyStrategy {
+public interface ConcurrencyStrategy<M extends EntityMessage> {
   /**
    * UNIVERSAL_KEY is a negative key that indicates a request requires no order and can be run concurrently with any
    * other entity operation
@@ -45,8 +46,8 @@ public interface ConcurrencyStrategy {
    * 
    * At a minimum this method needs to be thread-safe. Ideally, it should be a pure function.
    *
-   * @param payload request payload passed in from a client
+   * @param message The message from the client.
    * @return integer key 
    */
-  int concurrencyKey(byte[] payload);
+  int concurrencyKey(M message);
 }
