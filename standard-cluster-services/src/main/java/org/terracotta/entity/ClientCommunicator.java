@@ -39,9 +39,14 @@ public interface ClientCommunicator {
   /**
    * Send a message getting an async completion back.
    *
+   * NOTE: async completion back is extremely dangerous.  Any wait on the server
+   * for client completion can have disastrous effects on the server.  DO NOT USE
+   * THIS METHOD
+   * 
    * @param clientDescriptor The client side instance to send to
    * @param payload bytes to send
    * @return Future representing when the client finishes with and acknowledges the sent message.
    */
+  @Deprecated
   Future<Void> send(ClientDescriptor clientDescriptor, byte[] payload);
 }
