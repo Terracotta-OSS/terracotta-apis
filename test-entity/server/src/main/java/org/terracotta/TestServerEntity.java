@@ -48,6 +48,12 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
       public TestMessage deserialize(byte[] payload) {
         return new TestMessage(payload);
       }
+
+      @Override
+      public TestMessage deserializeForSync(int concurrencyKey, byte[] payload) {
+        // TODO:  Add synchronization support.
+        throw new AssertionError("Synchronization not supported for this entity");
+      }
     };
   }
 

@@ -31,9 +31,20 @@ package org.terracotta.entity;
 public interface MessageDeserializer<M extends EntityMessage> {
   /**
    * Deserializes a given message payload into a high-level message type, useful to the server-side entity.
+   * This deserializer routine is used for normal client->server message invocations.
    * 
    * @param payload The byte array containing the raw wire message
    * @return A high-level message instance
    */
   M deserialize(byte[] payload);
+
+  /**
+   * Deserializes a given message payload into a high-level message type, useful to the server-side entity.
+   * This deserializer routine is used specifically for server->server passive synchronization.
+   * 
+   * @param concurrencyKey The concurrency key where the message must be run (so it can be described in the message type)
+   * @param payload The byte array containing the raw wire message
+   * @return A high-level message instance
+   */
+  M deserializeForSync(int concurrencyKey, byte[] payload);
 }
