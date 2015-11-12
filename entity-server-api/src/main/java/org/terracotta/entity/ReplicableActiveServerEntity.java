@@ -12,15 +12,16 @@ package org.terracotta.entity;
 // TODO:  This API (passive sync) is expected to significantly change.  At that time, consider removing the default implementation  
 public interface ReplicableActiveServerEntity extends ActiveServerEntity {
   /**
-   * returns a stream of byte arrays representing the data for the given concurrency key.
-   * these byte arrays will be passed to the passive server on sync.
+   * Passes any information required to describe all entity data/state associated with the given concurrency key to a
+   * passive instance being synchronized to be consistent with the receiver.
    * 
-   * CAUTION: This API is likely to change
+   * Note that this method is also run on the concurrencyKey specified, so it blocks other messages executed on that key.
    * 
-   * @param concurrency key of the data to be sync'd
-   * @return see above
+   * @param syncChannel The output channel to the passive
+   * @param concurrencyKey The key of the data to be synchronized
    */
-  Iterable<byte[]> sync(int concurrency);
+  void synchronizeKeyToPassive(PassiveSynchronizationChannel syncChannel, int concurrencyKey);
+
   /**
    * ReplicableConcurrencyStrategy is able to return the full set of concurrency
    * keys that would possibly be returned by this strategy.
