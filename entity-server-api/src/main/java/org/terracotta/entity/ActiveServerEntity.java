@@ -71,4 +71,15 @@ public interface ActiveServerEntity<M extends EntityMessage> extends CommonServe
    * @param extendedReconnectData Arbitrary data sent by the client-side instance to rebuild the server-side in-memory state 
    */
   void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData);
+
+  /**
+   * Passes any information required to describe all entity data/state associated with the given concurrency key to a
+   * passive instance being synchronized to be consistent with the receiver.
+   * 
+   * Note that this method is also run on the concurrencyKey specified, so it blocks other messages executed on that key.
+   * 
+   * @param syncChannel The output channel to the passive
+   * @param concurrencyKey The key of the data to be synchronized
+   */
+  void synchronizeKeyToPassive(PassiveSynchronizationChannel syncChannel, int concurrencyKey);
 }
