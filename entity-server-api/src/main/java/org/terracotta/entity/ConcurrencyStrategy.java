@@ -19,6 +19,8 @@
 
 package org.terracotta.entity;
 
+import java.util.Set;
+
 /**
  * The concurrency strategy is used to manage and control this entity.  
  * @param <M> The message type expected by the implementation.
@@ -50,4 +52,13 @@ public interface ConcurrencyStrategy<M extends EntityMessage> {
    * @return integer key 
    */
   int concurrencyKey(M message);
+
+  /**
+   * Called when the platform wishes to synchronize the data and state of an active server entity to a newly-online passive
+   * server.  This operation is performed on a per-concurrencyKey basis so this method is used to determine the set of keys
+   * which must be synchronized.
+   * 
+   * @return The set of concurrency keys to synchronize to the passive.
+   */
+  Set<Integer> getKeysForSynchronization();
 }

@@ -21,12 +21,4 @@ public interface ReplicableActiveServerEntity extends ActiveServerEntity {
    * @param concurrencyKey The key of the data to be synchronized
    */
   void synchronizeKeyToPassive(PassiveSynchronizationChannel syncChannel, int concurrencyKey);
-
-  /**
-   * ReplicableConcurrencyStrategy is able to return the full set of concurrency
-   * keys that would possibly be returned by this strategy.
-   * @return 
-   */
-  @Override
-  ReplicableConcurrencyStrategy getConcurrencyStrategy();
 }
