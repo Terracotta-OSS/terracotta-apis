@@ -25,6 +25,7 @@ import org.terracotta.entity.EntityMessage;
 import org.terracotta.entity.MessageDeserializer;
 import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.ActiveServerEntity;
+import org.terracotta.entity.PassiveSynchronizationChannel;
 
 
 public class TestServerEntity implements ActiveServerEntity<TestServerEntity.TestMessage> {
@@ -46,6 +47,12 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
       @Override
       public TestMessage deserialize(byte[] payload) {
         return new TestMessage(payload);
+      }
+
+      @Override
+      public TestMessage deserializeForSync(int concurrencyKey, byte[] payload) {
+        // TODO:  Add synchronization support.
+        throw new AssertionError("Synchronization not supported for this entity");
       }
     };
   }
@@ -88,5 +95,11 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
 
   @Override
   public void destroy() {
+  }
+
+  @Override
+  public void synchronizeKeyToPassive(PassiveSynchronizationChannel syncChannel, int concurrencyKey) {
+    // TODO:  Add synchronization support.
+    throw new AssertionError("Synchronization not supported for this entity");
   }
 }

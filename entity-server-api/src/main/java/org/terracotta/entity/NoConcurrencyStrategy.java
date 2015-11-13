@@ -19,6 +19,9 @@
 
 package org.terracotta.entity;
 
+import java.util.Collections;
+import java.util.Set;
+
 /**
  * Implements the simplest concurrency strategy possible: use the same key for everything to force serial execution
  * in the same queue.
@@ -33,5 +36,11 @@ public class NoConcurrencyStrategy<M extends EntityMessage> implements Concurren
   @Override
   public int concurrencyKey(M payload) {
     return ConcurrencyStrategy.MANAGEMENT_KEY;
+  }
+
+  @Override
+  public Set<Integer> getKeysForSynchronization() {
+    // XXX: We temporarily disable synchronization of all users of this strategy until we determine if it needs to be special.
+    return Collections.emptySet();
   }
 }

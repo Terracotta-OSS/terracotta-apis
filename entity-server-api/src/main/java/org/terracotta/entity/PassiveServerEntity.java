@@ -27,8 +27,33 @@ package org.terracotta.entity;
 public interface PassiveServerEntity<M extends EntityMessage> extends CommonServerEntity<M> {
   /**
    * Invoke a call on the given entity.  Note that passive entities can't return data to the client.
+   * This method is called both in the cases of normal client->server method invocation but also in the case of
+   * server->server passive synchronization.
    *
-   * @param message The message from a client
+   * @param message The message from a client or upstream active server
    */
   void invoke(M message);
+
+  /**
+   * Called on MANAGEMENT_KEY to notify the receiver that it is about to start receiving synchronization messages.
+   */
+  void startSyncEntity();
+
+  /**
+   * Called on MANAGEMENT_KEY to notify the receiver synchronization is complete and it will see no more synchronization
+   * messages.
+   */
+  void endSyncEntity();
+
+  /**
+   * Called on concurrencyKey to notify the receiver that it is about to start receiving synchronization messages on this
+   * key.
+   */
+  void startSyncConcurrencyKey(int concurrencyKey);
+
+  /**
+   * Called on concurrencyKey to notify the receiver that synchronization of this key is complete and no more
+   * synchronization messages will be received on that key.
+   */
+  void endSyncConcurrencyKey(int concurrencyKey);
 }
