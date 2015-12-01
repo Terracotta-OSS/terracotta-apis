@@ -16,13 +16,31 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
 
+/**
+ * A helper class for building simple server-side entities in a common pattern.
+ * 
+ * @param <M> The specific EntityMessage type of the invocation argument
+ * @param <O> The specific invocation response type which must be encoded to send over the wire
+ */
 public abstract class AbstractDecodingServerEntity<M extends EntityMessage, O> implements ActiveServerEntity<M> {
+  /**
+   * Called with the result of invokeHighLevel() in order to encode that result into a byte[] for transmission over the wire.
+   * 
+   * @param o The output object
+   * @return The encoded byte[]
+   */
   protected abstract byte[] encodeOutput(O o);
 
+  /**
+   * Invokes with the message type, returning a high-level object which will be encoded for response, after the return.
+   * 
+   * @param clientDescriptor The sending of the invocation
+   * @param input The message being invoked
+   * @return A high-level output object
+   */
   protected abstract O invokeHighLevel(ClientDescriptor clientDescriptor, M input);
 
   @Override

@@ -16,19 +16,30 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
 import java.util.ServiceLoader;
 
+
 /**
- * @author twu
+ * Loads and creates the ActiveServerEntity and PassiveServerEntity instances, on the server, for specific entity types.
  */
 public class ServerEntityFactory {
-  public static <T extends ServerEntityService<? extends ActiveServerEntity, ? extends PassiveServerEntity>> T getService(String typeName) {
+  /**
+   * Finds the service for the given entity type, in the class loader of ServerEntityFactory.
+   * 
+   */
+  public static <T extends ServerEntityService<? extends ActiveServerEntity<?>, ? extends PassiveServerEntity<?>>> T getService(String typeName) {
     return getService(typeName, ServerEntityFactory.class.getClassLoader());
   }
 
+  /**
+   * Finds the service for the given entity type, in the given class loader.
+   * 
+   * @param typeName The entity type name
+   * @param classLoader The class loader where the type should be searched
+   * @return The ServerEntityFactory to create server-side entities of this type
+   */
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public static <T extends ServerEntityService<? extends ActiveServerEntity, ? extends PassiveServerEntity>> T getService(String typeName, ClassLoader classLoader) {
     ServiceLoader<ServerEntityService> serviceLoader = ServiceLoader.load(ServerEntityService.class, classLoader);

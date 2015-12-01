@@ -16,10 +16,16 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
-public interface ServerEntityService<A extends ActiveServerEntity, P extends PassiveServerEntity> {
+
+/**
+ * The specific service instance used to create server-side instances of the given active and passive entity types.
+ * 
+ * @param <A> The specific ActiveServerEntity type created
+ * @param <P> The specific PassiveServerEntity type created
+ */
+public interface ServerEntityService<A extends ActiveServerEntity<?>, P extends PassiveServerEntity<?>> {
   /**
    * Used for ensuring that the entity version implementation version is consistent between server and client,
    * active and passive, and pre-restart and post-restart.
@@ -30,7 +36,7 @@ public interface ServerEntityService<A extends ActiveServerEntity, P extends Pas
    * @return The version of the entity's implementation.
    */
   long getVersion();
-  
+
   /**
    * Check if this service handles the given type
    *

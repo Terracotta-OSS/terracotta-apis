@@ -16,7 +16,6 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
 import java.io.Closeable;
@@ -27,22 +26,36 @@ import java.io.Closeable;
  * Note that instances of this class become invalid after close() and will throw IllegalStateException on access.
  */
 public interface EntityClientEndpoint extends Closeable {
-
+  /**
+   * Requests the configuration of the server-side entity to which the receiver is attached.  Note that this refers to the
+   * configuration originally passed to the server-side entity when it was instantiated.
+   * 
+   * @return The server-side entity's initial configuration
+   */
   byte[] getEntityConfiguration();
 
   /**
    * Sets the delegate for events originating within the end-point.
    * Note that this value can only be set once.
+   * 
    * @param delegate The delegate to use for events originating within the receiver.
    */
   void setDelegate(EndpointDelegate delegate);
 
+  /**
+   * Called to start formulating an invocation to send to the remote server-side entity.
+   * Note that this doesn't actually send the invocation.  That is done by the returned InvocationBuilder instance, once the
+   * invocation is fully formed.
+   * 
+   * @return An InvocationBuilder instance to build a new invocation to send to the server-side instance
+   */
   InvocationBuilder beginInvoke();
 
   /**
    * Called when constructing the reconnect handshake, when the connection under this endpoint is re-established after
    * restart or fail-over in order to ask if the entity on top of the endpoint has registered any special data to be sent
    * to the server-side entity.
+   * 
    * @return A non-null array of bytes to send.
    */
   byte[] getExtendedReconnectData();

@@ -16,13 +16,19 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
 import org.terracotta.connection.entity.Entity;
 import org.terracotta.entity.EntityClientEndpoint;
 
 
+/**
+ * The specific service instance used to create client-side instances of the entities which wrap the connection to the
+ * server.
+ * 
+ * @param <T> The client-side entity type
+ * @param <C> The configuration type
+ */
 public interface EntityClientService<T extends Entity, C> {
   /**
    * Check if this service handles the given entity type.
