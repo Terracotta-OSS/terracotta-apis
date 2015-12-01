@@ -16,12 +16,15 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
+
 
 /**
  * Service Provider configuration which will be used to initialize service providers.
  */
 public interface ServiceProviderConfiguration {
+  /**
+   * @return The type of service provider that this configuration is meant to configure
+   */
   Class<? extends ServiceProvider> getServiceProviderType();
 }

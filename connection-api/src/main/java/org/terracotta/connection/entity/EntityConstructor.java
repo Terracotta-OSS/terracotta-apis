@@ -4,6 +4,7 @@
  */
 package org.terracotta.connection.entity;
 
+
 /**
  * The constructor object is passed to EntityConnction.  This object is responsible
  * for designating the version, name and type of the entity fetched or created.  The
@@ -15,16 +16,21 @@ package org.terracotta.connection.entity;
  */
 public interface EntityConstructor<T extends Entity> {
   /**
+   * Note that the version must be an exact match to succeed in resolving the entity instance, on the server.
    * 
    * @return the version of the entity to be connected
    */
   long version();
+
   /**
+   * The name specifies one part of the unique identification of an entity (the type being the other part).
    * 
    * @return name of the entity to be mapped
    */
   String name();
+
   /**
+   * The type specifies one part of the unique identification of an entity (the name being the other part).
    * 
    * @return type of the entity to be connect
    */

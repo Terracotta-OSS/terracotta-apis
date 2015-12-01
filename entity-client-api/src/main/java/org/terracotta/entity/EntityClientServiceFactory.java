@@ -16,25 +16,37 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
 import org.terracotta.connection.entity.Entity;
 
 import java.util.ServiceLoader;
 
+
 /**
- * @author twu
+ * Loads and creates the EntityClientService instances for specific entity types.
  */
 public class EntityClientServiceFactory {
+  /**
+   * Finds the service for the given entity type, in the class loader of EntityClientServiceFactory.
+   * 
+   * @param cls The entity class type
+   * @return The EntityClientService to create client-side entities of this type
+   */
   public static <T extends Entity, C> EntityClientService<T, C> creationServiceForType(Class<T> cls) {
     return creationServiceForType(cls, EntityClientServiceFactory.class.getClassLoader());
   }
 
+  /**
+   * Finds the service for the given entity type, in the given class loader.
+   * 
+   * @param cls The entity class type
+   * @param classLoader The class loader where the type should be searched
+   * @return The EntityClientService to create client-side entities of this type
+   */
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public static <T extends Entity, C> EntityClientService<T, C> creationServiceForType(Class<T> cls, ClassLoader classLoader) {
-    ServiceLoader<EntityClientService> serviceLoader = ServiceLoader.load(EntityClientService.class,
-        classLoader);
+    ServiceLoader<EntityClientService> serviceLoader = ServiceLoader.load(EntityClientService.class, classLoader);
     for (EntityClientService<T, C> entityClientService : serviceLoader) {
       if (entityClientService.handlesEntityType(cls)) {
         return entityClientService;

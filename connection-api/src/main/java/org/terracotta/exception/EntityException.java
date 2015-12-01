@@ -26,7 +26,14 @@ package org.terracotta.exception;
  */
 public abstract class EntityException extends Exception {
   private static final long serialVersionUID = 1L;
-  
+
+  /**
+   * All of these exception types have a specific description and refer to a type and name pair.
+   * 
+   * @param className The name of the type of the entity
+   * @param entityName The name of the entity instance
+   * @param description The description describing the specific problem
+   */
   protected EntityException(String className, String entityName, String description) {
     super("Entity: " + className + ":" + entityName + " " + description);
   }

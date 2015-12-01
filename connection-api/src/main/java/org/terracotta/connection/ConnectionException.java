@@ -16,13 +16,20 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.connection;
 
+
 /**
- * @author twu
+ * The exception type thrown when a connection fails to be established by the connection service.
  */
 public class ConnectionException extends Exception {
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * This type can only be created as a high-level wrapper over the underlying cause.
+   * 
+   * @param cause The underlying throwable, describing what went wrong, specifically
+   */
   public ConnectionException(Throwable cause) {
     super(cause);
   }

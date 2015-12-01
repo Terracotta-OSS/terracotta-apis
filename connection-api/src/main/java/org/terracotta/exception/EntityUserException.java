@@ -25,8 +25,16 @@ package org.terracotta.exception;
  */
 public class EntityUserException extends EntityException {
   private static final long serialVersionUID = 1L;
-  
-  public EntityUserException(String className, String entityName, Exception e) {
-    super(className, entityName, "exception in user code: " + e.getLocalizedMessage());
+
+  /**
+   * Creates the exception instance describing the given type-name pair and the specific underlying exception from the user
+   * code.
+   * 
+   * @param className The name of the entity type
+   * @param entityName The name of the entity instance
+   * @param cause The underlying exception thrown by the user code
+   */
+  public EntityUserException(String className, String entityName, Exception cause) {
+    super(className, entityName, "exception in user code: " + cause.getLocalizedMessage());
   }
 }

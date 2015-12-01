@@ -25,7 +25,13 @@ package org.terracotta.exception;
  */
 public class EntityAlreadyExistsException extends EntityException {
   private static final long serialVersionUID = 1L;
-  
+
+  /**
+   * Creates the exception instance describing the given type-name pair.
+   * 
+   * @param className The name of the entity type
+   * @param entityName The name of the entity instance
+   */
   public EntityAlreadyExistsException(String className, String entityName) {
     super(className, entityName, "already exists");
   }

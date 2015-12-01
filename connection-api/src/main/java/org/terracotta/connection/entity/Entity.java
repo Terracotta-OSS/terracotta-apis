@@ -16,16 +16,18 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.connection.entity;
 
 import java.io.Closeable;
 
+
 /**
- * @author twu
+ * An instance of this type represents a concrete connection to a server-side entity.  The entity always exists so long as
+ * an instance of this type is open to it.  This also means that the open instance will block any attempts to delete the
+ * server-side instance.
+ * Therefore, close() must be called in order to release this hold on the entity.
  */
 public interface Entity extends Closeable {
-
   /**
    * Release this handle on the entity. The instance will be unusable after this call.
    */
