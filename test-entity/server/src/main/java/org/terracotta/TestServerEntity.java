@@ -16,13 +16,12 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta;
 
 import org.terracotta.entity.ClientDescriptor;
 import org.terracotta.entity.ConcurrencyStrategy;
 import org.terracotta.entity.EntityMessage;
-import org.terracotta.entity.MessageDeserializer;
+import org.terracotta.entity.MessageCodec;
 import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.ActiveServerEntity;
 import org.terracotta.entity.PassiveSynchronizationChannel;
@@ -42,8 +41,8 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
   }
 
   @Override
-  public MessageDeserializer<TestMessage> getMessageDeserializer() {
-    return new MessageDeserializer<TestMessage>() {
+  public MessageCodec<TestMessage> getMessageCodec() {
+    return new MessageCodec<TestMessage>() {
       @Override
       public TestMessage deserialize(byte[] payload) {
         return new TestMessage(payload);

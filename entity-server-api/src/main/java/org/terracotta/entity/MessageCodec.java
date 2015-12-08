@@ -16,8 +16,8 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
+
 
 /**
  * The message deserializer used to convert incoming byte[] data into high-level messages to be passed to the entity for
@@ -28,7 +28,7 @@ package org.terracotta.entity;
  * reused.
  * @param <M> The message type deserialized by the implementation.
  */
-public interface MessageDeserializer<M extends EntityMessage> {
+public interface MessageCodec<M extends EntityMessage> {
   /**
    * Deserializes a given message payload into a high-level message type, useful to the server-side entity.
    * This deserializer routine is used for normal client->server message invocations.

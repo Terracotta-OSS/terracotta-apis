@@ -16,7 +16,6 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
 
@@ -32,7 +31,7 @@ public interface CommonServerEntity<M extends EntityMessage> {
    *
    * @return message deserializer
    */
-  MessageDeserializer<M> getMessageDeserializer();
+  MessageCodec<M> getMessageCodec();
   
   /**
    * Called when a client asks that an entity be explicitly created.
