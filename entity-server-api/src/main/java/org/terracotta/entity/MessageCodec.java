@@ -20,15 +20,17 @@ package org.terracotta.entity;
 
 
 /**
- * The message deserializer used to convert incoming byte[] data into high-level messages to be passed to the entity for
- * invocation.
+ * This interface is used, on the server-side, to convert incoming byte[] data into high-level EntityMessage objects and then
+ * convert outgoing EntityResponse objects into byte[] data to send back over the wire.  This is used both for the normal
+ * "invoke" path as well as passive synchronization.
  * Note that the implementation cannot assume when it will be called, relative to any other calls related to the entity, or
- * even that the calls will be made sequentially.  Multiple messages should be concurrently deserializable.
- * This means that an implementation is expected to be state-less and each returned EntityMessage must not be cached or
- * reused.
- * @param <M> The message type deserialized by the implementation.
+ * even that the calls will be made sequentially.  Multiple messages should be concurrently serialized or deserialized.
+ * This means that an implementation is expected to be state-less and each returned EntityMessage or byte[] must not be
+ * cached or reused.
+ * @param <M> The message type deserialized from byte[] by the implementation.
+ * @param <R> The message type serialized to byte[] by the implementation.
  */
-public interface MessageCodec<M extends EntityMessage> {
+public interface MessageCodec<M extends EntityMessage, R extends EntityResponse> {
   /**
    * Deserializes a given message payload into a high-level message type, useful to the server-side entity.
    * This deserializer routine is used for normal client->server message invocations.

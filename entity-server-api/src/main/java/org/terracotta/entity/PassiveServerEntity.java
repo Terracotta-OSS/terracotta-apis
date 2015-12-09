@@ -23,8 +23,10 @@ package org.terracotta.entity;
 /**
  * The methods specifically supported by passive entities.  Note that a passive doesn't know anything about
  *  connected clients, nor can it return data to them.
+ * Note that passive entities have no invoke response but we still accept the generic R so that accessors of the codec will
+ * see a consistent type landscape.
  */
-public interface PassiveServerEntity<M extends EntityMessage> extends CommonServerEntity<M> {
+public interface PassiveServerEntity<M extends EntityMessage, R extends EntityResponse> extends CommonServerEntity<M, R> {
   /**
    * Invoke a call on the given entity.  Note that passive entities can't return data to the client.
    * This method is called both in the cases of normal client->server method invocation but also in the case of

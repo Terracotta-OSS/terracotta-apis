@@ -21,13 +21,14 @@ package org.terracotta;
 import org.terracotta.entity.ClientDescriptor;
 import org.terracotta.entity.ConcurrencyStrategy;
 import org.terracotta.entity.EntityMessage;
+import org.terracotta.entity.EntityResponse;
 import org.terracotta.entity.MessageCodec;
 import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.ActiveServerEntity;
 import org.terracotta.entity.PassiveSynchronizationChannel;
 
 
-public class TestServerEntity implements ActiveServerEntity<TestServerEntity.TestMessage> {
+public class TestServerEntity implements ActiveServerEntity<TestServerEntity.TestMessage, TestServerEntity.TestResponse> {
   public static class TestMessage implements EntityMessage {
     private final byte[] payload;
 
@@ -40,9 +41,17 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
     }
   }
 
+  public static class TestResponse implements EntityResponse {
+    public final byte[] payload;
+    
+    public TestResponse(byte[] payload) {
+      this.payload = payload;
+    }
+  }
+
   @Override
-  public MessageCodec<TestMessage> getMessageCodec() {
-    return new MessageCodec<TestMessage>() {
+  public MessageCodec<TestMessage, TestResponse> getMessageCodec() {
+    return new MessageCodec<TestMessage, TestResponse>() {
       @Override
       public TestMessage deserialize(byte[] payload) {
         return new TestMessage(payload);
