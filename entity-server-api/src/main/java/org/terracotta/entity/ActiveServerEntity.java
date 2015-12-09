@@ -60,7 +60,7 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param message The message from the client
    * @return possible return value
    */
-  byte[] invoke(ClientDescriptor clientDescriptor, M message);
+  R invoke(ClientDescriptor clientDescriptor, M message);
 
   /**
    * Called during client reconnect to allow the client to pass arbitrary extra data to the server-side entity so it can

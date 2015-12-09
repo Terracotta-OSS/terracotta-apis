@@ -62,6 +62,11 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
         // TODO:  Add synchronization support.
         throw new AssertionError("Synchronization not supported for this entity");
       }
+
+      @Override
+      public byte[] serialize(TestResponse response) {
+        return response.payload;
+      }
     };
   }
 
@@ -89,8 +94,8 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
   }
 
   @Override
-  public byte[] invoke(ClientDescriptor clientDescriptor, TestMessage message) {
-    return message.getPayload();
+  public TestResponse invoke(ClientDescriptor clientDescriptor, TestMessage message) {
+    return new TestResponse(message.getPayload());
   }
 
   @Override

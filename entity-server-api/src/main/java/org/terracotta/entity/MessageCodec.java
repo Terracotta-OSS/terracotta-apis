@@ -49,4 +49,14 @@ public interface MessageCodec<M extends EntityMessage, R extends EntityResponse>
    * @return A high-level message instance
    */
   M deserializeForSync(int concurrencyKey, byte[] payload);
+
+  /**
+   * Serializes the given EntityResponse object into a byte[] which can be passed over the wire, back to a client.
+   * Note that the response argument may be null (if that is what the entity invoke() returned) but this method
+   * must NOT return null.
+   * 
+   * @param response The response object received as the return value from a call to invoke 
+   * @return The raw data which can be passed over the wire to the client
+   */
+  byte[] serialize(R response);
 }
