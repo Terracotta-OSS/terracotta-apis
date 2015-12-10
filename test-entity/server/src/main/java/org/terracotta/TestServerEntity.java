@@ -16,19 +16,19 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta;
 
 import org.terracotta.entity.ClientDescriptor;
 import org.terracotta.entity.ConcurrencyStrategy;
 import org.terracotta.entity.EntityMessage;
-import org.terracotta.entity.MessageDeserializer;
+import org.terracotta.entity.EntityResponse;
+import org.terracotta.entity.MessageCodec;
 import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.ActiveServerEntity;
 import org.terracotta.entity.PassiveSynchronizationChannel;
 
 
-public class TestServerEntity implements ActiveServerEntity<TestServerEntity.TestMessage> {
+public class TestServerEntity implements ActiveServerEntity<TestServerEntity.TestMessage, TestServerEntity.TestResponse> {
   public static class TestMessage implements EntityMessage {
     private final byte[] payload;
 
@@ -41,9 +41,17 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
     }
   }
 
+  public static class TestResponse implements EntityResponse {
+    public final byte[] payload;
+    
+    public TestResponse(byte[] payload) {
+      this.payload = payload;
+    }
+  }
+
   @Override
-  public MessageDeserializer<TestMessage> getMessageDeserializer() {
-    return new MessageDeserializer<TestMessage>() {
+  public MessageCodec<TestMessage, TestResponse> getMessageCodec() {
+    return new MessageCodec<TestMessage, TestResponse>() {
       @Override
       public TestMessage deserialize(byte[] payload) {
         return new TestMessage(payload);
@@ -53,6 +61,11 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
       public TestMessage deserializeForSync(int concurrencyKey, byte[] payload) {
         // TODO:  Add synchronization support.
         throw new AssertionError("Synchronization not supported for this entity");
+      }
+
+      @Override
+      public byte[] serialize(TestResponse response) {
+        return response.payload;
       }
     };
   }
@@ -81,8 +94,8 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
   }
 
   @Override
-  public byte[] invoke(ClientDescriptor clientDescriptor, TestMessage message) {
-    return message.getPayload();
+  public TestResponse invoke(ClientDescriptor clientDescriptor, TestMessage message) {
+    return new TestResponse(message.getPayload());
   }
 
   @Override

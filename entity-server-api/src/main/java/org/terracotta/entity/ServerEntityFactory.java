@@ -29,7 +29,7 @@ public class ServerEntityFactory {
    * Finds the service for the given entity type, in the class loader of ServerEntityFactory.
    * 
    */
-  public static <T extends ServerEntityService<? extends ActiveServerEntity<?>, ? extends PassiveServerEntity<?>>> T getService(String typeName) {
+  public static <T extends ServerEntityService<? extends ActiveServerEntity<?, ?>, ? extends PassiveServerEntity<?, ?>>> T getService(String typeName) {
     return getService(typeName, ServerEntityFactory.class.getClassLoader());
   }
 

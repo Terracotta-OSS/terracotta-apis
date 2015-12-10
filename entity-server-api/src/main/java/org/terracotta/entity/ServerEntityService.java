@@ -25,7 +25,7 @@ package org.terracotta.entity;
  * @param <A> The specific ActiveServerEntity type created
  * @param <P> The specific PassiveServerEntity type created
  */
-public interface ServerEntityService<A extends ActiveServerEntity<?>, P extends PassiveServerEntity<?>> {
+public interface ServerEntityService<A extends ActiveServerEntity<?, ?>, P extends PassiveServerEntity<?, ?>> {
   /**
    * Used for ensuring that the entity version implementation version is consistent between server and client,
    * active and passive, and pre-restart and post-restart.
