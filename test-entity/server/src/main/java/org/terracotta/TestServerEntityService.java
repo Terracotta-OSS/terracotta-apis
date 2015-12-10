@@ -18,12 +18,14 @@
  */
 package org.terracotta;
 
+import org.terracotta.entity.EntityMessage;
+import org.terracotta.entity.EntityResponse;
 import org.terracotta.entity.PassiveServerEntity;
 import org.terracotta.entity.ServerEntityService;
 import org.terracotta.entity.ServiceRegistry;
 
 
-public class TestServerEntityService implements ServerEntityService<TestServerEntity, PassiveServerEntity<?, ?>> {
+public class TestServerEntityService implements ServerEntityService<TestServerEntity, PassiveServerEntity<EntityMessage, EntityResponse>> {
   @Override
   public long getVersion() {
     return TestEntity.VERSION;
@@ -40,7 +42,7 @@ public class TestServerEntityService implements ServerEntityService<TestServerEn
   }
 
   @Override
-  public PassiveServerEntity<?, ?> createPassiveEntity(ServiceRegistry registry, byte[] configuration) {
+  public PassiveServerEntity<EntityMessage, EntityResponse> createPassiveEntity(ServiceRegistry registry, byte[] configuration) {
     throw new UnsupportedOperationException();
   }
 }
