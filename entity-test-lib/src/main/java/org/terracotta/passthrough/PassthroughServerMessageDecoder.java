@@ -71,7 +71,13 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
           // There is no response on successful create.
           this.messageHandler.create(entityClassName, entityName, version, serializedConfiguration);
         } catch (Exception e) {
-          error = e;
+          // We may want to ignore this failure on re-send.
+          if (sender.shouldTolerateCreateDestroyDuplication()) {
+            // Absorb the error.
+          } else {
+            // Real error.
+            error = e;
+          }
         }
         sendCompleteResponse(sender, transactionID, response, error);
         break;
@@ -85,7 +91,13 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
           // There is no response on successful delete.
           this.messageHandler.destroy(entityClassName, entityName);
         } catch (Exception e) {
-          error = e;
+          // We may want to ignore this failure on re-send.
+          if (sender.shouldTolerateCreateDestroyDuplication()) {
+            // Absorb the error.
+          } else {
+            // Real error.
+            error = e;
+          }
         }
         sendCompleteResponse(sender, transactionID, response, error);
         break;
@@ -190,6 +202,31 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
           error = e;
         }
         sendCompleteResponse(sender, transactionID, response, error);
+        break;
+      }
+      case LOCK_RESTORE: {
+        // This is called to reestablish a maintenance write-lock on reconnect.
+        // It only has the class and entity name for the locked entity.
+        String entityClassName = input.readUTF();
+        String entityName = input.readUTF();
+        Runnable onAcquire = new Runnable() {
+          @Override
+          public void run() {
+            // We will just send an empty response, with no error, on restore.
+            byte[] response = new byte[0];
+            Exception error = null;
+            sendCompleteResponse(sender, transactionID, response, error);
+          }
+        };
+        try {
+          // We still use the same "onAcquire" runnable approach used by the other methods, just for consistency, since this
+          // call can't fail or block.  Success is REQUIRED since we are only receiving this on reconnect of a client which
+          // already knew that it had the lock so a disagreement here would mean that there is a serious bug.
+          this.messageHandler.restoreWriteLock(sender, entityClassName, entityName, onAcquire);
+        } catch (Exception error) {
+          // An unexpected exception is the only case where we send the response at this level.
+          sendCompleteResponse(sender, transactionID, null, error);
+        }
         break;
       }
       case RECONNECT: {
@@ -319,6 +356,7 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
     byte[] invoke(IMessageSenderWrapper sender, long clientInstanceID, String entityClassName, String entityName, byte[] payload) throws Exception;
     void acquireWriteLock(IMessageSenderWrapper sender, String entityClassName, String entityName, Runnable onAcquire);
     void releaseWriteLock(IMessageSenderWrapper sender, String entityClassName, String entityName);
+    void restoreWriteLock(IMessageSenderWrapper sender, String entityClassName, String entityName, Runnable onAcquire);
     void reconnect(IMessageSenderWrapper sender, long clientInstanceID, String entityClassName, String entityName, byte[] extendedData);
     void syncEntityStart(IMessageSenderWrapper sender, String entityClassName, String entityName) throws Exception;
     void syncEntityEnd(IMessageSenderWrapper sender, String entityClassName, String entityName) throws Exception;
