@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.terracotta</groupId>
     <artifactId>terracotta-parent</artifactId>
-    <version>5.0.0.alpha1</version>
+    <version>5.0.0.alpha2</version>
   </parent>
 
   <groupId>org.terracotta.internal</groupId>
@@ -101,9 +101,20 @@
     </snapshotRepository>
   </distributionManagement>
 
+  <repositories>
+    <repository>
+      <id>terracotta-snapshots</id>
+      <url>http://www.terracotta.org/download/reflector/snapshots</url>
+    </repository>
+    <repository>
+      <id>terracotta-releases</id>
+      <url>http://www.terracotta.org/download/reflector/releases</url>
+    </repository>
+  </repositories>
+
   <scm>
-    <connection>scm:git:ssh://git@irepo.eur.ad.sag:7999/tab/terracotta-apis.git</connection>
-    <developerConnection>scm:git:ssh://git@irepo.eur.ad.sag:7999/tab/terracotta-apis.git</developerConnection>
+    <connection>scm:git:https://github.com/Terracotta-OSS/terracotta-apis.git</connection>
+    <developerConnection>scm:git:https://github.com/Terracotta-OSS/terracotta-apis.git</developerConnection>
   </scm>
 
 </project>

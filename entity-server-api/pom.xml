@@ -30,11 +30,4 @@
 
   <groupId>org.terracotta</groupId>
   <artifactId>entity-server-api</artifactId>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-  </dependencies>
 </project>
