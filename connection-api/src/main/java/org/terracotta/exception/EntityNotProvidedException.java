@@ -33,6 +33,6 @@ public class EntityNotProvidedException extends EntityException {
    * @param entityName The name of the entity instance
    */
   public EntityNotProvidedException(String className, String entityName) {
-    super(className, entityName, "no provider found for class");
+    super(className, entityName, "no provider found for class", null);
   }
 }

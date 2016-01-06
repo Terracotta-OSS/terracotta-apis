@@ -32,9 +32,9 @@ public class EntityUserException extends EntityException {
    * 
    * @param className The name of the entity type
    * @param entityName The name of the entity instance
-   * @param cause The underlying exception thrown by the user code
+   * @param cause The underlying throwable thrown by the user code
    */
-  public EntityUserException(String className, String entityName, Exception cause) {
-    super(className, entityName, "exception in user code: " + cause.getLocalizedMessage());
+  public EntityUserException(String className, String entityName, Throwable cause) {
+    super(className, entityName, "exception in user code: " + cause.getLocalizedMessage(), cause);
   }
 }

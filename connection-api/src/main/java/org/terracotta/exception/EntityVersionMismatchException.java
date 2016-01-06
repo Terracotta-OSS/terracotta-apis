@@ -37,6 +37,6 @@ public class EntityVersionMismatchException extends EntityException {
    * @param attemptedVersion The version the client tried to use, which was incorrect
    */
   public EntityVersionMismatchException(String className, String entityName, long expectedVersion, long attemptedVersion) {
-    super(className, entityName, "version mismatch (expected " + expectedVersion + " but attempted " + attemptedVersion + ")");
+    super(className, entityName, "version mismatch (expected " + expectedVersion + " but attempted " + attemptedVersion + ")", null);
   }
 }

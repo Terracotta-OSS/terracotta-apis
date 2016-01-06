@@ -33,8 +33,9 @@ public abstract class EntityException extends Exception {
    * @param className The name of the type of the entity
    * @param entityName The name of the entity instance
    * @param description The description describing the specific problem
+   * @param cause The underlying cause of the exception, null if nothing appropriate
    */
-  protected EntityException(String className, String entityName, String description) {
-    super("Entity: " + className + ":" + entityName + " " + description);
+  protected EntityException(String className, String entityName, String description, Throwable cause) {
+    super("Entity: " + className + ":" + entityName + " " + description, cause);
   }
 }
