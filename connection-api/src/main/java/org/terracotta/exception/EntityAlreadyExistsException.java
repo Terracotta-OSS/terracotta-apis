@@ -33,6 +33,6 @@ public class EntityAlreadyExistsException extends EntityException {
    * @param entityName The name of the entity instance
    */
   public EntityAlreadyExistsException(String className, String entityName) {
-    super(className, entityName, "already exists");
+    super(className, entityName, "already exists", null);
   }
 }

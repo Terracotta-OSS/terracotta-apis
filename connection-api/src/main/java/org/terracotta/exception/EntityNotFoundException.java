@@ -33,6 +33,6 @@ public class EntityNotFoundException extends EntityException {
    * @param entityName The name of the entity instance
    */
   public EntityNotFoundException(String className, String entityName) {
-    super(className, entityName, "not found");
+    super(className, entityName, "not found", null);
   }
 }
