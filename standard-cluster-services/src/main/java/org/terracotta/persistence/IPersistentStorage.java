@@ -21,6 +21,9 @@ package org.terracotta.persistence;
 import java.io.IOException;
 import java.util.Map;
 
+import com.tc.classloader.CommonComponent;
+
+
 /**
  * This interface describes the needs of Persistor.  An implementation of this interface can be used as the storage back-end
  * of an instance of Persistor.
@@ -28,6 +31,7 @@ import java.util.Map;
  * NOTE:  Parts of this interface exist for demonstrations and tests of life-cycle and may be removed in the future (explicit
  * open()/create(), for example).
  */
+@CommonComponent
 public interface IPersistentStorage {
   /**
    * Called to open an existing storage instance for use.  The caller will expect any data previously present in the backing

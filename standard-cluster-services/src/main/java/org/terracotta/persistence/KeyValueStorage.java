@@ -21,6 +21,8 @@ package org.terracotta.persistence;
 import java.util.Collection;
 import java.util.Set;
 
+import com.tc.classloader.CommonComponent;
+
 
 /**
  * Used with IPersistentStorage as the interface which describes the storage of a specific key-value pair type.
@@ -28,6 +30,7 @@ import java.util.Set;
  * @param <K> The key type
  * @param <V> The value type
  */
+@CommonComponent
 public interface KeyValueStorage<K, V> {
   
   // We can probably get rid of these
