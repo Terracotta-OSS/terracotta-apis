@@ -29,19 +29,5 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.terracotta</groupId>
-  <artifactId>standard-cluster-services</artifactId>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.terracotta</groupId>
-      <artifactId>entity-server-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.terracotta</groupId>
-      <artifactId>packaging-support</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
-
+  <artifactId>packaging-support</artifactId>
 </project>

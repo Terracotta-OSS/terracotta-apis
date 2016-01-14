@@ -21,11 +21,15 @@ package org.terracotta.entity;
 
 import java.util.concurrent.Future;
 
+import com.tc.classloader.CommonComponent;
+
+
 /**
  * Communicator allowing server-side entities to push messages to client-side entities.
  *
  * @author twu
  */
+@CommonComponent
 public interface ClientCommunicator {
 
   /**
