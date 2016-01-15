@@ -29,37 +29,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.terracotta</groupId>
-  <artifactId>entity-test-lib</artifactId>
+  <artifactId>monitoring-support</artifactId>
 
   <dependencies>
     <dependency>
       <groupId>org.terracotta</groupId>
-      <artifactId>entity-client-api</artifactId>
+      <artifactId>packaging-support</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.terracotta</groupId>
-      <artifactId>entity-server-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.terracotta</groupId>
-      <artifactId>standard-cluster-services</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.terracotta</groupId>
-      <artifactId>monitoring-support</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>
