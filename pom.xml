@@ -41,6 +41,7 @@
     <module>entity-client-api</module>
     <module>entity-server-api</module>
     <module>entity-test-lib</module>
+    <module>monitoring-support</module>
     <module>packaging-support</module>
     <module>standard-cluster-services</module>
     <module>test-entity</module>
