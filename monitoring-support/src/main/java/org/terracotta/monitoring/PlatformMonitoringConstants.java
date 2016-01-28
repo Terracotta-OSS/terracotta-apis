@@ -37,6 +37,19 @@ public class PlatformMonitoringConstants {
    */
   public static final String CLIENTS_ROOT_NAME = "clients";
   /**
+   * The name of the node in the tree which is the parent to all nodes representing entities.
+   */
+  public static final String ENTITIES_ROOT_NAME = "entities";
+  /**
+   * The name of the node in the tree which is the parent to all nodes representing client-entity fetched connections.
+   */
+  public static final String FETCHED_ROOT_NAME = "fetched";
+  /**
+   * The name of the node in the tree which stores the name of the server's current state.
+   */
+  public static final String STATE_NODE_NAME = "state";
+
+  /**
    * The path of the platform node, for manipulating its children.
    */
   public static final String[] PLATFORM_PATH = {PLATFORM_ROOT_NAME};
@@ -44,4 +57,29 @@ public class PlatformMonitoringConstants {
    * The path of the platform's clients node, for manipulating its children.
    */
   public static final String[] CLIENTS_PATH = {PLATFORM_ROOT_NAME, CLIENTS_ROOT_NAME};
+  /**
+   * The path of the platform's entities node, for manipulating its children.
+   */
+  public static final String[] ENTITIES_PATH = {PLATFORM_ROOT_NAME, ENTITIES_ROOT_NAME};
+  /**
+   * The path of the platform's fetched node, for manipulating its children.
+   */
+  public static final String[] FETCHED_PATH = {PLATFORM_ROOT_NAME, FETCHED_ROOT_NAME};
+  /**
+   * The path of the platform's state node, for reading its value.
+   */
+  public static final String[] STATE_PATH = {PLATFORM_ROOT_NAME, STATE_NODE_NAME};
+
+  /**
+   * Set in STATE_NODE_NAME when the server enters a stopped state (typically only during startup).
+   */
+  public static final String SERVER_STATE_STOPPED = "STOPPED";
+  /**
+   * Set in STATE_NODE_NAME when the server enters the active state.
+   */
+  public static final String SERVER_STATE_ACTIVE = "ACTIVE";
+  /**
+   * Set in STATE_NODE_NAME when the server enters the passive state.
+   */
+  public static final String SERVER_STATE_PASSIVE = "PASSIVE";
 }
