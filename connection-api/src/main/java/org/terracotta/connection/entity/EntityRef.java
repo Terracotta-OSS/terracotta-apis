@@ -57,6 +57,17 @@ public interface EntityRef<T extends Entity, C> {
   void destroy() throws EntityNotProvidedException, EntityNotFoundException;
 
   /**
+   * Destroy the entity pointed to by this reference, but only if there are no open instances to this client remaining.
+   * This differs from destroy() in that it will NOT block if there are any open instances of the fetched entity on any
+   * client.  In that case, it merely fails, returning false.
+   * 
+   * @return True if the entity was destroyed, false if there are fetched entities on any client.
+   * @throws EntityNotProvidedException The service providing T doesn't exist on either the client or the server
+   * @throws EntityNotFoundException No entity with this type and name could be found
+   */
+  boolean tryDestroy() throws EntityNotProvidedException, EntityNotFoundException;
+
+  /**
    * Gets the entity pointed to by this reference.  Never returns null but throws on error.
    * Note that the returned instance is in an "open" state and must be closed (using "close()") to release this hold on the
    * server-side instance.  Otherwise, attempts to destroy() it will block.  Multiple clients can hold a fetched reference
