@@ -37,8 +37,9 @@ public interface MessageCodec<M extends EntityMessage, R extends EntityResponse>
    * 
    * @param payload The byte array containing the raw wire message
    * @return A high-level message instance
+   * @throws MessageCodecException The message could not be deserialized or was considered invalid.
    */
-  M deserialize(byte[] payload);
+  M deserialize(byte[] payload) throws MessageCodecException;
 
   /**
    * Deserializes a given message payload into a high-level message type, useful to the server-side entity.
@@ -47,8 +48,9 @@ public interface MessageCodec<M extends EntityMessage, R extends EntityResponse>
    * @param concurrencyKey The concurrency key where the message must be run (so it can be described in the message type)
    * @param payload The byte array containing the raw wire message
    * @return A high-level message instance
+   * @throws MessageCodecException The message could not be deserialized or was considered invalid.
    */
-  M deserializeForSync(int concurrencyKey, byte[] payload);
+  M deserializeForSync(int concurrencyKey, byte[] payload) throws MessageCodecException;
 
   /**
    * Serializes the given EntityResponse object into a byte[] which can be passed over the wire, back to a client.
@@ -57,6 +59,7 @@ public interface MessageCodec<M extends EntityMessage, R extends EntityResponse>
    * 
    * @param response The response object received as the return value from a call to invoke 
    * @return The raw data which can be passed over the wire to the client
+   * @throws MessageCodecException The message could not be serialized or was considered invalid.
    */
-  byte[] serialize(R response);
+  byte[] serialize(R response) throws MessageCodecException;
 }
