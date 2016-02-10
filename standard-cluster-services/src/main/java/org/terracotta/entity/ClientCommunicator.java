@@ -36,9 +36,10 @@ public interface ClientCommunicator {
    * Send a message to the client-side of an entity.
    *
    * @param clientDescriptor The client side instance to send to
-   * @param payload bytes to send
+   * @param message The message to send
+   * @throws MessageCodecException If the message could not be serialized by the provided codec
    */
-  void sendNoResponse(ClientDescriptor clientDescriptor, byte[] payload);
+  void sendNoResponse(ClientDescriptor clientDescriptor, EntityResponse message) throws MessageCodecException;
 
   /**
    * Send a message getting an async completion back.
@@ -48,9 +49,10 @@ public interface ClientCommunicator {
    * THIS METHOD
    * 
    * @param clientDescriptor The client side instance to send to
-   * @param payload bytes to send
+   * @param message The message to send
    * @return Future representing when the client finishes with and acknowledges the sent message.
+   * @throws MessageCodecException If the message could not be serialized by the provided codec
    */
   @Deprecated
-  Future<Void> send(ClientDescriptor clientDescriptor, byte[] payload);
+  Future<Void> send(ClientDescriptor clientDescriptor, EntityResponse message) throws MessageCodecException;
 }
