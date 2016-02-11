@@ -64,6 +64,12 @@ public interface ServerEntityService<M extends EntityMessage, R extends EntityRe
   PassiveServerEntity<M, R> createPassiveEntity(ServiceRegistry registry, byte[] configuration);
   
   /**
+   * Get the concurrency strategy to be used for this server entity.
+   *
+   * @return concurrency strategy
+   */
+  ConcurrencyStrategy<M> getConcurrencyStrategy(byte[] configuration);
+  /**
    * Gets the message codec which will be used to convert any byte[] messages destined for this entity into
    * higher-level objects and conversely convert any response objects into byte[] for the wire.
    *

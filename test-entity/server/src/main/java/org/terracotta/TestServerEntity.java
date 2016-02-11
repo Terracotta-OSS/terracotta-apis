@@ -48,11 +48,6 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
     }
   }
 
-   @Override
-  public ConcurrencyStrategy<TestMessage> getConcurrencyStrategy() {
-    return new NoConcurrencyStrategy<TestMessage>();
-  }
-
   @Override
   public void connected(ClientDescriptor clientDescriptor) {
   }

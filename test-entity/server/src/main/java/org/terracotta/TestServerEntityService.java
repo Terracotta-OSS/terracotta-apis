@@ -51,6 +51,11 @@ public class TestServerEntityService implements ServerEntityService<TestServerEn
   }
 
   @Override
+  public ConcurrencyStrategy<TestServerEntity.TestMessage> getConcurrencyStrategy(byte[] configuration) {
+    return new NoConcurrencyStrategy<TestServerEntity.TestMessage>();
+  }
+
+  @Override
   public MessageCodec<TestServerEntity.TestMessage, TestServerEntity.TestResponse> getMessageCodec() {
     return new MessageCodec<TestServerEntity.TestMessage, TestServerEntity.TestResponse>() {
       @Override
