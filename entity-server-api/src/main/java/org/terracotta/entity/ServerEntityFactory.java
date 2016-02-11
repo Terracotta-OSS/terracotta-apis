@@ -29,7 +29,7 @@ public class ServerEntityFactory {
    * Finds the service for the given entity type, in the class loader of ServerEntityFactory.
    * 
    */
-  public static <T extends ServerEntityService<? extends ActiveServerEntity<?, ?>, ? extends PassiveServerEntity<?, ?>>> T getService(String typeName) {
+  public static <T extends ServerEntityService<? extends EntityMessage, ? extends EntityResponse>> T getService(String typeName) {
     return getService(typeName, ServerEntityFactory.class.getClassLoader());
   }
 
@@ -41,7 +41,7 @@ public class ServerEntityFactory {
    * @return The ServerEntityFactory to create server-side entities of this type
    */
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  public static <T extends ServerEntityService<? extends ActiveServerEntity, ? extends PassiveServerEntity>> T getService(String typeName, ClassLoader classLoader) {
+  public static <T extends ServerEntityService<? extends EntityMessage, ? extends EntityResponse>> T getService(String typeName, ClassLoader classLoader) {
     ServiceLoader<ServerEntityService> serviceLoader = ServiceLoader.load(ServerEntityService.class, classLoader);
     for (ServerEntityService serverService : serviceLoader) {
       if (serverService.handlesEntityType(typeName)) {

@@ -24,7 +24,7 @@ package org.terracotta.entity;
  * Note that the instance is always specific to a entity and concurrency key and also can't be held beyond the scope of the
  * method where it is provided.
  */
-public interface PassiveSynchronizationChannel {
+public interface PassiveSynchronizationChannel<R extends EntityResponse> {
   /**
    * Requests that a message payload be sent to the passive for this entity on this concurrency key.
    * This payload will be deserialized by MessageDeserializer, on the passive (the concurrency key will be provided so it
@@ -32,5 +32,5 @@ public interface PassiveSynchronizationChannel {
    * 
    * @param payload The byte[]-encoding of a message.
    */
-  public void synchronizeToPassive(byte[] payload);
+  public void synchronizeToPassive(R payload);
 }

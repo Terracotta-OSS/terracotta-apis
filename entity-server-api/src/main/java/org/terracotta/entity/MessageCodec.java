@@ -62,4 +62,14 @@ public interface MessageCodec<M extends EntityMessage, R extends EntityResponse>
    * @throws MessageCodecException The message could not be serialized or was considered invalid.
    */
   byte[] serialize(R response) throws MessageCodecException;
+
+  /**
+   * Serializes a given message payload into a high-level message type, useful to the server-side entity.
+   * This serializer routine is used specifically for server->server passive synchronization.
+   * 
+   * @param payload The byte array containing the raw wire message
+   * @return A high-level message instance
+   * @throws MessageCodecException The message could not be deserialized or was considered invalid.
+   */
+  byte[] serializeForSync(int concurrencyKey, R payload) throws MessageCodecException;
 }

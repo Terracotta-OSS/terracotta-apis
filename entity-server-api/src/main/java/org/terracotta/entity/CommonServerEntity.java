@@ -25,15 +25,7 @@ package org.terracotta.entity;
  * implementation's MessageCodec and also read by the ConcurrencyStrategy.
  * @param <R> The high-level message type returned by invoke calls on the active entity.
  */
-public interface CommonServerEntity<M extends EntityMessage, R extends EntityResponse> {
-  /**
-   * Gets the message codec which will be used to convert any byte[] messages destined for this entity into
-   * higher-level objects and conversely convert any response objects into byte[] for the wire.
-   *
-   * @return message codec
-   */
-  MessageCodec<M, R> getMessageCodec();
-  
+public interface CommonServerEntity<M extends EntityMessage, R extends EntityResponse> {  
   /**
    * Called when a client asks that an entity be explicitly created.
    */
