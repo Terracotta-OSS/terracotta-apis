@@ -22,10 +22,10 @@ package org.terracotta.entity;
 /**
  * The specific service instance used to create server-side instances of the given active and passive entity types.
  * 
- * @param <A> The specific ActiveServerEntity type created
- * @param <P> The specific PassiveServerEntity type created
+ * @param <M> Incoming message type
+ * @param <R> outgoing message type
  */
-public interface ServerEntityService<A extends ActiveServerEntity<? extends EntityMessage, ? extends EntityResponse>, P extends PassiveServerEntity<? extends EntityMessage, ? extends EntityResponse>> {
+public interface ServerEntityService<M extends EntityMessage, R extends EntityResponse> {
   /**
    * Used for ensuring that the entity version implementation version is consistent between server and client,
    * active and passive, and pre-restart and post-restart.
@@ -52,7 +52,7 @@ public interface ServerEntityService<A extends ActiveServerEntity<? extends Enti
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  A createActiveEntity(ServiceRegistry registry, byte[] configuration);
+  ActiveServerEntity<M, R> createActiveEntity(ServiceRegistry registry, byte[] configuration);
 
   /**
    * Create an instance of the specified server entity in passive mode.
@@ -61,5 +61,19 @@ public interface ServerEntityService<A extends ActiveServerEntity<? extends Enti
    * @param configuration entity specific configuration object
    * @return server side entity
    */
-  P createPassiveEntity(ServiceRegistry registry, byte[] configuration);
+  PassiveServerEntity<M, R> createPassiveEntity(ServiceRegistry registry, byte[] configuration);
+  
+  /**
+   * Get the concurrency strategy to be used for this server entity.
+   *
+   * @return concurrency strategy
+   */
+  ConcurrencyStrategy<M> getConcurrencyStrategy(byte[] configuration);
+  /**
+   * Gets the message codec which will be used to convert any byte[] messages destined for this entity into
+   * higher-level objects and conversely convert any response objects into byte[] for the wire.
+   *
+   * @return message codec
+   */
+  MessageCodec<M, R> getMessageCodec();  
 }

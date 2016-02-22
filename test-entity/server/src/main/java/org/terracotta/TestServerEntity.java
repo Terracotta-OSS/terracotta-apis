@@ -22,7 +22,6 @@ import org.terracotta.entity.ClientDescriptor;
 import org.terracotta.entity.ConcurrencyStrategy;
 import org.terracotta.entity.EntityMessage;
 import org.terracotta.entity.EntityResponse;
-import org.terracotta.entity.MessageCodec;
 import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.ActiveServerEntity;
 import org.terracotta.entity.PassiveSynchronizationChannel;
@@ -50,32 +49,6 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
   }
 
   @Override
-  public MessageCodec<TestMessage, TestResponse> getMessageCodec() {
-    return new MessageCodec<TestMessage, TestResponse>() {
-      @Override
-      public TestMessage deserialize(byte[] payload) {
-        return new TestMessage(payload);
-      }
-
-      @Override
-      public TestMessage deserializeForSync(int concurrencyKey, byte[] payload) {
-        // TODO:  Add synchronization support.
-        throw new AssertionError("Synchronization not supported for this entity");
-      }
-
-      @Override
-      public byte[] serialize(TestResponse response) {
-        return response.payload;
-      }
-    };
-  }
-
-  @Override
-  public ConcurrencyStrategy<TestMessage> getConcurrencyStrategy() {
-    return new NoConcurrencyStrategy<TestMessage>();
-  }
-
-  @Override
   public void connected(ClientDescriptor clientDescriptor) {
   }
 
@@ -87,12 +60,7 @@ public class TestServerEntity implements ActiveServerEntity<TestServerEntity.Tes
   @Override
   public void disconnected(ClientDescriptor clientDescriptor) {
   }
-
-  @Override
-  public byte[] getConfig() {
-    return new byte[0];
-  }
-
+  
   @Override
   public TestResponse invoke(ClientDescriptor clientDescriptor, TestMessage message) {
     return new TestResponse(message.getPayload());

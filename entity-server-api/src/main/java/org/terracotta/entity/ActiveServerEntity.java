@@ -25,12 +25,6 @@ package org.terracotta.entity;
  *  interaction, it has more capabilities than the corresponding passive.
  */
 public interface ActiveServerEntity<M extends EntityMessage, R extends EntityResponse> extends CommonServerEntity<M, R> {
-  /**
-   * Get the concurrency strategy to be used for this server entity.
-   *
-   * @return concurrency strategy
-   */
-  ConcurrencyStrategy<M> getConcurrencyStrategy();
 
   /**
    * Indicate that the given client is now connected up to this ServerEntity.
@@ -45,13 +39,6 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param clientDescriptor client-side instance which disconnected
    */
   void disconnected(ClientDescriptor clientDescriptor);
-
-  /**
-   * Get configuration for given entity
-   *
-   * @return serialized byte array
-   */
-  byte[] getConfig();
   
   /**
    * Invoke a call on the given entity.
@@ -81,5 +68,5 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param syncChannel The output channel to the passive
    * @param concurrencyKey The key of the data to be synchronized
    */
-  void synchronizeKeyToPassive(PassiveSynchronizationChannel syncChannel, int concurrencyKey);
+  void synchronizeKeyToPassive(PassiveSynchronizationChannel<R> syncChannel, int concurrencyKey);
 }

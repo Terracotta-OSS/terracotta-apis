@@ -19,6 +19,7 @@
 package org.terracotta.connection.entity;
 
 import org.terracotta.exception.EntityAlreadyExistsException;
+import org.terracotta.exception.EntityException;
 import org.terracotta.exception.EntityNotFoundException;
 import org.terracotta.exception.EntityNotProvidedException;
 import org.terracotta.exception.EntityVersionMismatchException;
@@ -46,6 +47,13 @@ public interface EntityRef<T extends Entity, C> {
    * @throws EntityVersionMismatchException No entity exists but the client and server providing services for T don't have the same version numbers
    */
   void create(C configuration) throws EntityNotProvidedException, EntityAlreadyExistsException, EntityVersionMismatchException;
+  /**
+   * reconfigure the entity with the given configuration.
+   *
+   * @param configuration configuration to be applied to the entity
+   * @throws EntityNotProvidedException The service providing T doesn't exist on either the client or the server
+   */
+  C reconfigure(C configuration) throws EntityException;
 
   /**
    * Destroy the entity pointed to by this reference.
