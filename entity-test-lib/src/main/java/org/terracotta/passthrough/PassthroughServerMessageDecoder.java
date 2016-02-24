@@ -34,21 +34,25 @@ import org.terracotta.passthrough.PassthroughMessage.Type;
  */
 public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.Decoder<Void> {
   private final MessageHandler messageHandler;
+  private final LifeCycleMessageHandler lifeCycleMessageHandler;
   private final PassthroughServerProcess downstreamPassive;
   private final IMessageSenderWrapper sender;
   private final byte[] message;
 
-  public PassthroughServerMessageDecoder(MessageHandler messageHandler, PassthroughServerProcess downstreamPassive, IMessageSenderWrapper sender, byte[] message) {
+  public PassthroughServerMessageDecoder(MessageHandler messageHandler, LifeCycleMessageHandler lifeCycleMessageHandler, PassthroughServerProcess downstreamPassive, IMessageSenderWrapper sender, byte[] message) {
     this.messageHandler = messageHandler;
+    this.lifeCycleMessageHandler = lifeCycleMessageHandler;
     this.downstreamPassive = downstreamPassive;
     this.sender = sender;
     this.message = message;
   }
   @Override
-  public Void decode(Type type, boolean shouldReplicate, final long transactionID, DataInputStream input) throws IOException {
+  public Void decode(Type type, boolean shouldReplicate, final long transactionID, final long oldestTransactionID, DataInputStream input) throws IOException {
     // First step, send the ack.
     PassthroughMessage ack = PassthroughMessageCodec.createAckMessage();
-    ack.setTransactionID(transactionID);
+    // The oldestTransactionID isn't relevant when sent back.
+    long oldestTransactionIDToReturn = -1;
+    ack.setTransactionTracking(transactionID, oldestTransactionIDToReturn);
     sender.sendAck(ack);
     
     // Now, before we can actually RUN the message, we need to make sure that we wait for its replicated copy to complete
@@ -62,6 +66,7 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
     // Now, decode the message and interpret it.
     switch (type) {
       case CREATE_ENTITY: {
+        long clientOriginID = this.sender.getClientOriginID();
         String entityClassName = input.readUTF();
         String entityName = input.readUTF();
         long version = input.readLong();
@@ -69,25 +74,40 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
         input.readFully(serializedConfiguration);
         byte[] response = null;
         EntityException error = null;
+        
+        boolean didAlreadyHandle = false;
         try {
           // There is no response on successful create.
-          this.messageHandler.create(entityClassName, entityName, version, serializedConfiguration);
+          didAlreadyHandle = this.lifeCycleMessageHandler.didAlreadyHandle(clientOriginID, transactionID);
         } catch (EntityException e) {
-          // We may want to ignore this failure on re-send.
-          if (sender.shouldTolerateCreateDestroyDuplication()) {
-            // Absorb the error.
-          } else {
-            // Real error.
+          error = e;
+          didAlreadyHandle = true;
+        }
+        
+        if (!didAlreadyHandle) {
+          try {
+            // There is no response on successful create.
+            this.messageHandler.create(entityClassName, entityName, version, serializedConfiguration);
+          } catch (EntityException e) {
             error = e;
+          } catch (RuntimeException e) {
+            // Just wrap this as a user exception since it was unexpected.
+            error = new EntityUserException(entityClassName, entityName, e);
           }
-        } catch (RuntimeException e) {
-          // Just wrap this as a user exception since it was unexpected.
-          error = new EntityUserException(entityClassName, entityName, e);
+          
+          // Record the result in order to handle future re-sends.
+          if (null == error) {
+            // No special result.
+            this.lifeCycleMessageHandler.successInMessage(clientOriginID, transactionID, oldestTransactionID, null);
+          } else {
+            this.lifeCycleMessageHandler.failureInMessage(clientOriginID, transactionID, oldestTransactionID, error);
+          }
         }
         sendCompleteResponse(sender, transactionID, response, error);
         break;
       }
       case RECONFIGURE_ENTITY: {
+        long clientOriginID = this.sender.getClientOriginID();
         String entityClassName = input.readUTF();
         String entityName = input.readUTF();
         long version = input.readLong();
@@ -95,43 +115,74 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
         input.readFully(serializedConfiguration);
         byte[] response = null;
         EntityException error = null;
+        
+        boolean didAlreadyHandle = false;
         try {
           // There is no response on successful create.
-          response = this.messageHandler.reconfigure(entityClassName, entityName, version, serializedConfiguration);
-        } catch (EntityException e) {
-          // We may want to ignore this failure on re-send.
-          if (sender.shouldTolerateCreateDestroyDuplication()) {
-            // Absorb the error.
-          } else {
-            // Real error.
-            error = e;
+          response = this.lifeCycleMessageHandler.didAlreadyHandleResult(clientOriginID, transactionID);
+          if (null != response) {
+            didAlreadyHandle = true;
           }
-        } catch (RuntimeException e) {
-          // Just wrap this as a user exception since it was unexpected.
-          error = new EntityUserException(entityClassName, entityName, e);
+        } catch (EntityException e) {
+          error = e;
+          didAlreadyHandle = true;
+        }
+        
+        if (!didAlreadyHandle) {
+          try {
+            // We response with the previous configuration.
+            response = this.messageHandler.reconfigure(entityClassName, entityName, version, serializedConfiguration);
+          } catch (EntityException e) {
+            error = e;
+          } catch (RuntimeException e) {
+            // Just wrap this as a user exception since it was unexpected.
+            error = new EntityUserException(entityClassName, entityName, e);
+          }
+          
+          // Record the result in order to handle future re-sends.
+          if (null == error) {
+            this.lifeCycleMessageHandler.successInMessage(clientOriginID, transactionID, oldestTransactionID, response);
+          } else {
+            this.lifeCycleMessageHandler.failureInMessage(clientOriginID, transactionID, oldestTransactionID, error);
+          }
         }
         sendCompleteResponse(sender, transactionID, response, error);
         break;
       }      
       case DESTROY_ENTITY: {
+        long clientOriginID = this.sender.getClientOriginID();
         String entityClassName = input.readUTF();
         String entityName = input.readUTF();
         byte[] response = null;
         EntityException error = null;
+        
+        boolean didAlreadyHandle = false;
         try {
-          // There is no response on successful delete.
-          this.messageHandler.destroy(entityClassName, entityName);
+          // There is no response on successful create.
+          didAlreadyHandle = this.lifeCycleMessageHandler.didAlreadyHandle(clientOriginID, transactionID);
         } catch (EntityException e) {
-          // We may want to ignore this failure on re-send.
-          if (sender.shouldTolerateCreateDestroyDuplication()) {
-            // Absorb the error.
-          } else {
-            // Real error.
+          error = e;
+          didAlreadyHandle = true;
+        }
+        
+        if (!didAlreadyHandle) {
+          try {
+            // There is no response on successful delete.
+            this.messageHandler.destroy(entityClassName, entityName);
+          } catch (EntityException e) {
             error = e;
+          } catch (RuntimeException e) {
+            // Just wrap this as a user exception since it was unexpected.
+            error = new EntityUserException(entityClassName, entityName, e);
           }
-        } catch (RuntimeException e) {
-          // Just wrap this as a user exception since it was unexpected.
-          error = new EntityUserException(entityClassName, entityName, e);
+          
+          // Record the result in order to handle future re-sends.
+          if (null == error) {
+            // No special result.
+            this.lifeCycleMessageHandler.successInMessage(clientOriginID, transactionID, oldestTransactionID, null);
+          } else {
+            this.lifeCycleMessageHandler.failureInMessage(clientOriginID, transactionID, oldestTransactionID, error);
+          }
         }
         sendCompleteResponse(sender, transactionID, response, error);
         break;
@@ -422,7 +473,9 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
 
   private void sendCompleteResponse(IMessageSenderWrapper sender, long transactionID, byte[] response, EntityException error) {
     PassthroughMessage complete = PassthroughMessageCodec.createCompleteMessage(response, error);
-    complete.setTransactionID(transactionID);
+    // The oldestTransactionID isn't relevant when sent back.
+    long oldestTransactionID = -1;
+    complete.setTransactionTracking(transactionID, oldestTransactionID);
     sender.sendComplete(complete);
   }
 
@@ -448,5 +501,17 @@ public class PassthroughServerMessageDecoder implements PassthroughMessageCodec.
     void syncEntityKeyStart(IMessageSenderWrapper sender, String entityClassName, String entityName, int concurrencyKey) throws EntityException;
     void syncEntityKeyEnd(IMessageSenderWrapper sender, String entityClassName, String entityName, int concurrencyKey) throws EntityException;
     void syncPayload(IMessageSenderWrapper sender, String entityClassName, String entityName, int concurrencyKey, byte[] payload) throws EntityException;
+  }
+
+
+  /**
+   * Used to ensure that calls to create/destroy/doesExist give consistent results, on re-send.
+   */
+  public static interface LifeCycleMessageHandler {
+    boolean didAlreadyHandle(long clientOriginID, long transactionID) throws EntityException;
+    // Like didAlreadyHandle but used only in cases where there is a result - a null return means that this was not previously handled.
+    byte[] didAlreadyHandleResult(long clientOriginID, long transactionID) throws EntityException;
+    void failureInMessage(long clientOriginID, long transactionID, long oldestTransactionID, EntityException error);
+    void successInMessage(long clientOriginID, long transactionID, long oldestTransactionID, byte[] reconfigureResponse);
   }
 }

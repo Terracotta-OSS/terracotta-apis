@@ -56,22 +56,27 @@ public class PassthroughConnectionState {
         Throwables.propagate(e);
       }
     }
-    return createAndSend(this.serverProcess, this.inFlightMessages, sender, message, shouldWaitForSent, shouldWaitForReceived, shouldWaitForCompleted);
+    long oldestTransactionID = 0;
+    for (long oneID : this.inFlightMessages.keySet()) {
+      if ((0 == oldestTransactionID) || (oneID < oldestTransactionID)) {
+        oldestTransactionID = oneID;
+      }
+    }
+    return createAndSend(this.serverProcess, this.inFlightMessages, sender, message, oldestTransactionID, shouldWaitForSent, shouldWaitForReceived, shouldWaitForCompleted);
   }
 
-  private PassthroughWait createAndSend(PassthroughServerProcess target, Map<Long, PassthroughWait> tracker, PassthroughConnection sender, PassthroughMessage message, boolean shouldWaitForSent, boolean shouldWaitForReceived, boolean shouldWaitForCompleted) {
+  private PassthroughWait createAndSend(PassthroughServerProcess target, Map<Long, PassthroughWait> tracker, PassthroughConnection sender, PassthroughMessage message, long oldestTransactionID, boolean shouldWaitForSent, boolean shouldWaitForReceived, boolean shouldWaitForCompleted) {
     PassthroughWait waiter = new PassthroughWait(shouldWaitForSent, shouldWaitForReceived, shouldWaitForCompleted);
     long transactionID = this.nextTransactionID;
     this.nextTransactionID += 1;
-    message.setTransactionID(transactionID);
+    message.setTransactionTracking(transactionID, oldestTransactionID);
     tracker.put(transactionID, waiter);
     if (shouldWaitForSent) {
       waiter.sent();
     }
     byte[] raw = message.asSerializedBytes();
     waiter.saveRawMessageForResend(raw);
-    boolean isResend = false;
-    target.sendMessageToServer(sender, raw, isResend);
+    target.sendMessageToServer(sender, raw);
     return waiter;
   }
 
@@ -82,7 +87,9 @@ public class PassthroughConnectionState {
   public synchronized PassthroughWait sendAsReconnect(PassthroughConnection sender, PassthroughMessage message, boolean shouldWaitForSent, boolean shouldWaitForReceived, boolean shouldWaitForCompleted) {
     // This is similar to the normal send but only happens in the reconnect state and creates a waiter in that in-flight set.
     Assert.assertTrue(null != this.reconnectingServerProcess);
-    return createAndSend(this.reconnectingServerProcess, this.reconnectingInFlightMessages, sender, message, shouldWaitForSent, shouldWaitForReceived, shouldWaitForCompleted);
+    // We won't bother clearing transactions on re-send.
+    long oldestTransactionID = 0;
+    return createAndSend(this.reconnectingServerProcess, this.reconnectingInFlightMessages, sender, message, oldestTransactionID, shouldWaitForSent, shouldWaitForReceived, shouldWaitForCompleted);
   }
 
   public synchronized Map<Long, PassthroughWait> enterReconnectState(PassthroughServerProcess newServerProcess) {
@@ -103,8 +110,7 @@ public class PassthroughConnectionState {
     Assert.assertTrue(null != this.reconnectingServerProcess);
     byte[] raw = waiter.resetAndGetMessageForResend();
     this.reconnectingInFlightMessages.put(transactionID, waiter);
-    boolean isResend = true;
-    this.reconnectingServerProcess.sendMessageToServer(sender, raw, isResend);
+    this.reconnectingServerProcess.sendMessageToServer(sender, raw);
   }
 
   public synchronized PassthroughWait getWaiterForTransaction(PassthroughServerProcess sender, long transactionID) {
