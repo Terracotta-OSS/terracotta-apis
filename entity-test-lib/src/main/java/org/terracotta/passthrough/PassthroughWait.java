@@ -111,7 +111,7 @@ public class PassthroughWait implements InvokeFuture<byte[]> {
 
   @Override
   public byte[] getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, EntityException, TimeoutException {
-    throw new IllegalStateException("Not supported");
+    return get();
   }
 
   public synchronized void sent() {
