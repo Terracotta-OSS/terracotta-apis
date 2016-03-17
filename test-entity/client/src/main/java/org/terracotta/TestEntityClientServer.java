@@ -21,11 +21,12 @@ package org.terracotta;
 
 import org.terracotta.entity.EntityClientEndpoint;
 import org.terracotta.entity.EntityClientService;
+import org.terracotta.entity.MessageCodec;
 
 /**
  * @author twu
  */
-public class TestEntityClientServer implements EntityClientService<TestEntity, TestEntityConfig> {
+public class TestEntityClientServer implements EntityClientService<TestEntity, TestEntityConfig, TestMessage, TestResponse> {
   @Override
   public boolean handlesEntityType(Class<TestEntity> cls) {
     return cls == TestEntity.class;
@@ -42,7 +43,12 @@ public class TestEntityClientServer implements EntityClientService<TestEntity, T
   }
 
   @Override
-  public TestEntity create(EntityClientEndpoint endpoint) {
+  public TestEntity create(EntityClientEndpoint<TestMessage, TestResponse> endpoint) {
     return new TestEntityClient();
+  }
+
+  @Override
+  public MessageCodec<TestMessage, TestResponse> getMessageCodec() {
+    return new TestMessageCodec();
   }
 }

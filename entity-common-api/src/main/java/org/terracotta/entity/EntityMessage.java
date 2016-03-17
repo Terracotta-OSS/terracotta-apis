@@ -20,8 +20,8 @@
 package org.terracotta.entity;
 
 /**
- * An opaque token interface implemented by the specific high-level message type(s) used by a given server-side entity
- * implementation.
+ * An opaque token interface implemented by the specific high-level message type(s) used by a client-side entity
+ * to invoke some operation on server-side entity.
  */
 public interface EntityMessage {
 }

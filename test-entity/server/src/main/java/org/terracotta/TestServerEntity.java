@@ -27,26 +27,7 @@ import org.terracotta.entity.ActiveServerEntity;
 import org.terracotta.entity.PassiveSynchronizationChannel;
 
 
-public class TestServerEntity implements ActiveServerEntity<TestServerEntity.TestMessage, TestServerEntity.TestResponse> {
-  public static class TestMessage implements EntityMessage {
-    private final byte[] payload;
-
-    public TestMessage(byte[] payload) {
-      this.payload = payload;
-    }
-
-    public byte[] getPayload() {
-      return this.payload;
-    }
-  }
-
-  public static class TestResponse implements EntityResponse {
-    public final byte[] payload;
-    
-    public TestResponse(byte[] payload) {
-      this.payload = payload;
-    }
-  }
+public class TestServerEntity implements ActiveServerEntity<TestMessage, TestResponse> {
 
   @Override
   public void connected(ClientDescriptor clientDescriptor) {
