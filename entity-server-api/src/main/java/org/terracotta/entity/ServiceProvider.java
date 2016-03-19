@@ -55,4 +55,16 @@ public interface ServiceProvider extends Closeable {
    */
   Collection<Class<?>> getProvidedServiceTypes();
 
+  /**
+   * Clears up state for this ServiceProvider including any persisted state
+   *
+   * Generally platform calls this method during platform initialization so there won't be any entities using
+   * underlying services but ServiceProviders need to make sure that no entities (with the exception of platform whose consumerID is 0) using underlying services
+   *
+   * If there are any failures when clearing state, this method should inform Platform by throwing {@link ServiceProviderCleanupException}
+   *
+   * @throws ServiceProviderCleanupException if there are any failures
+     */
+  void clear() throws ServiceProviderCleanupException;
+
 }
