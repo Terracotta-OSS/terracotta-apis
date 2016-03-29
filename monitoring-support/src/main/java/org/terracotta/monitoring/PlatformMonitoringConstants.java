@@ -33,6 +33,10 @@ public class PlatformMonitoringConstants {
    */
   public static final String PLATFORM_ROOT_NAME = "platform";
   /**
+   * The name of the node in the tree which is the parent to all nodes representing connected servers.
+   */
+  public static final String SERVER_ROOT_NAME = "servers";
+  /**
    * The name of the node in the tree which is the parent to all nodes representing connected clients.
    */
   public static final String CLIENTS_ROOT_NAME = "clients";
@@ -82,4 +86,8 @@ public class PlatformMonitoringConstants {
    * Set in STATE_NODE_NAME when the server enters the passive state.
    */
   public static final String SERVER_STATE_PASSIVE = "PASSIVE";
+  /**
+   * Set in STATE_NODE_NAME when the server is new and has no cluster state.
+   */
+  public static final String SERVER_STATE_UNINITIALIZED = "UNINITIALIZED";
 }
