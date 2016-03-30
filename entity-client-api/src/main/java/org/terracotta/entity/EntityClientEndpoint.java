@@ -24,8 +24,11 @@ import java.io.Closeable;
 /**
  * The common connection point between client-side entity instances and the underlying connection to the server.
  * Note that instances of this class become invalid after close() and will throw IllegalStateException on access.
+ *
+ * @param <M> An {@link EntityMessage}
+ * @param <R> An {@link EntityResponse}
  */
-public interface EntityClientEndpoint extends Closeable {
+public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityResponse> extends Closeable {
   /**
    * Requests the configuration of the server-side entity to which the receiver is attached.  Note that this refers to the
    * configuration originally passed to the server-side entity when it was instantiated.
@@ -49,7 +52,7 @@ public interface EntityClientEndpoint extends Closeable {
    * 
    * @return An InvocationBuilder instance to build a new invocation to send to the server-side instance
    */
-  InvocationBuilder beginInvoke();
+  InvocationBuilder<M, R> beginInvoke();
 
   /**
    * Called when constructing the reconnect handshake, when the connection under this endpoint is re-established after

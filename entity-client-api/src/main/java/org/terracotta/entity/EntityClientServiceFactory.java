@@ -33,7 +33,7 @@ public class EntityClientServiceFactory {
    * @param cls The entity class type
    * @return The EntityClientService to create client-side entities of this type
    */
-  public static <T extends Entity, C> EntityClientService<T, C> creationServiceForType(Class<T> cls) {
+  public static <T extends Entity, C> EntityClientService<T, C, ? extends EntityMessage, ? extends EntityResponse> creationServiceForType(Class<T> cls) {
     return creationServiceForType(cls, EntityClientServiceFactory.class.getClassLoader());
   }
 
@@ -45,9 +45,9 @@ public class EntityClientServiceFactory {
    * @return The EntityClientService to create client-side entities of this type
    */
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  public static <T extends Entity, C> EntityClientService<T, C> creationServiceForType(Class<T> cls, ClassLoader classLoader) {
+  public static <T extends Entity, C> EntityClientService<T, C, ? extends EntityMessage, ? extends EntityResponse> creationServiceForType(Class<T> cls, ClassLoader classLoader) {
     ServiceLoader<EntityClientService> serviceLoader = ServiceLoader.load(EntityClientService.class, classLoader);
-    for (EntityClientService<T, C> entityClientService : serviceLoader) {
+    for (EntityClientService<T, C, ? extends EntityMessage, ? extends EntityResponse> entityClientService : serviceLoader) {
       if (entityClientService.handlesEntityType(cls)) {
         return entityClientService;
       }

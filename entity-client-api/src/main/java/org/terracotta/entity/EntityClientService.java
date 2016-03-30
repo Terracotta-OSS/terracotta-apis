@@ -19,7 +19,6 @@
 package org.terracotta.entity;
 
 import org.terracotta.connection.entity.Entity;
-import org.terracotta.entity.EntityClientEndpoint;
 
 
 /**
@@ -28,8 +27,10 @@ import org.terracotta.entity.EntityClientEndpoint;
  * 
  * @param <T> The client-side entity type
  * @param <C> The configuration type
+ * @param <M> An {@link EntityMessage}
+ * @param <R> An {@link EntityResponse}
  */
-public interface EntityClientService<T extends Entity, C> {
+public interface EntityClientService<T extends Entity, C, M extends EntityMessage, R extends EntityResponse> {
   /**
    * Check if this service handles the given entity type.
    *
@@ -60,5 +61,13 @@ public interface EntityClientService<T extends Entity, C> {
    * @param endpoint RPC endpoint for the entity
    * @return entity
    */
-  T create(EntityClientEndpoint endpoint);
+  T create(EntityClientEndpoint<M, R> endpoint);
+
+  /**
+   * Gets the message codec which will be used to convert high-level {@link EntityMessage}/{@link EntityResponse}
+   * to byte[] and vice-versa
+   *
+   * @return A {@link org.terracotta.entity.MessageCodec<M, R>}
+   */
+  MessageCodec<M, R> getMessageCodec();
 }

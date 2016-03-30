@@ -70,10 +70,17 @@ public interface ServerEntityService<M extends EntityMessage, R extends EntityRe
    */
   ConcurrencyStrategy<M> getConcurrencyStrategy(byte[] configuration);
   /**
-   * Gets the message codec which will be used to convert any byte[] messages destined for this entity into
-   * higher-level objects and conversely convert any response objects into byte[] for the wire.
+   * Gets the message codec which will be used to convert high-level {@link EntityMessage}/{@link EntityResponse}
+   * to byte[] and vice-versa
    *
    * @return message codec
    */
-  MessageCodec<M, R> getMessageCodec();  
+  MessageCodec<M, R> getMessageCodec();
+
+  /**
+   * Gets the Sync message codec which will be used to convert high-level Passive Sync Messages to byte[] and vice-versa
+   *
+   * @return A {@link org.terracotta.entity.MessageCodec<M, R>}
+   */
+  SyncMessageCodec<M, R> getSyncMessageCodec();
 }

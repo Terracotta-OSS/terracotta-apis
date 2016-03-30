@@ -19,17 +19,16 @@
 package org.terracotta;
 
 import org.terracotta.entity.ConcurrencyStrategy;
-import org.terracotta.entity.EntityMessage;
-import org.terracotta.entity.EntityResponse;
 import org.terracotta.entity.MessageCodec;
 import org.terracotta.entity.MessageCodecException;
 import org.terracotta.entity.NoConcurrencyStrategy;
 import org.terracotta.entity.PassiveServerEntity;
 import org.terracotta.entity.ServerEntityService;
 import org.terracotta.entity.ServiceRegistry;
+import org.terracotta.entity.SyncMessageCodec;
 
 
-public class TestServerEntityService implements ServerEntityService<TestServerEntity.TestMessage, TestServerEntity.TestResponse> {
+public class TestServerEntityService implements ServerEntityService<TestMessage, TestResponse> {
   @Override
   public long getVersion() {
     return TestEntity.VERSION;
@@ -46,40 +45,32 @@ public class TestServerEntityService implements ServerEntityService<TestServerEn
   }
 
   @Override
-  public PassiveServerEntity<TestServerEntity.TestMessage, TestServerEntity.TestResponse> createPassiveEntity(ServiceRegistry registry, byte[] configuration) {
+  public PassiveServerEntity<TestMessage, TestResponse> createPassiveEntity(ServiceRegistry registry, byte[] configuration) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public ConcurrencyStrategy<TestServerEntity.TestMessage> getConcurrencyStrategy(byte[] configuration) {
-    return new NoConcurrencyStrategy<TestServerEntity.TestMessage>();
+  public ConcurrencyStrategy<TestMessage> getConcurrencyStrategy(byte[] configuration) {
+    return new NoConcurrencyStrategy<TestMessage>();
   }
 
   @Override
-  public MessageCodec<TestServerEntity.TestMessage, TestServerEntity.TestResponse> getMessageCodec() {
-    return new MessageCodec<TestServerEntity.TestMessage, TestServerEntity.TestResponse>() {
+  public MessageCodec<TestMessage, TestResponse> getMessageCodec() {
+    return new TestMessageCodec();
+  }
+
+  @Override
+  public SyncMessageCodec<TestMessage, TestResponse> getSyncMessageCodec() {
+    return new SyncMessageCodec<TestMessage, TestResponse>() {
       @Override
-      public TestServerEntity.TestMessage deserialize(byte[] payload) {
-        return new TestServerEntity.TestMessage(payload);
+      public byte[] encode(int concurrencyKey, TestResponse request) throws MessageCodecException {
+        throw new UnsupportedOperationException("Not supported");
       }
 
       @Override
-      public TestServerEntity.TestMessage deserializeForSync(int concurrencyKey, byte[] payload) {
-        // TODO:  Add synchronization support.
-        throw new AssertionError("Synchronization not supported for this entity");
+      public TestMessage decode(int concurrencyKey, byte[] payload) throws MessageCodecException {
+        throw new UnsupportedOperationException("Not supported");
       }
-
-      @Override
-      public byte[] serialize(TestServerEntity.TestResponse response) {
-        return response.payload;
-      }
-
-      @Override
-      public byte[] serializeForSync(int concurrencyKey, TestServerEntity.TestResponse payload) throws MessageCodecException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-      }
-      
-      
     };
-  } 
+  }
 }
