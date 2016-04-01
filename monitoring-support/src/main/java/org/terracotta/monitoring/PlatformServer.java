@@ -19,8 +19,6 @@
 package org.terracotta.monitoring;
 
 import com.tc.classloader.CommonComponent;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  *
