@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -71,6 +72,12 @@ import org.terracotta.persistence.KeyValueStorage;
  * and also test concurrency strategy.
  */
 public class PassthroughServerProcess implements MessageHandler {
+  private final String serverName;
+  private final int bindPort;
+  private final int groupPort;
+  
+  private final AtomicInteger clientPort = new AtomicInteger(49152);  //  current recommended start value of ephemeral ports 
+  
   private final int processID;
   private boolean isRunning;
   private final List<ServerEntityService<?, ?>> entityServices;
@@ -95,7 +102,10 @@ public class PassthroughServerProcess implements MessageHandler {
   // We need to hold onto any registered monitoring services to report client connection/disconnection events.
   private IMonitoringProducer serviceInterface;
   
-  public PassthroughServerProcess(boolean isActiveMode) {
+  public PassthroughServerProcess(String serverName, int bindPort, int groupPort, boolean isActiveMode) {
+    this.serverName = serverName;
+    this.bindPort = bindPort;
+    this.groupPort = groupPort;
     this.entityServices = new Vector<ServerEntityService<?, ?>>();
     this.messageQueue = new Vector<MessageContainer>();
     this.lockManager = new PassthroughLockManager();
@@ -194,14 +204,14 @@ public class PassthroughServerProcess implements MessageHandler {
       String stateValue = (null != this.activeEntities) ? PlatformMonitoringConstants.SERVER_STATE_ACTIVE : PlatformMonitoringConstants.SERVER_STATE_PASSIVE;
       String server = serverIdentifierForService(this);
       PlatformServer serverObj = new PlatformServer(
-          "server" + processID, //  server name
+          serverName == null ? "server" + processID : serverName, //  server name
           "localhost", // hostname
           "127.0.0.1", // hostAddress
           "0.0.0.0", // bindAddress
-          processID, //  bindPort but just fake with processID
-          0, // groupPort
+          bindPort, //  bindPort but just fake with processID
+          groupPort, // groupPort
           "Version Passthrough 5.0.0-SNAPSHOT", //  version
-          "Build ID", // build
+          "Build ID - " + new Random().nextInt(), // build
           System.currentTimeMillis() // start time
       );
       
@@ -826,9 +836,7 @@ public class PassthroughServerProcess implements MessageHandler {
         // We don't have handling for this.
         Assert.unexpected(e);
       }
-      int serverPort = 1;
-      int clientPort = 2;
-      PlatformConnectedClient clientDescription = new PlatformConnectedClient(localHost, serverPort, localHost, clientPort);
+      PlatformConnectedClient clientDescription = new PlatformConnectedClient(localHost, this.bindPort, localHost, this.clientPort.getAndIncrement());
       String nodeName = clientIdentifierForService(connectionID);
       this.serviceInterface.addNode(PlatformMonitoringConstants.CLIENTS_PATH, nodeName, clientDescription);
     }
