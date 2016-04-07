@@ -80,7 +80,7 @@ public interface ServerEntityService<M extends EntityMessage, R extends EntityRe
   /**
    * Gets the Sync message codec which will be used to convert high-level Passive Sync Messages to byte[] and vice-versa
    *
-   * @return A {@link org.terracotta.entity.MessageCodec<M, R>}
+   * @return A {@link org.terracotta.entity.SyncMessageCodec<M>}
    */
-  SyncMessageCodec<M, R> getSyncMessageCodec();
+  SyncMessageCodec<M> getSyncMessageCodec();
 }

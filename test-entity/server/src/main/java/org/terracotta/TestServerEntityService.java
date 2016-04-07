@@ -60,10 +60,10 @@ public class TestServerEntityService implements ServerEntityService<TestMessage,
   }
 
   @Override
-  public SyncMessageCodec<TestMessage, TestResponse> getSyncMessageCodec() {
-    return new SyncMessageCodec<TestMessage, TestResponse>() {
+  public SyncMessageCodec<TestMessage> getSyncMessageCodec() {
+    return new SyncMessageCodec<TestMessage>() {
       @Override
-      public byte[] encode(int concurrencyKey, TestResponse request) throws MessageCodecException {
+      public byte[] encode(int concurrencyKey, TestMessage message) throws MessageCodecException {
         throw new UnsupportedOperationException("Not supported");
       }
 
