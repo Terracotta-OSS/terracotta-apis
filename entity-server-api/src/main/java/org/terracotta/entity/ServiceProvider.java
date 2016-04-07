@@ -16,10 +16,8 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
-import java.io.Closeable;
 import java.util.Collection;
 
 
@@ -28,7 +26,7 @@ import java.util.Collection;
  * services to interact with its underlying implementation in response to platform requests.  While the services are
  * generally used by entities, they are also used by the platform, itself.
  */
-public interface ServiceProvider extends Closeable {
+public interface ServiceProvider {
 
   /**
    * The platform configuration based on which the Service provider can choose to initialize itself.
@@ -66,5 +64,4 @@ public interface ServiceProvider extends Closeable {
    * @throws ServiceProviderCleanupException if there are any failures
      */
   void clear() throws ServiceProviderCleanupException;
-
 }
