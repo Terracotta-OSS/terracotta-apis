@@ -68,5 +68,5 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param syncChannel The output channel to the passive
    * @param concurrencyKey The key of the data to be synchronized
    */
-  void synchronizeKeyToPassive(PassiveSynchronizationChannel<R> syncChannel, int concurrencyKey);
+  void synchronizeKeyToPassive(PassiveSynchronizationChannel<M> syncChannel, int concurrencyKey);
 }
