@@ -38,7 +38,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class PassthroughInvocationBuilder<M extends EntityMessage, R extends EntityResponse> implements InvocationBuilder<M, R> {
   private final PassthroughConnection connection;
-  private final Class<?> entityClass;
+  private final String entityClassName;
   private final String entityName;
   private final long clientInstanceID;
   private final MessageCodec<M, R> messageCodec;
@@ -49,47 +49,47 @@ public class PassthroughInvocationBuilder<M extends EntityMessage, R extends Ent
   private boolean shouldReplicate;
   private M request;
   
-  public PassthroughInvocationBuilder(PassthroughConnection connection, Class<?> entityClass, String entityName, long clientInstanceID, MessageCodec<M, R> messageCodec) {
+  public PassthroughInvocationBuilder(PassthroughConnection connection, String entityClassName, String entityName, long clientInstanceID, MessageCodec<M, R> messageCodec) {
     this.connection = connection;
-    this.entityClass = entityClass;
+    this.entityClassName = entityClassName;
     this.entityName = entityName;
     this.clientInstanceID = clientInstanceID;
     this.messageCodec = messageCodec;
   }
 
   @Override
-  public InvocationBuilder ackSent() {
+  public InvocationBuilder<M, R> ackSent() {
     this.shouldWaitForSent = true;
     return this;
   }
 
   @Override
-  public InvocationBuilder ackReceived() {
+  public InvocationBuilder<M, R> ackReceived() {
     this.shouldWaitForReceived = true;
     return this;
   }
 
   @Override
-  public InvocationBuilder ackCompleted() {
+  public InvocationBuilder<M, R> ackCompleted() {
     this.shouldWaitForCompleted = true;
     return this;
   }
 
   @Override
-  public InvocationBuilder replicate(boolean requiresReplication) {
+  public InvocationBuilder<M, R> replicate(boolean requiresReplication) {
     this.shouldReplicate = requiresReplication;
     return this;
   }
 
   @Override
-  public InvocationBuilder message(M message) {
+  public InvocationBuilder<M, R> message(M message) {
     this.request = message;
     return this;
   }
 
   @Override
   public InvokeFuture<R> invoke() throws MessageCodecException {
-    final PassthroughMessage message = PassthroughMessageCodec.createInvokeMessage(this.entityClass, this.entityName, this.clientInstanceID, messageCodec.encodeMessage(this.request), this.shouldReplicate);
+    final PassthroughMessage message = PassthroughMessageCodec.createInvokeMessage(this.entityClassName, this.entityName, this.clientInstanceID, messageCodec.encodeMessage(this.request), this.shouldReplicate);
     final InvokeFuture<byte[]> invokeFuture = this.connection.invokeActionAndWaitForAcks(message, this.shouldWaitForSent, this.shouldWaitForReceived, this.shouldWaitForCompleted);
     return new InvokeFuture<R>() {
       @Override

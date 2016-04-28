@@ -22,18 +22,20 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.terracotta.entity.ClientCommunicator;
+import org.terracotta.entity.IEntityMessenger;
 import org.terracotta.entity.ServiceConfiguration;
 
 
-/**
- * The provider of PassthroughCommunicatorService, to server-side entities.  It has no meaningful implementation beyond
- * providing that.
- */
-public class PassthroughCommunicatorServiceProvider implements PassthroughBuiltInServiceProvider {
+public class PassthroughMessengerServiceProvider implements PassthroughBuiltInServiceProvider {
+  private final PassthroughConnection pseudoConnection;
+  
+  public PassthroughMessengerServiceProvider(PassthroughConnection connection) {
+    this.pseudoConnection = connection;
+  }
+
   @Override
   public <T> T getService(String entityClassName, String entityName, long consumerID, DeferredEntityContainer container, ServiceConfiguration<T> configuration) {
-    return configuration.getServiceType().cast(new PassthroughCommunicatorService(container));
+    return configuration.getServiceType().cast(new PassthroughMessengerService(this.pseudoConnection, container, entityClassName, entityName));
   }
 
   @Override
@@ -41,7 +43,7 @@ public class PassthroughCommunicatorServiceProvider implements PassthroughBuiltI
     // Using Collections.singleton here complains about trying to unify between different containers of different class
     // bindings so doing it manually satisfies the compiler (seems to work in Java8 but not Java6).
     Set<Class<?>> set = new HashSet<Class<?>>();
-    set.add(ClientCommunicator.class);
+    set.add(IEntityMessenger.class);
     return set;
   }
 }
