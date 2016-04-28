@@ -19,6 +19,7 @@
 package org.terracotta.monitoring;
 
 import com.tc.classloader.CommonComponent;
+import org.terracotta.entity.ClientDescriptor;
 
 
 /**
@@ -28,9 +29,11 @@ import com.tc.classloader.CommonComponent;
 public class PlatformClientFetchedEntity {
   public final String clientIdentifier;
   public final String entityIdentifier;
+  public final ClientDescriptor clientDescriptor;
 
-  public PlatformClientFetchedEntity(String clientIdentifier, String entityIdentifier) {
+  public PlatformClientFetchedEntity(String clientIdentifier, String entityIdentifier, ClientDescriptor clientDescriptor) {
     this.clientIdentifier = clientIdentifier;
     this.entityIdentifier = entityIdentifier;
+    this.clientDescriptor = clientDescriptor;
   }
 }

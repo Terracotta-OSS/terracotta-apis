@@ -32,11 +32,13 @@ public class PlatformConnectedClient {
   public final int localPort;
   public final InetAddress remoteAddress;
   public final int remotePort;
+  public final long clientPID;
 
-  public PlatformConnectedClient(InetAddress localAddress, int localPort, InetAddress remoteAddress, int remotePort) {
+  public PlatformConnectedClient(InetAddress localAddress, int localPort, InetAddress remoteAddress, int remotePort, long clientPID) {
     this.localAddress = localAddress;
     this.localPort = localPort;
     this.remoteAddress = remoteAddress;
     this.remotePort = remotePort;
+    this.clientPID = clientPID;
   }
 }
