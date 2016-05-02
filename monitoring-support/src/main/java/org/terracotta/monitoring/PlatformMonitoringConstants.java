@@ -87,6 +87,10 @@ public class PlatformMonitoringConstants {
    */
   public static final String SERVER_STATE_PASSIVE = "PASSIVE";
   /**
+   * Set in STATE_NODE_NAME when the server enters the passive syncing to the active.
+   */
+  public static final String SERVER_STATE_SYNCHRONIZING = "SYNCHRONIZING";
+  /**
    * Set in STATE_NODE_NAME when the server is new and has no cluster state.
    */
   public static final String SERVER_STATE_UNINITIALIZED = "UNINITIALIZED";

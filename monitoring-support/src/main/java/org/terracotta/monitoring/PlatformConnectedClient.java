@@ -33,8 +33,12 @@ public class PlatformConnectedClient {
   public final InetAddress remoteAddress;
   public final int remotePort;
   public final long clientPID;
+  public final String uuid;
+  public final String name;
 
-  public PlatformConnectedClient(InetAddress localAddress, int localPort, InetAddress remoteAddress, int remotePort, long clientPID) {
+  public PlatformConnectedClient(String uuid, String name, InetAddress localAddress, int localPort, InetAddress remoteAddress, int remotePort, long clientPID) {
+    this.uuid = uuid;
+    this.name = name;
     this.localAddress = localAddress;
     this.localPort = localPort;
     this.remoteAddress = remoteAddress;
