@@ -26,11 +26,14 @@ package org.terracotta.entity;
  */
 public interface EndpointDelegate {
   /**
-   * Handle a message coming from the clustered implementation of the Entity
+   * Handle a message coming from the clustered implementation of the Entity.
+   * Note that the message comes back as an EntityResponse object, maintaining consistency with the normal message flow:
+   * -client->server (EntityMessage)
+   * -server->client (EntityResponse)
    *
-   * @param payload serialized message
+   * @param messageFromServer The EntityResponse object sent by the server
    */
-  public void handleMessage(byte[] payload);
+  public void handleMessage(EntityResponse messageFromServer);
 
   /**
    * Called on the thread handling the reconnect to ask if any additional data should be provided to the server-side entity,
