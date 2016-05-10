@@ -480,9 +480,7 @@ public class PassthroughServerProcess implements MessageHandler {
           long expectedVersion = service.getVersion();
           if (expectedVersion == version) {
             PassthroughClientDescriptor clientDescriptor = sender.clientDescriptorForID(clientInstanceID);
-            entity.connected(clientDescriptor);
-            config = entityData.configuration;
-            
+
             if (null != PassthroughServerProcess.this.serviceInterface) {
               // Record that this entity has been fetched by this client.
               String clientIdentifier = clientIdentifierForService(sender.getClientOriginID());
@@ -491,6 +489,9 @@ public class PassthroughServerProcess implements MessageHandler {
               String fetchIdentifier = fetchIdentifierForService(clientIdentifier, entityIdentifier);
               PassthroughServerProcess.this.serviceInterface.addNode(PlatformMonitoringConstants.FETCHED_PATH, fetchIdentifier, record);
             }
+
+            entity.connected(clientDescriptor);
+            config = entityData.configuration;
           } else {
             error = new EntityVersionMismatchException(entityClassName, entityName, expectedVersion, version);
           }
