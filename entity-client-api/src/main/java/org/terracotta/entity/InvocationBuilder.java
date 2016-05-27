@@ -50,6 +50,13 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
   public InvocationBuilder<M, R> ackCompleted();
 
   /**
+   * Requests that the invocation wait on the RETIRED acknowledgement, before returning from invoke().
+   * 
+   * @return Itself
+   */
+  public InvocationBuilder<M, R> ackRetired();
+
+  /**
    * Sets whether or not the invocation should be replicated to any passive servers in this stripe.
    * 
    * @param requiresReplication True if the message should be replicated, false otherwise
@@ -64,6 +71,16 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * @return Itself
    */
   public InvocationBuilder<M, R> message(M message);
+
+  /**
+   * By default, the get() blocks only until the FIRST COMPLETE ack.  It also ignores any other COMPLETE response, only
+   * keeping the first.
+   * Calling this changes that behavior so that the get() will block until the RETIRE ack and additionally waits for the
+   * final COMPLETE response, returning it in favor of any others.
+   * 
+   * @return Itself
+   */
+  public InvocationBuilder<M, R> blockGetOnRetire();
 
   /**
    * Actually sends the invocation staged in the receiver with encoded message {@link M} using {@link MessageCodec<M, R>} to the server.  Note that this will wait for any requested
