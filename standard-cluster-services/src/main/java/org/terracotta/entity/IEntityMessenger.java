@@ -37,4 +37,14 @@ public interface IEntityMessenger {
    * @throws MessageCodecException The message could not be serialized.
    */
   void messageSelf(EntityMessage message) throws MessageCodecException;
+
+  /**
+   * Asynchronously send a message to the entity instance which looked up the service instance but also blocks the final
+   * retirement acknowledgement of originalMessageToDefer until newMessageToSchedule completes.
+   * 
+   * @param originalMessageToDefer The currently executing message whose retirement must be deferred.
+   * @param newMessageToSchedule The new message to send.
+   * @throws MessageCodecException The message could not be serialized.
+   */
+  void messageSelfAndDeferRetirement(EntityMessage originalMessageToDefer, EntityMessage newMessageToSchedule) throws MessageCodecException;
 }
