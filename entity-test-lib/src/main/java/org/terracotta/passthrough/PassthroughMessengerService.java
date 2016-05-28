@@ -26,12 +26,14 @@ import org.terracotta.passthrough.PassthroughBuiltInServiceProvider.DeferredEnti
 
 
 public class PassthroughMessengerService implements IEntityMessenger {
+  private final PassthroughServerProcess passthroughServerProcess;
   private final PassthroughConnection pseudoConnection;
   private final DeferredEntityContainer entityContainer;
   private final String entityClassName;
   private final String entityName;
   
-  public PassthroughMessengerService(PassthroughConnection pseudoConnection, DeferredEntityContainer entityContainer, String entityClassName, String entityName) {
+  public PassthroughMessengerService(PassthroughServerProcess passthroughServerProcess, PassthroughConnection pseudoConnection, DeferredEntityContainer entityContainer, String entityClassName, String entityName) {
+    this.passthroughServerProcess = passthroughServerProcess;
     this.pseudoConnection = pseudoConnection;
     // Note that we hold the entity container to get the codec but this container is deferred so we hold onto it, instead of
     // the codec (which probably isn't set yet).
@@ -53,6 +55,17 @@ public class PassthroughMessengerService implements IEntityMessenger {
     boolean shouldWaitForSent = false;
     boolean shouldWaitForReceived = false;
     boolean shouldWaitForCompleted = false;
-    this.pseudoConnection.invokeActionAndWaitForAcks(passthroughMessage, shouldWaitForSent, shouldWaitForReceived, shouldWaitForCompleted);
+    boolean shouldWaitForRetired = false;
+    boolean shouldBlockGetUntilRetire = false;
+    this.pseudoConnection.invokeActionAndWaitForAcks(passthroughMessage, shouldWaitForSent, shouldWaitForReceived, shouldWaitForCompleted, shouldWaitForRetired, shouldBlockGetUntilRetire);
+  }
+
+  @Override
+  public void messageSelfAndDeferRetirement(EntityMessage originalMessageToDefer, EntityMessage newMessageToSchedule) throws MessageCodecException {
+    // Serialize the message.
+    @SuppressWarnings("unchecked")
+    MessageCodec<EntityMessage, ?> codec = (MessageCodec<EntityMessage, ?>) this.entityContainer.codec;
+    byte[] serializedMessage = codec.encodeMessage(newMessageToSchedule);
+    this.passthroughServerProcess.sendMessageToActiveFromInsideActive(newMessageToSchedule, serializedMessage);
   }
 }
