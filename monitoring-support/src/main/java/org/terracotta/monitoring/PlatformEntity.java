@@ -35,4 +35,14 @@ public class PlatformEntity {
     this.name = name;
     this.isActive = isActive;
   }
+
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("PlatformEntity{");
+    sb.append("isActive=").append(isActive);
+    sb.append(", typeName='").append(typeName).append('\'');
+    sb.append(", name='").append(name).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 }

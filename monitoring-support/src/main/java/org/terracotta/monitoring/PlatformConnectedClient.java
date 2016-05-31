@@ -45,4 +45,18 @@ public class PlatformConnectedClient {
     this.remotePort = remotePort;
     this.clientPID = clientPID;
   }
+
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("PlatformConnectedClient{");
+    sb.append("clientPID=").append(clientPID);
+    sb.append(", localAddress=").append(localAddress);
+    sb.append(", localPort=").append(localPort);
+    sb.append(", remoteAddress=").append(remoteAddress);
+    sb.append(", remotePort=").append(remotePort);
+    sb.append(", uuid='").append(uuid).append('\'');
+    sb.append(", name='").append(name).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 }

@@ -36,4 +36,14 @@ public class PlatformClientFetchedEntity {
     this.entityIdentifier = entityIdentifier;
     this.clientDescriptor = clientDescriptor;
   }
+
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("PlatformClientFetchedEntity{");
+    sb.append("clientDescriptor=").append(clientDescriptor);
+    sb.append(", clientIdentifier='").append(clientIdentifier).append('\'');
+    sb.append(", entityIdentifier='").append(entityIdentifier).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 }
