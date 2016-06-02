@@ -16,19 +16,24 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
 import java.util.Set;
 
+
 /**
- * The concurrency strategy is used to manage and control this entity.  
+ * The concurrency strategy is used to provide the concurrent execution hints to the platform, for a given EntityMessage.
+ * 
+ * NOTE:  A given EntityMessage can only have one concurrency key and the same key must be returned each time the receiver
+ * is asked the key of a specific message.  There are no constraints between messages but a specific message must always
+ * resolve to the same key.
+ * 
  * @param <M> The message type expected by the implementation.
  */
 public interface ConcurrencyStrategy<M extends EntityMessage> {
   /**
    * UNIVERSAL_KEY is a negative key that indicates a request requires no order and can be run concurrently with any
-   * other entity operation
+   * other entity operation.
    */
   public final int UNIVERSAL_KEY = Integer.MIN_VALUE; 
   /**
@@ -36,20 +41,24 @@ public interface ConcurrencyStrategy<M extends EntityMessage> {
    */
   public final int MANAGEMENT_KEY = 0; 
   /**
-   * Given a payload for an entity request, return an integer key. The server will guarantee that requests with
-   * the same key greater than or equal to zero will run linearly. It does not, however, guarantee that requests 
+   * Given a message to send to an entity, return an integer key.  Must be a positive integer, UNIVERSAL_KEY, or
+   * MANAGEMENT_KEY.
+   * 
+   * Valid keys:
+   *  >0 - The server will guarantee that requests with the same key greater than zero will run linearly. It does not, however, guarantee that requests 
    * with different keys will run on different threads (i.e. it's perfectly valid for the server to ignore the key and
    * put everything on a single thread).
-   * 
-   * Any negative key is considered invalid and can be executed concurrently with any other entity request
-   *
-   * The zero key is used for management of the entity.  If zero is returned as the key, execution will run serially to 
+   *  MANAGEMENT_KEY - The zero key is used for management of the entity.  If zero is returned as the key, execution will run serially to 
    * platform management of the entity.
+   *  UNIVERSAL_KEY - The only negative-numbered key which is considered valid is UNIVERSAL_KEY.  UNIVERSAL_KEY implies no relative ordering
+   * restriction (it is valid for all messages with this key to run concurrently or serially).
+   * 
+   * Note that this function must return the same key, for a specific message, no matter how many times it is called.
    * 
    * At a minimum this method needs to be thread-safe. Ideally, it should be a pure function.
-   *
+   * 
    * @param message The message from the client.
-   * @return integer key 
+   * @return The integer key
    */
   int concurrencyKey(M message);
 
