@@ -25,9 +25,11 @@ public class PermanentEntityException extends EntityNotFoundException {
 
   /**
    * Creates a new instance of <code>PermanentEntityException</code> without
-   * detail message.
-   * @param className
-   * @param entityName
+   * detail message.  This exception is thrown when a client attempts to delete a
+   * permanent entity created on the server.
+   * 
+   * @param className class of the entity that was being deleted
+   * @param entityName name of the entity being deleted
    */
   public PermanentEntityException(String className, String entityName) {
     super(className, entityName);
