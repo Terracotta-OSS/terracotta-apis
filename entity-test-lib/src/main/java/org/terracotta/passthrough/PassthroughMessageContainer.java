@@ -20,25 +20,10 @@ package org.terracotta.passthrough;
 
 
 /**
- * Common assertion utilities used by the pass-through system-test.
+ * A class which ties together information related to a message.
+ * It is common since this container is useful in some public APIs.
  */
-public class Assert {
-
-  public static void unexpected(Throwable e) {
-    throw (AssertionError) new AssertionError("Unexpected exception").initCause(e);
-  }
-
-  public static void unimplemented() {
-    throw new AssertionError("Case not implemented");
-  }
-
-  public static void unreachable() {
-    throw new AssertionError("Path should not be reachable");
-  }
-
-  public static void assertTrue(boolean test) {
-    if (!test) {
-      throw new AssertionError("Case must be true");
-    }
-  }
+public class PassthroughMessageContainer {
+  public IMessageSenderWrapper sender;
+  public byte[] message;
 }

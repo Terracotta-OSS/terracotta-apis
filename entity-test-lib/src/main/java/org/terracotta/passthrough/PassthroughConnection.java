@@ -69,6 +69,9 @@ public class PassthroughConnection implements Connection {
   // the real implementation.
   // TODO:  Remove this in favor of splitting the server-side execution thread from its message processing thread.
   private final List<Waiter> clientResponseWaitQueue;
+  
+  // This is only used during reconnect.
+  private Map<Long, PassthroughWait> waitersToResend;
 
 
   public PassthroughConnection(String readerThreadName, PassthroughServerProcess serverProcess, List<EntityClientService<?, ?, ? extends EntityMessage, ? extends EntityResponse>> entityClientServices, Runnable onClose, long uniqueConnectionID) {
@@ -449,10 +452,20 @@ public class PassthroughConnection implements Connection {
 
 
   /**
-   * Called after the server restarts to reconnect us to the new instance.
+   * Note that reconnect (on either restart or fail-over) is a two-phase process:
+   * 1) startReconnect - Reconstructs lock state and per-entity extended reconnect data
+   * 2) finishReconnect - Re-sends outstanding messages
+   * 
+   * The reason for the two-phase approach is that the server can't process re-sends until all clients have reconnected.
+   * This way, each client can startReconnect before any clients can finishReconnect.
+   * 
+   * Otherwise, the server-side would need substantial client-tracking logic to know when everyone had checked in.  Since
+   * cases such as reconnect timeout don't happen within passthrough, explicitly ordering the connection messages from all
+   * the clients, in this way, is far simpler and more obvious.
    */
-  public void reconnect(PassthroughServerProcess serverProcess) {
-    Map<Long, PassthroughWait> waitersToResend = this.connectionState.enterReconnectState(serverProcess);
+  public void startReconnect(PassthroughServerProcess serverProcess) {
+    Assert.assertTrue(null == this.waitersToResend);
+    this.waitersToResend = this.connectionState.enterReconnectState(serverProcess);
     
     // Tell the server about our exclusive lock states (since this isn't replicated or persisted).
     for (PassthroughEntityTuple lockedEntity : this.writeLockedEntities) {
@@ -480,26 +493,26 @@ public class PassthroughConnection implements Connection {
       PassthroughWait waiter = this.connectionState.sendAsReconnect(this, message, shouldWaitForSent, shouldWaitForReceived, shouldWaitForCompleted, shouldWaitForRetired, forceGetToBlockOnRetire);
       waiter.waitForAck();
     }
+  }
+
+  /**
+   * The second phase of the reconnect - re-send in-flight messages and exit the reconnecting state.
+   */
+  public void finishReconnect() {
+    Assert.assertTrue(null != this.waitersToResend);
     
     // Re-send the existing in-flight messages - note that we need to take a snapshot of these instead of walking the map since it will change as the responses come back.
-    for (Map.Entry<Long, PassthroughWait> entry : waitersToResend.entrySet()) {
+    for (Map.Entry<Long, PassthroughWait> entry : this.waitersToResend.entrySet()) {
       long transactionID = entry.getKey();
       PassthroughWait waiter = entry.getValue();
       this.connectionState.sendAsResend(this, transactionID, waiter);
-      // This is a little heavy-handed but it gives us a clean state for leaving reconnect.
-      // We don't really care what the get does, just that it blocks until complete.
-      try {
-        waiter.get();
-      } catch (InterruptedException e) {
-        // Unexpected.
-        Throwables.propagate(e);
-      } catch (EntityException e) {
-        // We ignore this since someone will call the get(), later, in a more appropriate place.
-      }
+      // NOTE:  We cannot block on the get since the server won't send any acks until ALL re-sent messages are
+      // received.
     }
     
     // Now that we send the reconnect handshake and the re-sent transactions, we can install the new serverProcess and permit the new messages to go through.
     this.connectionState.finishReconnectState();
+    this.waitersToResend = null;
   }
 
   public void disconnect() {

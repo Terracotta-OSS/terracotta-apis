@@ -83,7 +83,7 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
   private boolean isRunning;
   private final List<ServerEntityService<?, ?>> entityServices;
   private Thread serverThread;
-  private final List<MessageContainer> messageQueue;
+  private final List<PassthroughMessageContainer> messageQueue;
   private final PassthroughLockManager lockManager;
   // Currently, for simplicity, we will resolve entities by name.
   // Technically, these should be resolved by class+name.
@@ -98,18 +98,23 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
   private KeyValueStorage<Long, EntityData> persistedEntitiesByConsumerID;
   private LifeCycleMessageHandler lifeCycleMessageHandler;
   private final PassthroughRetirementManager retirementManager;
+  private PassthroughTransactionOrderManager transactionOrderManager;
   
   private static final AtomicInteger processIdGen = new AtomicInteger(0);
   
   // We need to hold onto any registered monitoring services to report client connection/disconnection events.
   private IMonitoringProducer serviceInterface;
   
+  // Special flag used to change behavior when we are receiving re-sends:  we don't want to run them until we seem them all.
+  private boolean isHandlingResends;
+
+
   public PassthroughServerProcess(String serverName, int bindPort, int groupPort, boolean isActiveMode) {
     this.serverName = serverName;
     this.bindPort = bindPort;
     this.groupPort = groupPort;
     this.entityServices = new Vector<ServerEntityService<?, ?>>();
-    this.messageQueue = new Vector<MessageContainer>();
+    this.messageQueue = new Vector<PassthroughMessageContainer>();
     this.lockManager = new PassthroughLockManager();
     this.activeEntities = (isActiveMode ? new HashMap<PassthroughEntityTuple, CreationData<?, ?>>() : null);
     this.passiveEntities = (isActiveMode ? null : new HashMap<PassthroughEntityTuple, CreationData<?, ?>>());
@@ -131,6 +136,9 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
       // Note that we may want to persist the version, as well, but we currently have no way of exposing that difference,
       // within the passthrough system, and it would require the creation of an almost completely-redundant container class.
       this.persistedEntitiesByConsumerID = persistentStorage.getKeyValueStorage("entities", Long.class, EntityData.class);
+      
+      // Load the transaction order.
+      this.transactionOrderManager = new PassthroughTransactionOrderManager(persistentStorage);
       
       // Load the entities.
       for (long consumerID : this.persistedEntitiesByConsumerID.keySet()) {
@@ -290,6 +298,9 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
   }
   
   public void shutdown() {
+    // Shutdown can't happen while handling resends.
+    Assert.assertTrue(!this.isHandlingResends);
+    
     // TODO:  Find a way to cut the connections of any current task so that they can't send a response to the client.
     synchronized(this) {
       this.isRunning = false;
@@ -318,7 +329,7 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
       throw new IllegalStateException("Connection already closed");
     }
 
-    MessageContainer container = new MessageContainer();
+    PassthroughMessageContainer container = new PassthroughMessageContainer();
     container.sender = new IMessageSenderWrapper() {
       @Override
       public void sendAck(PassthroughMessage ack) {
@@ -342,8 +353,14 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
       }
     };
     container.message = message;
-    this.messageQueue.add(container);
-    this.notifyAll();
+    if (this.isHandlingResends) {
+      long connectionID = sender.getNewInstanceID();
+      long transactionID = PassthroughMessageCodec.decodeTransactionIDFromRawMessage(message);
+      this.transactionOrderManager.handleResend(connectionID, transactionID, container);
+    } else {
+      this.messageQueue.add(container);
+      this.notifyAll();
+    }
   }
 
   public synchronized void sendMessageToActiveFromInsideActive(final EntityMessage newMessage, byte[] serializedMessage) {
@@ -355,10 +372,12 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
     Assert.assertTrue(null != serializedMessage);
     // This entry-point is only used in the cases where the message already exists.
     Assert.assertTrue(null != newMessage);
+    // When handling re-sends, we are effectively paused so this shouldn't happen.
+    Assert.assertTrue(!this.isHandlingResends);
     
     // Defer the current message, blocking it on the new one.
     this.retirementManager.deferCurrentMessage(newMessage);
-    MessageContainer container = new MessageContainer();
+    PassthroughMessageContainer container = new PassthroughMessageContainer();
     container.sender = new IMessageSenderWrapper() {
       @Override
       public void sendAck(PassthroughMessage ack) {
@@ -403,7 +422,10 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
   }
 
   public synchronized void sendMessageToServerFromActive(IMessageSenderWrapper senderCallback, byte[] message) {
-    MessageContainer container = new MessageContainer();
+    // Passives don't care whether a message is a re-send, or not.
+    Assert.assertTrue(!this.isHandlingResends);
+    
+    PassthroughMessageContainer container = new PassthroughMessageContainer();
     container.sender = senderCallback;
     container.message = message;
     this.messageQueue.add(container);
@@ -412,7 +434,7 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
 
   private void runServerThread() {
     Thread.currentThread().setName("Server thread isActive: " + ((null != this.activeEntities) ? "active" : "passive"));
-    MessageContainer toRun = getNextMessage();
+    PassthroughMessageContainer toRun = getNextMessage();
     while (null != toRun) {
       IMessageSenderWrapper sender = toRun.sender;
       byte[] message = toRun.message;
@@ -422,8 +444,8 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
     }
   }
   
-  private synchronized MessageContainer getNextMessage() {
-    MessageContainer toRun = null;
+  private synchronized PassthroughMessageContainer getNextMessage() {
+    PassthroughMessageContainer toRun = null;
     while (this.isRunning && this.messageQueue.isEmpty()) {
       try {
         this.wait();
@@ -439,7 +461,7 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
   
   private void serverThreadHandleMessage(IMessageSenderWrapper sender, byte[] message) {
     // Called on the server thread to handle a message.
-    PassthroughMessageCodec.Decoder<Void> decoder = new PassthroughServerMessageDecoder(this, this.lifeCycleMessageHandler, this.downstreamPassive, sender, message);
+    PassthroughMessageCodec.Decoder<Void> decoder = new PassthroughServerMessageDecoder(this, this.transactionOrderManager, this.lifeCycleMessageHandler, this.downstreamPassive, sender, message);
     PassthroughMessageCodec.decodeRawMessage(decoder, message);
   }
 
@@ -970,6 +992,26 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
     }
   }
 
+  public synchronized void beginReceivingResends() {
+    // We can only enter specialized re-send processing mode if we have order persistence.
+    if (null != this.transactionOrderManager) {
+      Assert.assertTrue(!this.isHandlingResends);
+      this.transactionOrderManager.startHandlingResends();
+      this.isHandlingResends = true;
+    }
+  }
+
+  public synchronized void endReceivingResends() {
+    // We can only exit specialized re-send processing mode if we have order persistence.
+    if (null != this.transactionOrderManager) {
+      Assert.assertTrue(this.isHandlingResends);
+      List<PassthroughMessageContainer> list = this.transactionOrderManager.stopHandlingResends();
+      this.messageQueue.addAll(list);
+      this.isHandlingResends = false;
+      this.notifyAll();
+    }
+  }
+
   private PassthroughServiceRegistry getNextServiceRegistry(String entityClassName, String entityName, DeferredEntityContainer container) {
     long thisConsumerID = this.nextConsumerID;
     this.nextConsumerID += 1;
@@ -1000,12 +1042,6 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
       newEntity = data.getPassive();
     }
     return newEntity;
-  }
-
-
-  private static class MessageContainer {
-    public IMessageSenderWrapper sender;
-    public byte[] message;
   }
 
 
@@ -1094,5 +1130,5 @@ public class PassthroughServerProcess implements MessageHandler, PassthroughDump
         throw new RuntimeException(me);
       }
     }
-  }  
+  }
 }
