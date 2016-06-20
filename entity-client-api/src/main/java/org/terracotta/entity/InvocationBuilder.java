@@ -73,14 +73,21 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
   public InvocationBuilder<M, R> message(M message);
 
   /**
-   * By default, the get() blocks only until the FIRST COMPLETE ack.  It also ignores any other COMPLETE response, only
-   * keeping the first.
-   * Calling this changes that behavior so that the get() will block until the RETIRE ack and additionally waits for the
-   * final COMPLETE response, returning it in favor of any others.
+   * By default, the get() blocks until the RETIRED ack is received (meaning that this message will NOT be re-sent).
+   * In general, the RETIRED ack comes immediately after the COMPLETED ack.  Applications which rely on deferred
+   * retirement, it is possible that there is a long time delay between these 2 acks, and it is possible to see many
+   * COMPLETED acks before the RETIRED (this happens if the message is re-sent).
+   * In some of these applications, it may give a client-side performance benefit to only wait for the first COMPLETED
+   * ack, before returning from the get().  This method allows the client to change this behavior.
+   * Note that, in the case of multiple COMPLETED acks, an invocation NOT blocking on RETIRED will return the result
+   * which is associated with the first COMPLETED ack.  Additionally, even though the get() will return before the
+   * RETIRED, the message may still be re-sent, in the background.
    * 
+   * @param shouldBlock True if the get() should block on RETIRE (the default), false if it should only block on the
+   * first COMPLETED ack.
    * @return Itself
    */
-  public InvocationBuilder<M, R> blockGetOnRetire();
+  public InvocationBuilder<M, R> blockGetOnRetire(boolean shouldBlock);
 
   /**
    * Actually sends the invocation staged in the receiver with encoded message {@link M} using {@link MessageCodec<M, R>} to the server.  Note that this will wait for any requested
