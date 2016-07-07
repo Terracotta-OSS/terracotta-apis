@@ -45,7 +45,6 @@
     <module>monitoring-support</module>
     <module>packaging-support</module>
     <module>standard-cluster-services</module>
-    <module>test-entity</module>
   </modules>
 
   <dependencyManagement>
