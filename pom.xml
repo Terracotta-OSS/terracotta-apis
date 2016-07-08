@@ -41,7 +41,6 @@
     <module>entity-common-api</module>
     <module>entity-client-api</module>
     <module>entity-server-api</module>
-    <module>entity-test-lib</module>
     <module>monitoring-support</module>
     <module>packaging-support</module>
     <module>standard-cluster-services</module>
@@ -53,12 +52,6 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>18.0</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.11</version>
-        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
