@@ -27,6 +27,8 @@ package org.terracotta.exception;
  */
 public class EntityVersionMismatchException extends EntityException {
   private static final long serialVersionUID = 1L;
+  private final long expectedVersion;
+  private final long attemptedVersion;
 
   /**
    * Creates the exception instance describing the given type-name pair along with a description of the version mismatch.
@@ -38,5 +40,31 @@ public class EntityVersionMismatchException extends EntityException {
    */
   public EntityVersionMismatchException(String className, String entityName, long expectedVersion, long attemptedVersion) {
     super(className, entityName, "version mismatch (expected " + expectedVersion + " but attempted " + attemptedVersion + ")", null);
+    this.expectedVersion = expectedVersion;
+    this.attemptedVersion = attemptedVersion;
+  }
+
+  /**
+   * Creates the exception instance describing the given type-name pair along with a description of the version
+   * mismatch and underlying cause of this exception
+   *
+   * @param className The name of the entity type
+   * @param entityName The name of the entity instance
+   * @param expectedVersion The version of the actual entity instance
+   * @param attemptedVersion The version the client tried to use, which was incorrect
+   * @param cause underlying cause of this exception
+   */
+  public EntityVersionMismatchException(String className, String entityName, long expectedVersion, long attemptedVersion, Throwable cause) {
+    super(className, entityName, "version mismatch (expected " + expectedVersion + " but attempted " + attemptedVersion + ")", cause);
+    this.expectedVersion = expectedVersion;
+    this.attemptedVersion = attemptedVersion;
+  }
+
+  public long getExpectedVersion() {
+    return expectedVersion;
+  }
+
+  public long getAttemptedVersion() {
+    return attemptedVersion;
   }
 }

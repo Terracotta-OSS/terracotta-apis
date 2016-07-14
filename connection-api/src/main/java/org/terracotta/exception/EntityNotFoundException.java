@@ -35,4 +35,14 @@ public class EntityNotFoundException extends EntityException {
   public EntityNotFoundException(String className, String entityName) {
     super(className, entityName, "not found", null);
   }
+  /**
+   * Creates the exception instance describing the given type-name pair along with underlying cause of this exception
+   *
+   * @param className The name of the entity type
+   * @param entityName The name of the entity instance
+   * @param cause underlying cause of this exception
+   */
+  public EntityNotFoundException(String className, String entityName, Throwable cause) {
+    super(className, entityName, "not found", cause);
+  }
 }
