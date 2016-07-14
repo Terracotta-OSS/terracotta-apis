@@ -26,6 +26,21 @@ package org.terracotta.exception;
  */
 public abstract class EntityException extends Exception {
   private static final long serialVersionUID = 1L;
+  private final String className;
+  private final String entityName;
+  private final String description;
+
+  public String getClassName() {
+    return className;
+  }
+
+  public String getEntityName() {
+    return entityName;
+  }
+
+  public String getDescription() {
+    return description;
+  }
 
   /**
    * All of these exception types have a specific description and refer to a type and name pair.
@@ -37,5 +52,8 @@ public abstract class EntityException extends Exception {
    */
   protected EntityException(String className, String entityName, String description, Throwable cause) {
     super("Entity: " + className + ":" + entityName + " " + description, cause);
+    this.className = className;
+    this.entityName = entityName;
+    this.description = description;
   }
 }

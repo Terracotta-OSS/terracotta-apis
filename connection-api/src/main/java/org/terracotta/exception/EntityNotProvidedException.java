@@ -35,4 +35,15 @@ public class EntityNotProvidedException extends EntityException {
   public EntityNotProvidedException(String className, String entityName) {
     super(className, entityName, "no provider found for class", null);
   }
+
+  /**
+   * Creates the exception instance describing the given type-name pair along with underlying cause of this exception
+   *
+   * @param className The name of the entity type
+   * @param entityName The name of the entity instance
+   * @param cause underlying cause of this exception
+   */
+  public EntityNotProvidedException(String className, String entityName, Throwable cause) {
+    super(className, entityName, "no provider found for class", cause);
+  }
 }
