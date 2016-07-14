@@ -25,7 +25,7 @@ package org.terracotta.entity;
  * @param <M> Incoming message type
  * @param <R> outgoing message type
  */
-public interface ServerEntityService<M extends EntityMessage, R extends EntityResponse> {
+public interface EntityServerService<M extends EntityMessage, R extends EntityResponse> {
   /**
    * Used for ensuring that the entity version implementation version is consistent between server and client,
    * active and passive, and pre-restart and post-restart.
