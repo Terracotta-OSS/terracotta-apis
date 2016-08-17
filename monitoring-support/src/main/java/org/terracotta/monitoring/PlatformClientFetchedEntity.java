@@ -18,18 +18,29 @@
  */
 package org.terracotta.monitoring;
 
+import java.io.Serializable;
+
 import com.tc.classloader.CommonComponent;
 import org.terracotta.entity.ClientDescriptor;
 
 
 /**
  * A type which describes the connection between a client and an entity, created by a fetch.
+ * 
+ * WARNING:  The clientDescriptor is marked as transient since it can't be meaningfully deserialized and the cases where this
+ *  object will be used are also cases where it won't be serialized.  Be careful of using this object in these other cases.
  */
 @CommonComponent
-public class PlatformClientFetchedEntity {
-  public final String clientIdentifier;
-  public final String entityIdentifier;
-  public final ClientDescriptor clientDescriptor;
+public class PlatformClientFetchedEntity implements Serializable {
+  private static final long serialVersionUID = 4741752382657834201L;
+
+  public String clientIdentifier;
+  public String entityIdentifier;
+  public transient ClientDescriptor clientDescriptor;
+
+  public PlatformClientFetchedEntity() {
+    // For Serializable.
+  }
 
   public PlatformClientFetchedEntity(String clientIdentifier, String entityIdentifier, ClientDescriptor clientDescriptor) {
     this.clientIdentifier = clientIdentifier;
@@ -45,5 +56,25 @@ public class PlatformClientFetchedEntity {
     sb.append(", entityIdentifier='").append(entityIdentifier).append('\'');
     sb.append('}');
     return sb.toString();
+  }
+
+  @Override
+  public int hashCode() {
+    return this.clientIdentifier.hashCode()
+        ^ this.entityIdentifier.hashCode()
+        ^ this.clientDescriptor.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    boolean doesMatch = (this == other);
+    if (!doesMatch && (null != other) && (getClass() == other.getClass()))
+    {
+      final PlatformClientFetchedEntity that = (PlatformClientFetchedEntity) other;
+      doesMatch = this.clientIdentifier.equals(that.clientIdentifier)
+          && this.entityIdentifier.equals(that.entityIdentifier)
+          && (((null == this.clientDescriptor) && (null == that.clientDescriptor)) || this.clientDescriptor.equals(that.clientDescriptor));
+    }
+    return doesMatch;
   }
 }
