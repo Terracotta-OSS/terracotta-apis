@@ -18,6 +18,8 @@
  */
 package org.terracotta.monitoring;
 
+import java.io.Serializable;
+
 import com.tc.classloader.CommonComponent;
 
 
@@ -25,10 +27,16 @@ import com.tc.classloader.CommonComponent;
  * A type which describes an entity in the stripe.
  */
 @CommonComponent
-public class PlatformEntity {
-  public final String typeName;
-  public final String name;
-  public final boolean isActive;
+public class PlatformEntity implements Serializable {
+  private static final long serialVersionUID = -2907606444970217901L;
+
+  public String typeName;
+  public String name;
+  public boolean isActive;
+
+  public PlatformEntity() {
+    // For Serializable.
+  }
 
   public PlatformEntity(String typeName, String name, boolean isActive) {
     this.typeName = typeName;
@@ -44,5 +52,25 @@ public class PlatformEntity {
     sb.append(", name='").append(name).append('\'');
     sb.append('}');
     return sb.toString();
+  }
+
+  @Override
+  public int hashCode() {
+    return this.typeName.hashCode()
+        ^ this.name.hashCode()
+        ^ (isActive ? 0x1 : 0x0);
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    boolean doesMatch = (this == other);
+    if (!doesMatch && (null != other) && (getClass() == other.getClass()))
+    {
+      final PlatformEntity that = (PlatformEntity) other;
+      doesMatch = this.typeName.equals(that.typeName)
+          && this.name.equals(that.name)
+          && (this.isActive == that.isActive);
+    }
+    return doesMatch;
   }
 }

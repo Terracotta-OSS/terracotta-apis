@@ -18,13 +18,19 @@
  */
 package org.terracotta.monitoring;
 
-/**
- *
- */
-public class ServerState {
-  private final String state;
-  private final long timestamp;
-  private final long activate;
+import java.io.Serializable;
+
+
+public class ServerState implements Serializable {
+  private static final long serialVersionUID = 1207854911088611229L;
+
+  private String state;
+  private long timestamp;
+  private long activate;
+
+  public ServerState() {
+    // For Serializable.
+  }
 
   public ServerState(String state, long timestamp, long activate) {
     this.state = state;
@@ -47,5 +53,25 @@ public class ServerState {
   @Override
   public String toString() {
     return "ServerState{" + "state=" + state + ", timestamp=" + timestamp + ", activateTime=" + activate +  '}';
+  }
+
+  @Override
+  public int hashCode() {
+    return this.state.hashCode()
+        ^ (int)timestamp
+        ^ (int)activate;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    boolean doesMatch = (this == other);
+    if (!doesMatch && (null != other) && (getClass() == other.getClass()))
+    {
+      final ServerState that = (ServerState) other;
+      doesMatch = this.state.equals(that.state)
+          && (this.timestamp == that.timestamp)
+          && (this.activate == that.activate);
+    }
+    return doesMatch;
   }
 }

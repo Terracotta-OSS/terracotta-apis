@@ -1,11 +1,15 @@
 package org.terracotta.monitoring;
 
+import java.io.Serializable;
+
 import com.tc.classloader.CommonComponent;
 
 
 /**
  * The interface exposed by a monitoring service, allowing entities to push statistics and structured data which can be
  * consumed by an external component (attached to the other side of the service, using some more specialized interface).
+ * 
+ * Note that the values used in these methods must be Serializable since the implementation may need to send them over a wire.
  */
 @CommonComponent
 public interface IMonitoringProducer {
@@ -18,7 +22,7 @@ public interface IMonitoringProducer {
    * @param value The value to set for the new node.
    * @return True if the node was created/replaced.  False if a parent couldn't be found.
    */
-  public boolean addNode(String[] parents, String name, Object value);
+  public boolean addNode(String[] parents, String name, Serializable value);
 
   /**
    * Removes a node from the internal data registry tree.
@@ -42,5 +46,5 @@ public interface IMonitoringProducer {
    *  infrequent data is not disproportionately over-written by very frequent data.
    * @param data The object to push.
    */
-  public void pushBestEffortsData(String name, Object data); 
+  public void pushBestEffortsData(String name, Serializable data); 
 }
