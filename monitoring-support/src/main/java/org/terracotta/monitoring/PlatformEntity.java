@@ -28,19 +28,21 @@ import com.tc.classloader.CommonComponent;
  */
 @CommonComponent
 public class PlatformEntity implements Serializable {
-  private static final long serialVersionUID = -2907606444970217901L;
+  private static final long serialVersionUID = 8775531936321210074L;
 
   public String typeName;
   public String name;
+  public long consumerID;
   public boolean isActive;
 
   public PlatformEntity() {
     // For Serializable.
   }
 
-  public PlatformEntity(String typeName, String name, boolean isActive) {
+  public PlatformEntity(String typeName, String name, long consumerID, boolean isActive) {
     this.typeName = typeName;
     this.name = name;
+    this.consumerID = consumerID;
     this.isActive = isActive;
   }
 
@@ -49,6 +51,7 @@ public class PlatformEntity implements Serializable {
     final StringBuilder sb = new StringBuilder("PlatformEntity{");
     sb.append("isActive=").append(isActive);
     sb.append(", typeName='").append(typeName).append('\'');
+    sb.append(", consumerID=").append(consumerID);
     sb.append(", name='").append(name).append('\'');
     sb.append('}');
     return sb.toString();
@@ -58,7 +61,9 @@ public class PlatformEntity implements Serializable {
   public int hashCode() {
     return this.typeName.hashCode()
         ^ this.name.hashCode()
-        ^ (isActive ? 0x1 : 0x0);
+        ^ (int)consumerID
+        ^ (isActive ? 0x1 : 0x0)
+      ;
   }
 
   @Override
@@ -69,7 +74,9 @@ public class PlatformEntity implements Serializable {
       final PlatformEntity that = (PlatformEntity) other;
       doesMatch = this.typeName.equals(that.typeName)
           && this.name.equals(that.name)
-          && (this.isActive == that.isActive);
+          && (this.consumerID == that.consumerID)
+          && (this.isActive == that.isActive)
+        ;
     }
     return doesMatch;
   }
