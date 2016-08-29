@@ -58,6 +58,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
 
   /**
    * Sets whether or not the invocation should be replicated to any passive servers in this stripe.
+   * If this method call is omitted from builder, the default behavior is to replicate the message.
    * 
    * @param requiresReplication True if the message should be replicated, false otherwise
    * @return Itself
