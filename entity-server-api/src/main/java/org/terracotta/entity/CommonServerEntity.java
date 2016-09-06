@@ -22,22 +22,37 @@ package org.terracotta.entity;
 /**
  * The methods common to both active and passive entities.
  * @param <M> The high-level message type used by the active and passive server-side entities.  This type is created by the
- * implementation's MessageCodec and also read by the ConcurrencyStrategy.
+ *  implementation's MessageCodec and also read by the ConcurrencyStrategy.
  * @param <R> The high-level message type returned by invoke calls on the active entity.
  */
-public interface CommonServerEntity<M extends EntityMessage, R extends EntityResponse> {  
+public interface CommonServerEntity<M extends EntityMessage, R extends EntityResponse> {
   /**
-   * Called when a client asks that an entity be explicitly created.
+   * <p>Called when a client asks that an entity be explicitly created.  Also called at the very beginning of passive sync of
+   *  the entity, asking it to be created for the first time.</p>
+   * <p>This is distinct from cases such as restart or fail-over when the object will receive a loadExisting() call,
+   *  instead.</p>
+   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
+   *  respect to all other messages enqueued for the entity.</p>
    */
   void createNew();
   
   /**
-   * Called when starting a server from a persistent state and the entity is expected to already be known to the server.
+   * <p>Called when starting a server from a persistent state and the entity is expected to already be known to the
+   *  server.</p>
+   * <p>Specifically, this refers to situations such as a restart or fail-over.  A given entity will always receive a single
+   *  createNew() call but can receive any number of loadExisting() calls, in response to server life-cycle.</p>
+   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
+   *  respect to all other messages enqueued for the entity.</p>
    */
   void loadExisting();
   
   /**
-   * Destroy all state associated with this entity.
+   * <p>Destroy all state associated with this entity.</p>
+   * <p>This is called in response to a client explicitly requesting that the entity be destroyed.  Other situations where
+   *  the object representing the entity may be discarded (server goes down for a restart or the server is being promoted to
+   *  active) will not result in this call.</p>
+   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
+   *  respect to all other messages enqueued for the entity.</p>
    */
   void destroy();
 }

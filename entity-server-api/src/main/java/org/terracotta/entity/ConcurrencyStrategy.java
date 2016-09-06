@@ -88,6 +88,10 @@ public interface ConcurrencyStrategy<M extends EntityMessage> {
    * 
    * <p>The key set returned MUST NOT contain either MANAGEMENT_KEY or UNIVERSAL_KEY.</p>
    * 
+   * <p>Note that the keys are synchronized in the order returned by the returned set's {@link Set#iterator()}, one at a
+   * time.  This means that an ordered set can be used in order to ensure that a specific key finishes synchronizing before
+   * any others start, for example.</p>
+   * 
    * @return The set of concurrency keys to synchronize to the passive.
    */
   Set<Integer> getKeysForSynchronization();
