@@ -16,24 +16,39 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
+
 /**
- * Registry which Entities interact with list of services provided by the platform. Services provided to entity might
- * be namespaced or not, depending on  service provider.
- *
- * @author twu
+ * <p>The registry given to entities so that they can look up the services hosted on the platform.</p>
+ * 
+ * <p>Note that the Service instances returned by this interface are not cached or interned, in any way (unless the
+ *  underlying ServiceProvider decides to add that functionality).  This means that multiple requests for the same service,
+ *  through the same registry, could return different instances.</p>
+ * 
+ * <p>ServiceProvider implementations see each call through a ServiceRegistry as originating from a specific consumerID,
+ *  which is per-entity.  Using this mechanism is how a service knows which entity is contacting it, no matter how many
+ *  instances of its underlying service were returned through repeated getService calls.  More information regarding
+ *  consumerIDs can be found in {@link ServiceProvider}.</p>
+ * 
+ * <p>Note about using services together:  Services are not explicitly granted access to each other as there would be no
+ *  consumerID to identify them to each other.  However, it is possible to use services together, so long as the entity and
+ *  calling service know that they aren't going to collide in their usage of the underlying service they wish to access.
+ *  This is because any service instance fetched through a given ServiceRegistry will have the same consumerID.  Therefore,
+ *  it is possible to pass something fetched from one service, or even the entire ServiceRegistry, into another via its
+ *  configuration or its public interface.  This is safe so long as the entity and calling service know that they are
+ *  sharing access to the same underlying resource.</p>
  */
 public interface ServiceRegistry {
-
   /**
-   * Get the service instance of a given serviceType subject to the constraints of the given configuration.
+   * <p>Get the service instance of a given serviceType subject to the constraints of the given configuration.</p>
+   * 
+   * <p>Note that successive calls to this method, even with the same configuration, usually return different instances to
+   *  access the same underlying resource of the ServiceProvider.</p>
    * 
    * @param <T> type interface of the requested service
    * @param configuration With which service should be provisioned
    * @return an instance of service which will provide the requested interface
    */
   <T> T getService(ServiceConfiguration<T> configuration);
-
 }
