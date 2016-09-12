@@ -6,36 +6,37 @@ import com.tc.classloader.CommonComponent;
 
 
 /**
- * The interface exposed by a monitoring service, allowing entities to push statistics and structured data which can be
- *  consumed by an external component.
+ * The interface which must be implemented by a monitoring component in order to receive the data entities passed into
+ *  IMonitoringProducer, on a server within the stripe.
  * 
- * The implementation of this interface is provided by the server implementation, itself.  A monitoring component must
- *  provide an IStripeMonitoring implementation to receive the data passed into this interface.
+ * Note that only the implementation on the current active server will receive this data but it will receive the data from
+ *  the entire stripe.
  * 
- * Note that the values used in these methods must be Serializable since the implementation may need to send them over a
- *  wire.
+ * Note that the values used in these methods are Serializable since they may have come over the wire.
  */
 @CommonComponent
-public interface IMonitoringProducer {
+public interface IStripeMonitoring {
   /**
    * Adds a node to the internal data registry tree or replaces an existing one.
    * By default, new nodes have no children.
    * 
+   * @param sender The description of the server where the call originated.
    * @param parents The parent node names, starting from the root.
    * @param name The name of the node to create or replace.
    * @param value The value to set for the new node.
    * @return True if the node was created/replaced.  False if a parent couldn't be found.
    */
-  public boolean addNode(String[] parents, String name, Serializable value);
+  public boolean addNode(PlatformServer sender, String[] parents, String name, Serializable value);
 
   /**
    * Removes a node from the internal data registry tree.
    * 
+   * @param sender The description of the server where the call originated.
    * @param parents The parent node names, starting from the root.
    * @param name The name of the node to remove.
    * @return True if the node was removed.  False if it or a parent couldn't be found.
    */
-  public boolean removeNode(String[] parents, String name);
+  public boolean removeNode(PlatformServer sender, String[] parents, String name);
 
   /**
    * Makes a best-efforts attempt to push named data to the interface.  This method differs from the add/remove node methods
@@ -46,9 +47,10 @@ public interface IMonitoringProducer {
    *  storage size, element count, staleness before send, or any other approach.  Additionally, the limit may be applied
    *  globally or on a per-name basis.
    * 
+   * @param sender The description of the server where the call originated.
    * @param name A name given to identify the data.  An implementation may use this as its limiting heuristic, to ensure that
    *  infrequent data is not disproportionately over-written by very frequent data.
    * @param data The object to push.
    */
-  public void pushBestEffortsData(String name, Serializable data); 
+  public void pushBestEffortsData(PlatformServer sender, String name, Serializable data); 
 }
