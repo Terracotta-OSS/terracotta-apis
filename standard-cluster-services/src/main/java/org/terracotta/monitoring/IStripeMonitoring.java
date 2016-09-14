@@ -17,6 +17,34 @@ import com.tc.classloader.CommonComponent;
 @CommonComponent
 public interface IStripeMonitoring {
   /**
+   * Called when a server first becomes active to notify its IStripeMonitoring implementation that it will now start to
+   *  receive the other calls in this interface.  The PlatformServer representing itself is provided so that it can identify
+   *  the calls which are locally-originating.
+   * NOTE:  This is only ever called on the consumerID 0 instance.
+   * 
+   * @param self The description of the active server where this call occurs.
+   */
+  public void serverDidBecomeActive(PlatformServer self);
+
+  /**
+   * Called to notify the implementation when another server has first joined the stripe, meaning that messages may start
+   *  arriving from this server.
+   * NOTE:  This is only ever called on the consumerID 0 instance.
+   * 
+   * @param server The description of the newly-arrived server.
+   */
+  public void serverDidJoinStripe(PlatformServer server);
+
+  /**
+   * Called to notify the implementation when another server has left the stripe, meaning that no more messages will be
+   *  arriving from this server and any others from it are now stale.
+   * NOTE:  This is only ever called on the consumerID 0 instance.
+   * 
+   * @param server The description of the now-departed server.
+   */
+  public void serverDidLeaveStripe(PlatformServer server);
+
+  /**
    * Adds a node to the internal data registry tree or replaces an existing one.
    * By default, new nodes have no children.
    * 
