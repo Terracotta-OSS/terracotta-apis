@@ -7,9 +7,13 @@ import com.tc.classloader.CommonComponent;
 
 /**
  * The interface exposed by a monitoring service, allowing entities to push statistics and structured data which can be
- * consumed by an external component (attached to the other side of the service, using some more specialized interface).
+ *  consumed by an external component.
  * 
- * Note that the values used in these methods must be Serializable since the implementation may need to send them over a wire.
+ * The implementation of this interface is provided by the server implementation, itself.  A monitoring component must
+ *  provide an IStripeMonitoring implementation to receive the data passed into this interface.
+ * 
+ * Note that the values used in these methods must be Serializable since the implementation may need to send them over a
+ *  wire.
  */
 @CommonComponent
 public interface IMonitoringProducer {
@@ -34,8 +38,8 @@ public interface IMonitoringProducer {
   public boolean removeNode(String[] parents, String name);
 
   /**
-   * Makes a best-efforts attempt to push named data to the interface.  This method differs from the add/remove node methods in
-   *  that the implementation is allowed to drop, ignore, or overwrite the data at any time.
+   * Makes a best-efforts attempt to push named data to the interface.  This method differs from the add/remove node methods
+   *  in that the implementation is allowed to drop, ignore, or overwrite the data at any time.
    * This interface is more appropriate for information such as statistics or other sampling information which may be dropped
    *  if the system is busy or otherwise saturated.
    * The implementation is free to impose whatever limiting heuristics it desires, meaning that the limiting may be based on

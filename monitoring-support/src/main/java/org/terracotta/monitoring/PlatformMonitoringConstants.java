@@ -33,10 +33,6 @@ public class PlatformMonitoringConstants {
    */
   public static final String PLATFORM_ROOT_NAME = "platform";
   /**
-   * The name of the node in the tree which is the parent to all nodes representing connected servers.
-   */
-  public static final String SERVERS_ROOT_NAME = "servers";
-  /**
    * The name of the node in the tree which is the parent to all nodes representing connected clients.
    */
   public static final String CLIENTS_ROOT_NAME = "clients";
@@ -49,7 +45,8 @@ public class PlatformMonitoringConstants {
    */
   public static final String FETCHED_ROOT_NAME = "fetched";
   /**
-   * The name of the node in the tree which stores the name of the server's current state.
+   * The name of the node in the tree which stores the ServerState instance.
+   * This is a direct child of PLATFORM_ROOT_NAME.
    */
   public static final String STATE_NODE_NAME = "state";
 
@@ -57,10 +54,6 @@ public class PlatformMonitoringConstants {
    * The path of the platform node, for manipulating its children.
    */
   public static final String[] PLATFORM_PATH = {PLATFORM_ROOT_NAME};
-  /**
-   * The path of the platform's clients node, for manipulating its children.
-   */
-  public static final String[] SERVERS_PATH = {PLATFORM_ROOT_NAME, SERVERS_ROOT_NAME};
   /**
    * The path of the platform's clients node, for manipulating its children.
    */
