@@ -30,6 +30,9 @@
 
   <groupId>org.terracotta</groupId>
   <artifactId>entity-server-api</artifactId>
+  <properties>
+    <java.build.version>1.8</java.build.version>
+  </properties>
 
   <dependencies>
     <dependency>
