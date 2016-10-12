@@ -53,10 +53,11 @@ public interface ServiceProvider {
    *  {@link #getService(long, ServiceConfiguration<T>)}.
    * 
    * @param configuration The configuration for this ServiceProvider instance.
+   * @param platformConfiguration platform configuration
    * @return True if provider has successfully been initialized with the provided configuration, false if this instance
    *  shouldn't be registered for the given configuration (it will be discarded).
    */
-  boolean initialize(ServiceProviderConfiguration configuration);
+  boolean initialize(ServiceProviderConfiguration configuration, PlatformConfiguration platformConfiguration);
 
   /**
    * Get an instance of a service from the provider.
