@@ -16,7 +16,6 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-
 package org.terracotta.entity;
 
 
@@ -25,23 +24,32 @@ package org.terracotta.entity;
  *  interaction, it has more capabilities than the corresponding passive.
  */
 public interface ActiveServerEntity<M extends EntityMessage, R extends EntityResponse> extends CommonServerEntity<M, R> {
-
   /**
-   * Indicate that the given client is now connected up to this ServerEntity.
+   * <p>Indicate that the given client is now connected up to this ServerEntity.</p>
+   * <p>This is called in response to a client-side fetchEntity() or the reconnect of a client which had previously fetched
+   *  the entity, after a server restart or fail-over.</p>
+   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
+   *  respect to all other messages enqueued for the entity.</p>
    *
    * @param clientDescriptor client-side instance which connected
    */
   void connected(ClientDescriptor clientDescriptor);
 
   /**
-   * Notify the ServerEntity that the given client has disconnected.
+   * <p>Notify the ServerEntity that the given client has disconnected.</p>
+   * <p>This is called in response to a client closing its previously fetched entity or when a client disappears from the
+   *  cluster (due to a network failure, unexpected termination, etc).</p>
+   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
+   *  respect to all other messages enqueued for the entity.</p>
    *
    * @param clientDescriptor client-side instance which disconnected
    */
   void disconnected(ClientDescriptor clientDescriptor);
   
   /**
-   * Invoke a call on the given entity.
+   * <p>Invoke a call on the given entity.</p>
+   * <p>Note that the thread used to make this call is determined by consulting the entity's ConcurrencyStrategy so it may be
+   *  called concurrently with other invokes.</p>
    *
    * @param clientDescriptor source instance from which the invocation originates.
    * @param message The message from the client
@@ -50,9 +58,11 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
   R invoke(ClientDescriptor clientDescriptor, M message);
 
   /**
-   * Called during client reconnect to allow the client to pass arbitrary extra data to the server-side entity so it can
-   * rebuild any in-memory state it had, related to the connected client.
-   * Note that this is called AFTER connected() is called for this clientDescriptor.
+   * <p>Called during client reconnect to allow the client to pass arbitrary extra data to the server-side entity so it can
+   *  rebuild any in-memory state it had, related to the connected client.</p>
+   * <p>Note that this is called AFTER connected() is called for this clientDescriptor.</p>
+   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
+   *  respect to all other messages enqueued for the entity.</p>
    * 
    * @param clientDescriptor The client-side instance which reconnected
    * @param extendedReconnectData Arbitrary data sent by the client-side instance to rebuild the server-side in-memory state 
@@ -60,10 +70,11 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
   void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData);
 
   /**
-   * Passes any information required to describe all entity data/state associated with the given concurrency key to a
-   * passive instance being synchronized to be consistent with the receiver.
+   * <p>Passes any information required to describe all entity data/state associated with the given concurrency key to a
+   *  passive instance being synchronized to be consistent with the receiver.</p>
    * 
-   * Note that this method is also run on the concurrencyKey specified, so it blocks other messages executed on that key.
+   * <p>Note that this method is also run on the concurrencyKey specified, so it blocks other messages executed on that
+   *  key.</p>
    * 
    * @param syncChannel The output channel to the passive
    * @param concurrencyKey The key of the data to be synchronized
