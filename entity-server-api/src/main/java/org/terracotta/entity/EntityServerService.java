@@ -66,9 +66,24 @@ public interface EntityServerService<M extends EntityMessage, R extends EntityRe
   /**
    * Get the concurrency strategy to be used for this server entity.
    *
+   * @param configuration
    * @return concurrency strategy
    */
   ConcurrencyStrategy<M> getConcurrencyStrategy(byte[] configuration);
+  /**
+   * Get the execution strategy to be used for this server entity.  The default implementation
+   * designates that all messages will be run on both active and passive
+   *
+   * @return execution strategy
+   */
+  default ExecutionStrategy<M> getExecutionStrategy(byte[] configuration) {
+    return new ExecutionStrategy<M>() {
+      @Override
+      public ExecutionStrategy.Location getExecutionLocation(M message) {
+        return ExecutionStrategy.Location.IGNORE;
+      }
+    };
+  }
   /**
    * Gets the message codec which will be used to convert high-level {@link EntityMessage}/{@link EntityResponse}
    * to byte[] and vice-versa
