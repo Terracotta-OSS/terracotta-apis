@@ -30,7 +30,9 @@
 
   <groupId>org.terracotta</groupId>
   <artifactId>standard-cluster-services</artifactId>
-
+  <properties>
+    <java.build.version>1.8</java.build.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.terracotta</groupId>

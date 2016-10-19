@@ -30,8 +30,10 @@
 
   <groupId>org.terracotta</groupId>
   <artifactId>monitoring-support</artifactId>
-
-  <dependencies>
+  <properties>
+    <java.build.version>1.8</java.build.version>
+  </properties>
+ <dependencies>
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>packaging-support</artifactId>

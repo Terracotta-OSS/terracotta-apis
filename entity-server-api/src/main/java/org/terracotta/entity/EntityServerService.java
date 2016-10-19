@@ -64,11 +64,50 @@ public interface EntityServerService<M extends EntityMessage, R extends EntityRe
   PassiveServerEntity<M, R> createPassiveEntity(ServiceRegistry registry, byte[] configuration);
   
   /**
+   * Reconfigure an existing entity during server execution.  Reconfigure call in the
+   * platform's entity API allows an entity to reconfigure in place, its instance in the 
+   * system.  Prior to the call of this method, the entities execution queue is flushed and 
+   * any subsequent messages are blocked until this call completes.  This call occurs only 
+   * under the MANAGEMENT_KEY concurrency key.  Implementations are allowed to either reconfigure
+   * in place and return the same instance of the entity or a new entity may be built if desired.
+   * 
+   * @param <AP> the entity type being reconfigured
+   * @param registry the service registry for the entity
+   * @param oldEntity the instance of the entity implementation being reconfigured
+   * @param configuration the new configuration of the entity
+   * @return An entity instance influenced by the new configuration
+   */
+  default <AP extends CommonServerEntity<M, R>> AP reconfigureEntity(ServiceRegistry registry, AP oldEntity, byte[] configuration) {
+    if (oldEntity instanceof PassiveServerEntity) {
+      return (AP)createPassiveEntity(registry, configuration);
+    } else if (oldEntity instanceof ActiveServerEntity) {
+      return (AP)createActiveEntity(registry, configuration);
+    } else {
+      throw new AssertionError("unknown entity type");
+    }
+  }
+  
+  /**
    * Get the concurrency strategy to be used for this server entity.
    *
+   * @param configuration
    * @return concurrency strategy
    */
   ConcurrencyStrategy<M> getConcurrencyStrategy(byte[] configuration);
+  /**
+   * Get the execution strategy to be used for this server entity.  The default implementation
+   * designates that all messages will be run on both active and passive
+   *
+   * @return execution strategy
+   */
+  default ExecutionStrategy<M> getExecutionStrategy(byte[] configuration) {
+    return new ExecutionStrategy<M>() {
+      @Override
+      public ExecutionStrategy.Location getExecutionLocation(M message) {
+        return ExecutionStrategy.Location.IGNORE;
+      }
+    };
+  }
   /**
    * Gets the message codec which will be used to convert high-level {@link EntityMessage}/{@link EntityResponse}
    * to byte[] and vice-versa
