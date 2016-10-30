@@ -32,6 +32,8 @@ import com.tc.classloader.CommonComponent;
  * open()/create(), for example).
  */
 @CommonComponent
+// Deprecated by IPlatformPersistence.
+@Deprecated
 public interface IPersistentStorage {
   /**
    * Called to open an existing storage instance for use.  The caller will expect any data previously present in the backing

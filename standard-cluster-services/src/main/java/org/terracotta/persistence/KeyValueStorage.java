@@ -31,6 +31,8 @@ import com.tc.classloader.CommonComponent;
  * @param <V> The value type
  */
 @CommonComponent
+//Deprecated by IPlatformPersistence.
+@Deprecated
 public interface KeyValueStorage<K, V> {
   
   // We can probably get rid of these
