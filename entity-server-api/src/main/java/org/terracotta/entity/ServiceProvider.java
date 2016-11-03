@@ -91,10 +91,15 @@ public interface ServiceProvider {
   /**
    * <p>Clears up state for this ServiceProvider including any persisted state.</p>
    * <p>This is called, by the platform, when it wishes to explicitly clear the server's state (both in-memory and
-   * persistent).</p>
+   *  persistent).  This need to clear state only happens when the server comes up as passive, but with some persistent
+   *  state which the active determines must be inconsistent.  This method should leave the underlying state clean such that
+   *  the server can restart itself and come up as a fresh passive to re-synchronize its state from the active.</p>
    * <p>Generally, the platform calls this method during platform initialization so there won't be any entities using the
    *  underlying service instances.  In a more concrete sense, no service instances created before this call are considered
    *  valid after the call returns.</p>
+   * <p>In terms of the specific place in the life-cycle, relative to other calls in this interface, it is always called
+   *  after initialize and will only ever be called in the cases where the server is about to be brought down so it can
+   *  restart in a fully clean state before being freshly synchronized with the active.</p>
    * <p>If there are any failures when clearing state, this method should inform Platform by throwing
    *  {@link ServiceProviderCleanupException}.</p>
    *
