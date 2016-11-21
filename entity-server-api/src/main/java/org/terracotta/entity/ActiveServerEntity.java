@@ -56,7 +56,17 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @return possible return value
    */
   R invoke(ClientDescriptor clientDescriptor, M message);
-
+  
+  /**
+   * <p>Called when an entity was loaded from some persistent state and the entity is expected to already be known to the
+   *  server.</p>
+   * <p>Specifically, this refers to situations such as a restart or fail-over.  A given entity will always receive a single
+   *  createNew() call but can receive any number of loadExisting() calls, in response to server life-cycle.</p>
+   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
+   *  respect to all other messages enqueued for the entity.</p>
+   */
+  void loadExisting();
+  
   /**
    * <p>Called during client reconnect to allow the client to pass arbitrary extra data to the server-side entity so it can
    *  rebuild any in-memory state it had, related to the connected client.</p>
