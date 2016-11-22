@@ -91,9 +91,8 @@ public interface ServiceProvider {
   /**
    * <p>Clears up state for this ServiceProvider including any persisted state.</p>
    * <p>This is called, by the platform, when it wishes to explicitly clear the server's state (both in-memory and
-   *  persistent).  This need to clear state only happens when the server comes up as passive, but with some persistent
-   *  state which the active determines must be inconsistent.  This method should leave the underlying state clean such that
-   *  the server can restart itself and come up as a fresh passive to re-synchronize its state from the active.</p>
+   *  persistent).  This method should leave the underlying state clean such that any client entities wishing to re-sync state
+   *  can start fresh as if the service are started fresh for the first time.</p>
    * <p>Generally, the platform calls this method during platform initialization so there won't be any entities using the
    *  underlying service instances.  In a more concrete sense, no service instances created before this call are considered
    *  valid after the call returns.</p>
@@ -105,5 +104,5 @@ public interface ServiceProvider {
    *
    * @throws ServiceProviderCleanupException Describes any failures in the attempt to clear state.
    */
-  void clear() throws ServiceProviderCleanupException;
+  void prepareForSynchronization() throws ServiceProviderCleanupException;
 }

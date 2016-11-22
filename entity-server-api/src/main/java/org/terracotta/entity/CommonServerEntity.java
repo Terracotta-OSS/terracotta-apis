@@ -37,16 +37,6 @@ public interface CommonServerEntity<M extends EntityMessage, R extends EntityRes
   void createNew();
   
   /**
-   * <p>Called when starting a server from a persistent state and the entity is expected to already be known to the
-   *  server.</p>
-   * <p>Specifically, this refers to situations such as a restart or fail-over.  A given entity will always receive a single
-   *  createNew() call but can receive any number of loadExisting() calls, in response to server life-cycle.</p>
-   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
-   *  respect to all other messages enqueued for the entity.</p>
-   */
-  void loadExisting();
-  
-  /**
    * <p>Destroy all state associated with this entity.</p>
    * <p>This is called in response to a client explicitly requesting that the entity be destroyed.  Other situations where
    *  the object representing the entity may be discarded (server goes down for a restart or the server is being promoted to
