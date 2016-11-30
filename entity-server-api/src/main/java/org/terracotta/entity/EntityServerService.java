@@ -51,8 +51,9 @@ public interface EntityServerService<M extends EntityMessage, R extends EntityRe
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity
+   * @throws org.terracotta.entity.ConfigurationException
    */
-  ActiveServerEntity<M, R> createActiveEntity(ServiceRegistry registry, byte[] configuration);
+  ActiveServerEntity<M, R> createActiveEntity(ServiceRegistry registry, byte[] configuration) throws ConfigurationException;
 
   /**
    * Create an instance of the specified server entity in passive mode.
@@ -60,8 +61,9 @@ public interface EntityServerService<M extends EntityMessage, R extends EntityRe
    * @param registry registry of services provided by the server
    * @param configuration entity specific configuration object
    * @return server side entity
+   * @throws org.terracotta.entity.ConfigurationException
    */
-  PassiveServerEntity<M, R> createPassiveEntity(ServiceRegistry registry, byte[] configuration);
+  PassiveServerEntity<M, R> createPassiveEntity(ServiceRegistry registry, byte[] configuration) throws ConfigurationException;
   
   /**
    * Reconfigure an existing entity during server execution.  Reconfigure call in the
@@ -76,8 +78,9 @@ public interface EntityServerService<M extends EntityMessage, R extends EntityRe
    * @param oldEntity the instance of the entity implementation being reconfigured
    * @param configuration the new configuration of the entity
    * @return An entity instance influenced by the new configuration
+   * @throws org.terracotta.entity.ConfigurationException
    */
-  default <AP extends CommonServerEntity<M, R>> AP reconfigureEntity(ServiceRegistry registry, AP oldEntity, byte[] configuration) {
+  default <AP extends CommonServerEntity<M, R>> AP reconfigureEntity(ServiceRegistry registry, AP oldEntity, byte[] configuration) throws ConfigurationException {
     if (oldEntity instanceof PassiveServerEntity) {
       return (AP)createPassiveEntity(registry, configuration);
     } else if (oldEntity instanceof ActiveServerEntity) {
