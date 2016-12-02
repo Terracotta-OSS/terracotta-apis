@@ -21,7 +21,7 @@ package org.terracotta.exception;
 /**
  *
  */
-public class PermanentEntityException extends EntityNotFoundException {
+public class PermanentEntityException extends EntityException {
 
   /**
    * Creates a new instance of <code>PermanentEntityException</code> without
@@ -32,7 +32,7 @@ public class PermanentEntityException extends EntityNotFoundException {
    * @param entityName name of the entity being deleted
    */
   public PermanentEntityException(String className, String entityName) {
-    super(className, entityName);
+    super(className, entityName, "permanent entity", null);
   }
 
   /**
@@ -45,6 +45,6 @@ public class PermanentEntityException extends EntityNotFoundException {
    * @param cause underlying cause of this exception
    */
   public PermanentEntityException(String className, String entityName, Throwable cause) {
-    super(className, entityName, cause);
+    super(className, entityName, "permanent entity", cause);
   }
 }
