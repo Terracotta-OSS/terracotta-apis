@@ -23,6 +23,7 @@ import org.terracotta.exception.EntityException;
 import org.terracotta.exception.EntityNotFoundException;
 import org.terracotta.exception.EntityNotProvidedException;
 import org.terracotta.exception.EntityVersionMismatchException;
+import org.terracotta.exception.PermanentEntityException;
 
 
 /**
@@ -87,8 +88,9 @@ public interface EntityRef<T extends Entity, C> {
 
    * @throws EntityNotProvidedException The service providing {@code <T>} doesn't exist on the server
    * @throws EntityNotFoundException No entity with this type and name could be found
+   * @throws PermanentEntityException Attempted to destroy a permanent entity
    */
-  boolean destroy() throws EntityNotProvidedException, EntityNotFoundException;
+  boolean destroy() throws EntityNotProvidedException, EntityNotFoundException, PermanentEntityException;
 
   /**
    * Gets the entity pointed to by this reference, or throws if the operation cannot complete.
