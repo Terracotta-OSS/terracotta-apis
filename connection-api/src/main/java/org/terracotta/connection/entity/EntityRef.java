@@ -19,10 +19,11 @@
 package org.terracotta.connection.entity;
 
 import org.terracotta.exception.EntityAlreadyExistsException;
-import org.terracotta.exception.EntityException;
+import org.terracotta.exception.EntityConfigurationException;
 import org.terracotta.exception.EntityNotFoundException;
 import org.terracotta.exception.EntityNotProvidedException;
 import org.terracotta.exception.EntityVersionMismatchException;
+import org.terracotta.exception.PermanentEntityException;
 
 
 /**
@@ -65,16 +66,18 @@ public interface EntityRef<T extends Entity, C> {
    * @throws EntityNotProvidedException The service providing {@code <T>} doesn't exist on the server
    * @throws EntityAlreadyExistsException An entity with this type and name already exists
    * @throws EntityVersionMismatchException The client and server providing services for T don't have the same version numbers
+   * @throws EntityConfigurationException The entity could not be created with the given configuration.
    */
-  void create(C configuration) throws EntityNotProvidedException, EntityAlreadyExistsException, EntityVersionMismatchException;
+  void create(C configuration) throws EntityNotProvidedException, EntityAlreadyExistsException, EntityVersionMismatchException, EntityConfigurationException;
 
   /**
    * reconfigure the entity with the given configuration.
    *
    * @param configuration configuration to be applied to the entity
    * @throws EntityNotProvidedException The service providing T doesn't exist on either the client or the server
+   * @throws EntityConfigurationException The entity could not be reconfigured with the given configuration.
    */
-  C reconfigure(C configuration) throws EntityException;
+  C reconfigure(C configuration) throws EntityNotProvidedException, EntityConfigurationException;
 
   /**
    * Destroys the entity pointed to by this reference if it is not fetched on any client.
@@ -87,8 +90,9 @@ public interface EntityRef<T extends Entity, C> {
 
    * @throws EntityNotProvidedException The service providing {@code <T>} doesn't exist on the server
    * @throws EntityNotFoundException No entity with this type and name could be found
+   * @throws PermanentEntityException Attempted to destroy a permanent entity
    */
-  boolean destroy() throws EntityNotProvidedException, EntityNotFoundException;
+  boolean destroy() throws EntityNotProvidedException, EntityNotFoundException, PermanentEntityException;
 
   /**
    * Gets the entity pointed to by this reference, or throws if the operation cannot complete.
