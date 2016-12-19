@@ -18,10 +18,14 @@
  */
 package org.terracotta.entity;
 
+
 /**
- *
+ * An exception type which can be thrown by {@link EntityServerService} when creating or reconfiguring an entity instance
+ * to indicate that the configuration could not be satisfied.
  */
 public class ConfigurationException extends Exception {
+  private static final long serialVersionUID = 1L;
+
   /**
    * Creates a new instance of <code>ConfigurationException</code> without
    * detail message.  This exception is thrown when a client attempts to delete a
