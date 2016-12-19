@@ -24,6 +24,8 @@ package org.terracotta.entity;
  * state could not be cleared.
  */
 public class ServiceProviderCleanupException extends Exception {
+  private static final long serialVersionUID = 1L;
+
   public ServiceProviderCleanupException(String s) {
     super(s);
   }

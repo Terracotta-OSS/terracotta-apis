@@ -24,6 +24,8 @@ package org.terracotta.entity;
  * to indicate that the configuration could not be satisfied.
  */
 public class ConfigurationException extends Exception {
+  private static final long serialVersionUID = 1L;
+
   /**
    * Creates a new instance of <code>ConfigurationException</code> without
    * detail message.  This exception is thrown when a client attempts to delete a

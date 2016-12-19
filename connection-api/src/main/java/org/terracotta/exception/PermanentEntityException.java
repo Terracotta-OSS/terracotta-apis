@@ -24,6 +24,7 @@ package org.terracotta.exception;
  * entity, defined within the server's configuration.
  */
 public class PermanentEntityException extends EntityException {
+  private static final long serialVersionUID = 1L;
 
   /**
    * Creates a new instance of <code>PermanentEntityException</code> without
