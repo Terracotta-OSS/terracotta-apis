@@ -18,8 +18,10 @@
  */
 package org.terracotta.entity;
 
+
 /**
- *
+ * An exception type which can be thrown by {@link EntityServerService} when creating or reconfiguring an entity instance
+ * to indicate that the configuration could not be satisfied.
  */
 public class ConfigurationException extends Exception {
   /**

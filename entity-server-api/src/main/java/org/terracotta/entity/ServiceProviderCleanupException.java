@@ -18,15 +18,17 @@
  */
 package org.terracotta.entity;
 
+
 /**
- * @author vmad
+ * An exception type thrown by {@link ServiceProvider#prepareForSynchronization()} to describe why the provider's
+ * state could not be cleared.
  */
 public class ServiceProviderCleanupException extends Exception {
-    public ServiceProviderCleanupException(String s) {
-        super(s);
-    }
+  public ServiceProviderCleanupException(String s) {
+    super(s);
+  }
 
-    public ServiceProviderCleanupException(String s, Throwable throwable) {
-        super(s, throwable);
-    }
+  public ServiceProviderCleanupException(String s, Throwable throwable) {
+    super(s, throwable);
+  }
 }

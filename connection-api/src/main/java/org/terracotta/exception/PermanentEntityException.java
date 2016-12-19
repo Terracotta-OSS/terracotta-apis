@@ -18,8 +18,10 @@
  */
 package org.terracotta.exception;
 
+
 /**
- *
+ * This specific EntityException type is thrown in cases where an entity couldn't be destroyed since it is a permanent
+ * entity, defined within the server's configuration.
  */
 public class PermanentEntityException extends EntityException {
 

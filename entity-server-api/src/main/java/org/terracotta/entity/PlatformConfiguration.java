@@ -20,11 +20,9 @@ package org.terracotta.entity;
 
 import java.util.Collection;
 
+
 /**
- *
- * API for exposing platform configuration
- *
- * @author vmad
+ * An API for reading the configuration of the current server.
  */
 public interface PlatformConfiguration {
   /**
