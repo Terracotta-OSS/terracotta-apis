@@ -18,6 +18,7 @@
  */
 package org.terracotta.exception;
 
+import java.io.ObjectStreamException;
 
 /**
  * This specific EntityException type is thrown in cases where an unexpected exception was thrown from user code associated
@@ -36,5 +37,17 @@ public class EntityUserException extends EntityException {
    */
   public EntityUserException(String className, String entityName, Throwable cause) {
     super(className, entityName, "exception in user code: " + cause.getLocalizedMessage(), cause);
+  }
+
+  public Object writeReplace() throws ObjectStreamException {
+    // We jump in here to convert the underlying cause (if there is one) to a type which we know won't depend on
+    //  server-side classpath.  We then return a new instance of ourself which wraps that exception.
+    Object toSerialize = this;
+    Throwable cause = this.getCause();
+    if (null != cause) {
+      ServerSideExceptionWrapper wrappedCause = ServerSideExceptionWrapper.buildFromThrowable(cause);
+      toSerialize = new EntityUserException(this.getClassName(), this.getEntityName(), wrappedCause);
+    }
+    return toSerialize;
   }
 }
