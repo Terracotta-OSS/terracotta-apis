@@ -29,7 +29,7 @@
 
   <groupId>org.terracotta.internal</groupId>
   <artifactId>terracotta-apis-root</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <packaging>pom</packaging>
 
   <properties>
