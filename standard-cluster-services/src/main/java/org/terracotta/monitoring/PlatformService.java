@@ -19,6 +19,7 @@
 package org.terracotta.monitoring;
 
 import com.tc.classloader.CommonComponent;
+import java.io.InputStream;
 
 
 /**
@@ -30,4 +31,8 @@ public interface PlatformService {
    * Dumps platform state into logs
    */
   void dumpPlatformState();
+  /**
+   * Provides the raw config file from server startup
+   */
+  InputStream getPlatformConfiguration();
 }
