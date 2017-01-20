@@ -75,9 +75,10 @@ public interface EntityRef<T extends Entity, C> {
    *
    * @param configuration configuration to be applied to the entity
    * @throws EntityNotProvidedException The service providing T doesn't exist on either the client or the server
+   * @throws EntityNotFoundException No entity with this type and name could be found
    * @throws EntityConfigurationException The entity could not be reconfigured with the given configuration.
    */
-  C reconfigure(C configuration) throws EntityNotProvidedException, EntityConfigurationException;
+  C reconfigure(C configuration) throws EntityNotProvidedException, EntityNotFoundException, EntityConfigurationException;
 
   /**
    * Destroys the entity pointed to by this reference if it is not fetched on any client.
