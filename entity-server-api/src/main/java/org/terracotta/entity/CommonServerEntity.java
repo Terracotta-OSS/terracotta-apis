@@ -33,8 +33,9 @@ public interface CommonServerEntity<M extends EntityMessage, R extends EntityRes
    *  instead.</p>
    * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
    *  respect to all other messages enqueued for the entity.</p>
+   * @throws ConfigurationException If an instance cannot be created as new with the configuration it was given.
    */
-  void createNew();
+  void createNew() throws ConfigurationException;
   
   /**
    * <p>Destroy all state associated with this entity.</p>
