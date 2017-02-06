@@ -22,14 +22,18 @@ import java.io.Closeable;
 
 
 /**
- * An instance of this type represents a concrete connection to a server-side entity.  The entity always exists so long as
- * an instance of this type is open to it.  This also means that the open instance will block any attempts to delete the
- * server-side instance.
- * Therefore, close() must be called in order to release this hold on the entity.
+ * <p>An instance of this type represents a concrete connection to a server-side entity.  The entity always exists so
+ * long as an instance of this type is open to it.  This also means that the open instance will block any attempts to
+ * delete the server-side instance.</p>
+ * 
+ * <p>Therefore, {@link Entity#close()} must be called in order to release this hold on the entity.</p>
  */
 public interface Entity extends Closeable {
   /**
-   * Release this handle on the entity. The instance will be unusable after this call.
+   * <p>Release this handle on the entity. The instance will be unusable after this call.</p>
+   * 
+   * <p>Note:  The implementation is required to close its underlying {@link EntityRef} within this call so the server
+   * can be notified that the client-side reference has been released.</p>
    */
   @Override
   void close();
