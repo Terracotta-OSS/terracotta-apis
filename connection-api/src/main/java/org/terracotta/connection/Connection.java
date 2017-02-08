@@ -38,8 +38,9 @@ public interface Connection extends Closeable {
    * @param name name of the entity
    * @param <T> entity type
    * @param <C> configuration type
+   * @param <U> user data type for EntityClientService
    * @return reference to the entity
    * @throws EntityNotProvidedException There is no client-side service providing entities of type T
    */
-  <T extends Entity, C> EntityRef<T, C> getEntityRef(Class<T> cls, long version, String name) throws EntityNotProvidedException;
+  <T extends Entity, C, U> EntityRef<T, C, U> getEntityRef(Class<T> cls, long version, String name) throws EntityNotProvidedException;
 }
