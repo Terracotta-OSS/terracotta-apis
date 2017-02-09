@@ -25,8 +25,8 @@ import org.terracotta.exception.EntityException;
 
 
 /**
- * Used to return the results of invocations to the server, asynchronously.  This allows the client to block on the result
- * at a later time.
+ * <p>Used to return the results of invocations to the server, asynchronously.  This allows the client to block on the
+ * result at a later time.</p>
  * 
  * @param <T> The underlying type wrapped by the instance
  */
@@ -37,8 +37,13 @@ public interface InvokeFuture<T> {
   public boolean isDone();
 
   /**
-   * Returns the underlying result or throws the underlying exception, if the invocation has completed.  Otherwise, blocks
-   * until that completion or an interrupt.
+   * <p>Returns the underlying result or throws the underlying exception, if satisfied.  Otherwise, blocks until it has
+   * satisfied its ack requirements or an interrupt.</p>
+   * 
+   * <p>Note that these ack requirements are configured via
+   * {@link org.terracotta.entity.InvocationBuilder#blockGetOnRetire(boolean)}, when the instance was created.  By
+   * default, this method waits until RETIRED but that method can be used to configure it to return after the first
+   * COMPLETED.</p>
    * 
    * @return The underlying result of the invocation, if successful
    * @throws InterruptedException If the call was interrupted while blocked
@@ -47,8 +52,10 @@ public interface InvokeFuture<T> {
   public T get() throws InterruptedException, EntityException;
 
   /**
-   * Returns the underlying result or throws the underlying exception, if the invocation has completed.  Otherwise, blocks
-   * until that completion, an interrupt, or a timeout.
+   * <p>Returns the underlying result or throws the underlying exception, if satisfied.  Otherwise, blocks until it has
+   * satisfied its ack requirements, an interrupt, or a timeout.</p>
+   * 
+   * <p>Details of ack requirements described in {@link #get()}.</p>
    * 
    * @param timeout The number of TimeUnits to wait until throwing TimeoutException, if no response
    * @param unit The TimeUnit to use in determining how long to wait before throwing TimeoutException
@@ -60,7 +67,8 @@ public interface InvokeFuture<T> {
   public T getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, EntityException, TimeoutException;
 
   /**
-   * Interrupts the underlying get() or getWithTimeout(), if blocked.  Will result in it throwing InterruptedException.
+   *<p> Interrupts the underlying {@link #get()} or {@link #getWithTimeout(long, TimeUnit)}, if blocked.  Will result in
+   *the blocked thread throwing {@link InterruptedException}.</p>
    */
   public void interrupt();
 }
