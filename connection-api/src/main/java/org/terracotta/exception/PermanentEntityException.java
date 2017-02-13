@@ -20,10 +20,12 @@ package org.terracotta.exception;
 
 
 /**
- * This specific EntityException type is thrown in cases where an entity couldn't be destroyed since it is a permanent
- * entity, defined within the server's configuration.
+ * <p>This specific {@link RuntimeEntityException} type is thrown in cases where an entity couldn't be destroyed since
+ * it is a permanent entity, defined within the server's configuration.</p>
+ * <p>It is unchecked since this is essentially a static programming or configuration error and is not possible in
+ * already-tested code and configurations.</p>
  */
-public class PermanentEntityException extends EntityException {
+public class PermanentEntityException extends RuntimeEntityException {
   private static final long serialVersionUID = 1L;
 
   /**
