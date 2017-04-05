@@ -37,8 +37,9 @@ import org.terracotta.connection.entity.Entity;
  * @param <C> The configuration type
  * @param <M> An {@link EntityMessage}
  * @param <R> An {@link EntityResponse}
+ * @param <U> User data type to be passed to the {@link #create(EntityClientEndpoint)}
  */
-public interface EntityClientService<T extends Entity, C, M extends EntityMessage, R extends EntityResponse> {
+public interface EntityClientService<T extends Entity, C, M extends EntityMessage, R extends EntityResponse, U> {
   /**
    * Check if this service handles the given entity type.
    *
@@ -74,9 +75,10 @@ public interface EntityClientService<T extends Entity, C, M extends EntityMessag
    * {@link org.terracotta.connection.entity.Entity#close()} is called, it is expected to also close this endpoint.</p>
    *
    * @param endpoint The RPC endpoint for interacting with the server-side entity represented by the returned instance.
+   * @param userData Constructor argument(s) passed through from the fetchEntity().
    * @return The client-side representation of the fetched server entity.
    */
-  T create(EntityClientEndpoint<M, R> endpoint);
+  T create(EntityClientEndpoint<M, R> endpoint, U userData);
 
   /**
    * Gets the message codec which will be used to convert high-level {@link EntityMessage}/{@link EntityResponse}

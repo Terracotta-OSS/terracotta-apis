@@ -42,8 +42,9 @@ import org.terracotta.exception.PermanentEntityException;
  *
  * @param <T> The entity type underlying this reference.
  * @param <C> The configuration type to use when creating this entity.
+ * @param <U> User-data type to be passed to the {@link #fetchEntity()}.
  */
-public interface EntityRef<T extends Entity, C> {
+public interface EntityRef<T extends Entity, C, U> {
   /**
    * Creates the entity with the given configuration.
    * <P>
@@ -105,12 +106,13 @@ public interface EntityRef<T extends Entity, C> {
    *   release this hold on the server-side instance. Otherwise, attempts to {@link #destroy()} it will fail.
    * </P>
    *
+   * @param userData Additional constructor argument(s) to be passed to EntityClientService.
    * @return The client-side entity attached to the server-side instance
    *
    * @throws EntityNotFoundException No entity with this type and name could be found
    * @throws EntityVersionMismatchException The client and server providing services for T don't have the same version numbers
    */
-  T fetchEntity() throws EntityNotFoundException, EntityVersionMismatchException;
+  T fetchEntity(U userData) throws EntityNotFoundException, EntityVersionMismatchException;
 
   /**
    * Gets the name of the entity
