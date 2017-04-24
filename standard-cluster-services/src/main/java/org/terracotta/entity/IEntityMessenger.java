@@ -39,6 +39,18 @@ public interface IEntityMessenger {
   void messageSelf(EntityMessage message) throws MessageCodecException;
 
   /**
+   * Defer a message based on another message, which will be sent in the future.
+   *
+   * @param tag String reason tag, mainly for debugging.
+   * @param originalMessageToDefer original message to defer
+   * @param futureMessage message to use to complete original message
+   * @return handle used to release the deferred message
+   */
+  ExplicitRetirementHandle deferRetirement(String tag,
+                                           EntityMessage originalMessageToDefer,
+                                           EntityMessage futureMessage);
+
+  /**
    * Asynchronously send a message to the entity instance which looked up the service instance but also blocks the final
    * retirement acknowledgement of originalMessageToDefer until newMessageToSchedule completes.
    * 
