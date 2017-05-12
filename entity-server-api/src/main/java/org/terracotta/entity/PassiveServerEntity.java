@@ -38,7 +38,7 @@ public interface PassiveServerEntity<M extends EntityMessage, R extends EntityRe
    *
    * @param message The message from a client or upstream active server
    */
-  void invoke(M message);
+  void invoke(M message) throws EntityUserException;
 
   /**
    * <p>Called on {@link ConcurrencyStrategy#MANAGEMENT_KEY} to notify the receiver that it is about to start receiving
