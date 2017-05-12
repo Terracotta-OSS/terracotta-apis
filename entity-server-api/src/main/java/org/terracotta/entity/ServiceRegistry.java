@@ -19,6 +19,8 @@
 package org.terracotta.entity;
 
 
+import java.util.Collection;
+
 /**
  * <p>The registry given to entities so that they can look up the services hosted on the platform.</p>
  * 
@@ -51,4 +53,16 @@ public interface ServiceRegistry {
    * @return an instance of service which will provide the requested interface
    */
   <T> T getService(ServiceConfiguration<T> configuration);
+
+  /**
+   * <p>Get the services instances of a given serviceType subject to the constraints of the given configuration.</p>
+   *
+   * <p>Note that successive calls to this method, even with the same configuration, usually return different instances to
+   *  access the same underlying resource of the ServiceProvider.</p>
+   *
+   * @param <T> type interface of the requested service
+   * @param configuration With which service should be provisioned
+   * @return a collection of instances of services providing the requested interface
+   */
+  <T> Collection<T> getServices(ServiceConfiguration<T> configuration);
 }
