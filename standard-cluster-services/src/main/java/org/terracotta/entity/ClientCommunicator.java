@@ -40,6 +40,15 @@ public interface ClientCommunicator {
    * @throws MessageCodecException If the message could not be serialized by the provided codec
    */
   void sendNoResponse(ClientDescriptor clientDescriptor, EntityResponse message) throws MessageCodecException;
+  /**
+   * Unilaterally closes the server-side connection associated with entity ClientDescriptor.
+   * Any other entity ClientDescriptors associated with the connection will also be invalidated
+   * There is no notification as to whether this method has succeeded in its goal as all interactions
+   * are asynchronous.  For confirmation of connection closer, consult entity based callbacks.
+   * 
+   * @param clientDescriptor The client side instance the connection to be closed is associated with
+   */
+  void closeClientConnection(ClientDescriptor clientDescriptor);
 
   /**
    * Send a message getting an async completion back.
