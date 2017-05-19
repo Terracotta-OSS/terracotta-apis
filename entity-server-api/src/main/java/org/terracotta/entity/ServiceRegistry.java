@@ -52,10 +52,9 @@ public interface ServiceRegistry {
    * @param <T> type interface of the requested service
    * @param configuration With which service should be provisioned
    * @return an instance of service which will provide the requested interface
-   * @throws IllegalArgumentException if multiple services satisfy the same configuration
+   * @throws ServiceException if multiple services satisfy the same configuration
    */
-  @Deprecated
-  <T> T getService(ServiceConfiguration<T> configuration);
+  <T> T getService(ServiceConfiguration<T> configuration) throws ServiceException;
   /**
    * <p>Get all the service instances of a given serviceType subject to the constraints of the given configuration.</p>
    * 
