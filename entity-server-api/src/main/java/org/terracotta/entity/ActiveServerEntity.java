@@ -55,7 +55,7 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param message The message from the client
    * @return possible return value
    */
-  R invoke(ClientDescriptor clientDescriptor, M message);
+  R invoke(ClientDescriptor clientDescriptor, M message) throws EntityUserException;
   
   /**
    * <p>Called when an entity was loaded from some persistent state and the entity is expected to already be known to the
