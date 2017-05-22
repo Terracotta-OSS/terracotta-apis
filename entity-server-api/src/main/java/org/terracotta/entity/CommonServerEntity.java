@@ -25,7 +25,7 @@ package org.terracotta.entity;
  *  implementation's MessageCodec and also read by the ConcurrencyStrategy.
  * @param <R> The high-level message type returned by invoke calls on the active entity.
  */
-public interface CommonServerEntity<M extends EntityMessage, R extends EntityResponse> {
+public interface CommonServerEntity<M extends EntityMessage, R extends EntityResponse> extends StateDumpable {
   /**
    * <p>Called when a client asks that an entity be explicitly created.  Also called at the very beginning of passive sync of
    *  the entity, asking it to be created for the first time.</p>
