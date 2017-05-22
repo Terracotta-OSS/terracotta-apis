@@ -21,7 +21,7 @@ package org.terracotta.exception;
 /**
  * A Runtime exception that wraps exception(s) thrown from Server entity implementations
  */
-public class EntityServerUncaughtException extends RuntimeEntityException {
+public class EntityServerException extends EntityException {
   /**
    * All of these exception types have a specific description and refer to a type and name pair.
    *
@@ -30,7 +30,7 @@ public class EntityServerUncaughtException extends RuntimeEntityException {
    * @param description The description describing the specific problem
    * @param cause       The underlying cause of the exception, null if nothing appropriate
    */
-  public EntityServerUncaughtException(final String className, final String entityName, final String description, final Throwable cause) {
+  public EntityServerException(final String className, final String entityName, final String description, final Throwable cause) {
     super(className, entityName, description, cause);
   }
 }

@@ -49,7 +49,7 @@ public interface InvokeFuture<T> {
    * @throws InterruptedException If the call was interrupted while blocked
    * @throws EntityException The underlying error in the invocation, if unsuccessful
    */
-  public T get() throws InterruptedException, EntityException, EntityUserException;
+  public T get() throws InterruptedException, EntityException;
 
   /**
    * <p>Returns the underlying result or throws the underlying exception, if satisfied.  Otherwise, blocks until it has
@@ -64,7 +64,7 @@ public interface InvokeFuture<T> {
    * @throws EntityException The underlying error in the invocation, if unsuccessful
    * @throws TimeoutException The get timed out before a response was received
    */
-  public T getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, EntityException, EntityUserException, TimeoutException;
+  public T getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, EntityException, TimeoutException;
 
   /**
    *<p> Interrupts the underlying {@link #get()} or {@link #getWithTimeout(long, TimeUnit)}, if blocked.  Will result in
