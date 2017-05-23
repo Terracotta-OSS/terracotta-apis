@@ -47,7 +47,6 @@ public interface ServiceRegistry {
    * <p>Note that successive calls to this method, even with the same configuration, usually return different instances to
    *  access the same underlying resource of the ServiceProvider.</p>
    * 
-   * <p>Note: deprecating this method as it throws a hidden IllegalArgumentException use getServices if possible</p>
    * 
    * @param <T> type interface of the requested service
    * @param configuration With which service should be provisioned
