@@ -52,11 +52,17 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    *  called concurrently with other invokes.</p>
    *
    * @param clientDescriptor source instance from which the invocation originates.
-   * @param message The message from the client
+   * @param currentOrderedId current id for this client that this invoke is part of
+   * @param eldestOrderedId earliest active id for this client; id's older than this
+   * can be thrown away.
+   * @param message The message from a client
    * @return possible return value
    */
-  R invoke(ClientDescriptor clientDescriptor, M message) throws EntityUserException;
-  
+  R invokeActive(ClientDescriptor clientDescriptor,
+           long currentOrderedId,
+           long eldestOrderedId,
+           M message) throws EntityUserException;
+
   /**
    * <p>Called when an entity was loaded from some persistent state and the entity is expected to already be known to the
    *  server.</p>

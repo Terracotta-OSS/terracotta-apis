@@ -46,4 +46,5 @@ public interface CommonServerEntity<M extends EntityMessage, R extends EntityRes
    *  respect to all other messages enqueued for the entity.</p>
    */
   void destroy();
+
 }

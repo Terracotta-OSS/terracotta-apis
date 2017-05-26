@@ -36,9 +36,16 @@ public interface PassiveServerEntity<M extends EntityMessage, R extends EntityRe
    *  under a given key, the messages it creates and sends for synchronization will be executed in that key, on the passive,
    *  via this invoke() entry-point.</p>
    *
+   * @param clientDescriptor source instance from which the invocation originates.
+   * @param currentOrderedId current id for this client that this invoke is part of
+   * @param eldestOrderedId earliest active id for this client; id's older than this
+   * can be thrown away.
    * @param message The message from a client or upstream active server
    */
-  void invoke(M message) throws EntityUserException;
+  void invokePassive(ClientDescriptor clientDescriptor,
+              long currentOrderedId,
+              long eldestOrderedId,
+              M message) throws EntityUserException;
 
   /**
    * <p>Called on {@link ConcurrencyStrategy#MANAGEMENT_KEY} to notify the receiver that it is about to start receiving
@@ -69,4 +76,12 @@ public interface PassiveServerEntity<M extends EntityMessage, R extends EntityRe
    *  where this call is executed.</p>
    */
   void endSyncConcurrencyKey(int concurrencyKey);
+  
+  /**
+   * Notify an entity that a particular client disconnected from the active.
+   *
+   * @param client client
+   */
+  void notifyClientDisconnectedFromActive(ClientDescriptor client);
+
 }
