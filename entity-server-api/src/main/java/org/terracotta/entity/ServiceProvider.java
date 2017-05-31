@@ -36,7 +36,7 @@ import java.util.Collection;
  *  any implementation which has shared state must ensure that it can manage this state in a thread safe way (subject to
  *  whatever thread safety its own state requires).</p>
  */
-public interface ServiceProvider {
+public interface ServiceProvider extends StateDumpable {
   /**
    * <p>PLATFORM_CONSUMER_ID is the consumerID used by the platform, itself, when it wants to interact with services.
    *  Normal entity instances use positive consumerID values.</p>
