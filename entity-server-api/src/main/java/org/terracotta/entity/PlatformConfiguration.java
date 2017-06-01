@@ -39,4 +39,11 @@ public interface PlatformConfiguration {
    * @return a collection of objects configured via the plug-in system of the type specified
    */
   <T> Collection<T> getExtendedConfiguration(Class<T> type);
+
+  /**
+   * Queries platform restart-ability
+   *
+   * @return {@code true} if this server is restartable otherwise {@code false}
+   */
+  boolean isRestartable();
 }
