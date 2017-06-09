@@ -20,30 +20,29 @@ package org.terracotta.entity;
 
 
 /**
- * An exception type which can be thrown by {@link EntityServerService} when creating or reconfiguring an entity instance
- * to indicate that the configuration could not be satisfied.
+ * When an entity is handling reconnect data from a client, if this exception is thrown, 
+ * the reconnection of that client will be rejected, and the Connection associated with the
+ * entity will be disconnected from the server.
  */
-public class ConfigurationException extends Exception {
+public class ReconnectRejectedException extends Exception {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new instance of <code>ConfigurationException</code> without
-   * detail message.  
+   * Creates a new instance of <code>ReconnectRejectedException</code>
    * 
    * @param description an implementation defined description of the problem
    */
-  public ConfigurationException(String description) {
+  public ReconnectRejectedException(String description) {
     this(description, null);
   }
 
   /**
-   * Creates a new instance of <code>ConfigurationException</code> along with underlying cause but without
-   * detail message.  
+   * Creates a new instance of <code>ReconnectRejectedException</code> along with underlying cause.
    *
    * @param description an implementation defined description of the problem
    * @param cause underlying cause of this exception
    */
-  public ConfigurationException(String description, Throwable cause) {
+  public ReconnectRejectedException(String description, Throwable cause) {
     super(description, cause);
   }
 }
