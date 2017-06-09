@@ -76,8 +76,11 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * 
    * @param clientDescriptor The client-side instance which reconnected
    * @param extendedReconnectData Arbitrary data sent by the client-side instance to rebuild the server-side in-memory state 
+   * @throws ReconnectRejectedException When a reconnect by the client is not supported by the server, throwing this exception
+   * forces the disconnect of the Connection associated with the entity attempting reconnect
+   * 
    */
-  void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData);
+  void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData) throws ReconnectRejectedException;
 
   /**
    * <p>Passes any information required to describe all entity data/state associated with the given concurrency key to a
