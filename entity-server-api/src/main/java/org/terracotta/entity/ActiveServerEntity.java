@@ -45,23 +45,38 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param clientDescriptor client-side instance which disconnected
    */
   void disconnected(ClientDescriptor clientDescriptor);
-  
+
   /**
    * <p>Invoke a call on the given entity.</p>
    * <p>Note that the thread used to make this call is determined by consulting the entity's ConcurrencyStrategy so it may be
    *  called concurrently with other invokes.</p>
+   * <p>This is the preferred entry point to override, and the method that
+   * will be called. Currently it calls the other invoke, but that is merely for
+   * compatibility in transition.</p>
    *
-   * @param clientDescriptor source instance from which the invocation originates.
-   * @param currentOrderedId current id for this client that this invoke is part of
-   * @param eldestOrderedId earliest active id for this client; id's older than this
-   * can be thrown away.
+   * @param context invocation context
    * @param message The message from a client
    * @return possible return value
    */
-  R invokeActive(ClientDescriptor clientDescriptor,
-           long currentOrderedId,
-           long eldestOrderedId,
-           M message) throws EntityUserException;
+  default R invokeActive(InvokeContext context, M message) throws EntityUserException {
+    return invoke(context.getClientDescriptor(), message);
+  }
+
+  /**
+   * <p>Invoke a call on the given entity.</p>
+   * <p>Note that the thread used to make this call is determined by consulting the entity's ConcurrencyStrategy so it may be
+   *  called concurrently with other invokes.</p>
+   * <p>This is the legacy endpoint, and will not be called unless the other
+   * invoke call is not overridden as it should be. Here for legacy transition.</p>
+   *
+   * @param descriptor client descriptor this invoke is sourced from
+   * @param message The message from a client
+   * @return possible return value
+   */
+  @Deprecated
+  default R invoke(ClientDescriptor descriptor, M message) throws EntityUserException {
+    throw new UnsupportedOperationException();
+  }
 
   /**
    * <p>Called when an entity was loaded from some persistent state and the entity is expected to already be known to the

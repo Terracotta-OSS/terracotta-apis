@@ -47,4 +47,8 @@ public interface CommonServerEntity<M extends EntityMessage, R extends EntityRes
    */
   void destroy();
 
+  @Override
+  default void dumpStateTo(StateDumper stateDumper) {
+    stateDumper.dumpState("string", this.toString());
+  }
 }
