@@ -35,18 +35,35 @@ public interface PassiveServerEntity<M extends EntityMessage, R extends EntityRe
    * <p>A note about passive synchronization messages:  When the active is given the opportunity to synchronize the data
    *  under a given key, the messages it creates and sends for synchronization will be executed in that key, on the passive,
    *  via this invoke() entry-point.</p>
+   * <p>This is the preferred entry point to override, and the method that
+   * will be called. Currently it calls the other invoke, but that is merely for
+   * compatibility in transition.</p>
    *
-   * @param clientDescriptor source instance from which the invocation originates.
-   * @param currentOrderedId current id for this client that this invoke is part of
-   * @param eldestOrderedId earliest active id for this client; id's older than this
-   * can be thrown away.
+   * @param context invoke context for this call
    * @param message The message from a client or upstream active server
    */
-  void invokePassive(ClientDescriptor clientDescriptor,
-              long currentOrderedId,
-              long eldestOrderedId,
-              M message) throws EntityUserException;
+  default void invokePassive(InvokeContext context, M message) throws EntityUserException {
+    invoke(message);
+  }
 
+  /**
+   * <p>Invoke a call on the given entity.  Note that passive entities can't return data to the client.</p>
+   * <p>This method is called both in the cases of normal client->server method invocation but also in the case of
+   *  server->server passive synchronization.</p>
+   * <p>Note that the thread used to make this call is determined by consulting the entity's ConcurrencyStrategy so it may be
+   *  called concurrently with other invokes.</p>
+   * <p>A note about passive synchronization messages:  When the active is given the opportunity to synchronize the data
+   *  under a given key, the messages it creates and sends for synchronization will be executed in that key, on the passive,
+   *  via this invoke() entry-point.</p>
+   * <p>This is the legacy endpoint, and will not be called unless the other
+   * invoke call is not overridden as it should be. Here for legacy transition.</p>
+   *
+   * @param message The message from a client or upstream active server
+   */
+  @Deprecated
+  default void invoke(M message) throws EntityUserException {
+    throw new UnsupportedOperationException();
+  }
   /**
    * <p>Called on {@link ConcurrencyStrategy#MANAGEMENT_KEY} to notify the receiver that it is about to start receiving
    *  synchronization messages.</p>
