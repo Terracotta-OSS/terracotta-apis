@@ -96,9 +96,11 @@ public interface PassiveServerEntity<M extends EntityMessage, R extends EntityRe
   
   /**
    * Notify an entity that a particular client disconnected from the active.
-   *
+   * Noop if not overridden.
    * @param client client
    */
-  void notifyClientDisconnectedFromActive(ClientDescriptor client);
+  default void notifyClientDisconnectedFromActive(ClientDescriptor client) {
+    // noop
+  }
 
 }
