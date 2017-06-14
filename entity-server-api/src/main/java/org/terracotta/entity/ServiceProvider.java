@@ -105,4 +105,9 @@ public interface ServiceProvider extends StateDumpable {
    * @throws ServiceProviderCleanupException Describes any failures in the attempt to clear state.
    */
   void prepareForSynchronization() throws ServiceProviderCleanupException;
+
+  @Override
+  default void addStateTo(StateDumpCollector stateDumpCollector) {
+    stateDumpCollector.addState(this.getClass().getName(), this.toString());
+  }
 }
