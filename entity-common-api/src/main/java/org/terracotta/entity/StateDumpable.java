@@ -26,11 +26,11 @@ package org.terracotta.entity;
  */
 public interface StateDumpable {
   /**
-   * Dumps this component state into given {@link StateDumper}
+   * Adds this component state into given {@link StateDumpCollector}
    *
-   * @param stateDumper
+   * @param stateDumpCollector
    */
-  void dumpStateTo(StateDumper stateDumper);
+  void addStateTo(StateDumpCollector stateDumpCollector);
 
 }
 
