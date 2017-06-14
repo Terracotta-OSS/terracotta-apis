@@ -41,6 +41,8 @@ public interface StateDumpCollector {
 
    public static final String NAMESPACE_DELIMITER = ".";
 
+   public static final String JSON_STATE_KEY = "__JSON__STATE__KEY__";
+
   /**
    * Returns a namespace'd {@link StateDumpCollector}
    *
@@ -51,6 +53,8 @@ public interface StateDumpCollector {
 
   /**
    * Adds given key-value mapping to this {@link StateDumpCollector}
+   *
+   * <p>Note that a component's complete state can be added in JSON format using {@link #JSON_STATE_KEY} as {@code key} if needed.</p>
    *
    * @param key      key name with the value to be associated
    * @param value    the value
