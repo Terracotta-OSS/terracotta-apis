@@ -22,4 +22,11 @@ public interface InvokeContext {
    * @return txid, or -1 if unknown.
    */
   long getOldestTransactionId();
+
+  /**
+   * Does the client information (ClientDescriptor and transaction ids)
+   * represent an actual valid client endpoint information or is it merely a marker.
+   * @return true if the client information represents a real client.
+   */
+  boolean isValidClientInformation();
 }
