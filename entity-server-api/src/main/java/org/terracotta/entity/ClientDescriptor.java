@@ -18,11 +18,15 @@
  */
 package org.terracotta.entity;
 
+import java.io.Serializable;
+
 /**
  * An opaque token representing a specific entity instance on a specific client node.
- * This is used by server-side code to specifically communicate with or track connection status of a specific client-side
- * object instance.
+ * This is used by server-side code to specifically communicate with or track connection
+ * status of a specific client-side object instance. This is used both in actives
+ * and passives in certain cases.
  * Note that implementations are expected to provide a proper equals()/hashCode().
  */
-public interface ClientDescriptor {
+public interface ClientDescriptor extends Serializable {
+
 }
