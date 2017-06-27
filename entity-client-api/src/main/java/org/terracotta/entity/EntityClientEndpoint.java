@@ -55,25 +55,8 @@ public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityR
   InvocationBuilder<M, R> beginInvoke();
 
   /**
-   * Called when constructing the reconnect handshake, when the connection under this endpoint is re-established after
-   * restart or fail-over in order to ask if the entity on top of the endpoint has registered any special data to be sent
-   * to the server-side entity.
-   * 
-   * @return A non-null array of bytes to send.
-   */
-  byte[] getExtendedReconnectData();
-
-  /**
    * The instance will be unusable after this call.
    */
   @Override
   void close();
-
-  /**
-   * Called if the receiver was closed unexpectedly in a way which can't be reconnected.  This can be due to a failure to
-   * reconnect within the window, the restart of a non-persistent server, or client shutdown without previously having
-   * called close().
-   * The receiver is considered to be invalid, once this call is received.
-   */
-  void didCloseUnexpectedly();
 }
