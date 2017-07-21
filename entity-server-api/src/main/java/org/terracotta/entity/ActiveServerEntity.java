@@ -105,7 +105,8 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
 
   /**
    * <p>Called when a reconnect event has finished. Either all clients have reconnected, or
-   * the reconnect window has timed out.</p>
+   * the reconnect window has timed out. Every entity which received a handleReconnect() message
+   * will get a capstone reconnectFinished call.</p>
    */
   void reconnectFinished();
 
