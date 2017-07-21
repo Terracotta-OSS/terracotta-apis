@@ -29,4 +29,18 @@ public interface InvokeContext {
    * @return true if the client information represents a real client.
    */
   boolean isValidClientInformation();
+
+  /**
+   * Create a tight byte representation of a client descriptor
+   * @param clientDescriptor
+   * @return
+   */
+  byte[] getClientDescriptorAsBytes(ClientDescriptor clientDescriptor);
+
+  /**
+   * Create a client descriptor from a byte array representation.
+   * @param arr
+   * @return
+   */
+  ClientDescriptor createClientDescriptorFromBytes(byte[] arr);
 }
