@@ -104,6 +104,12 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
   void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData) throws ReconnectRejectedException;
 
   /**
+   * <p>Called when a reconnect event has finished. Either all clients have reconnected, or
+   * the reconnect window has timed out.</p>
+   */
+  void reconnectFinished();
+
+  /**
    * <p>Passes any information required to describe all entity data/state associated with the given concurrency key to a
    *  passive instance being synchronized to be consistent with the receiver.</p>
    * 
