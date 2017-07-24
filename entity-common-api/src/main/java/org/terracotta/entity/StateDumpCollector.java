@@ -61,5 +61,5 @@ public interface StateDumpCollector {
    *                 implementation dependent.   It can be reasonably expected that the underlying implementation can handle both lists and maps.
    * @throws NullPointerException if the key passed for state is null
    */
-  void addState(String key, String value);
+  void addState(String key, Object value);
 }
