@@ -57,7 +57,9 @@ public interface StateDumpCollector {
    * <p>Note that a component's complete state can be added in JSON format using {@link #JSON_STATE_KEY} as {@code key} if needed.</p>
    *
    * @param key      key name with the value to be associated
-   * @param value    the value
+   * @param value    the value as an object which is converted to a string for output in the cluster state.  How the value is converted is 
+   *                 implementation dependent.   It can be reasonably expected that the underlying implementation can handle both lists and maps.
+   * @throws NullPointerException if the key passed for state is null
    */
   void addState(String key, String value);
 }
