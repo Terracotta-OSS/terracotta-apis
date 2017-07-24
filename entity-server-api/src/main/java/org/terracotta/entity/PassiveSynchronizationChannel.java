@@ -30,7 +30,7 @@ public interface PassiveSynchronizationChannel<M extends EntityMessage> {
    * This payload will be deserialized by MessageCodec, on the passive (the concurrency key will be provided so it
    * need not be part of the payload).
    * 
-   * @param payload The entity-specific EntityMessage to send.
+   * @param message The entity-specific EntityMessage to send.
    */
   public void synchronizeToPassive(M message);
 }
