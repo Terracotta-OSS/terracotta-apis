@@ -27,6 +27,6 @@ import java.io.Serializable;
  * and passives in certain cases.
  * Note that implementations are expected to provide a proper equals()/hashCode().
  */
-public interface ClientDescriptor extends Serializable {
+public interface ClientDescriptor {
 
 }
