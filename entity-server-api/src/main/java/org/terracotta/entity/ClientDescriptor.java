@@ -29,4 +29,9 @@ import java.io.Serializable;
  */
 public interface ClientDescriptor {
 
+  /**
+   * Client source id for this client descriptor.
+   * @return
+   */
+  ClientSourceId getSourceId();
 }
