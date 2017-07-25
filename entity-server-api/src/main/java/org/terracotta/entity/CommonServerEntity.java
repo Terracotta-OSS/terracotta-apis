@@ -51,4 +51,11 @@ public interface CommonServerEntity<M extends EntityMessage, R extends EntityRes
   default void addStateTo(StateDumpCollector stateDumpCollector) {
     stateDumpCollector.addState(this.getClass().getName(), this.toString());
   }
+
+  /**
+   * Notify an entity that a source id is gone. This is is called outside of the
+   * request processor, so this can be used only for non message things.
+   * @param sourceId
+   */
+  void notifyDestroyed(ClientSourceId sourceId);
 }
