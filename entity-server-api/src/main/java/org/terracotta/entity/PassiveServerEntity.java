@@ -93,14 +93,4 @@ public interface PassiveServerEntity<M extends EntityMessage, R extends EntityRe
    *  where this call is executed.</p>
    */
   void endSyncConcurrencyKey(int concurrencyKey);
-  
-  /**
-   * Notify an entity that a particular client disconnected from the active.
-   * Noop if not overridden.
-   * @param client client
-   */
-  default void notifyClientDisconnectedFromActive(ClientDescriptor client) {
-    // noop
-  }
-
 }

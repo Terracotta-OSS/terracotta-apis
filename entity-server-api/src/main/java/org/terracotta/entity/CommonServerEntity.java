@@ -56,5 +56,7 @@ public interface CommonServerEntity<M extends EntityMessage, R extends EntityRes
    * Notify an entity that a source id is gone.
    * @param sourceId
    */
-  void notifyDestroyed(ClientSourceId sourceId);
+  default void notifyDestroyed(ClientSourceId sourceId) {
+    
+  }
 }
