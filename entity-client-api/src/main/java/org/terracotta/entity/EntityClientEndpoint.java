@@ -19,6 +19,7 @@
 package org.terracotta.entity;
 
 import java.io.Closeable;
+import java.util.concurrent.Future;
 
 
 /**
@@ -59,4 +60,12 @@ public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityR
    */
   @Override
   void close();
+  /**
+   *
+   * Release the endpoint asynchronously.  The endpoint will be released some time in the future.
+   * @return a future void that completes when all the endpoints invokes are flushed and the reference released from
+   * the server
+   *
+   */
+  Future<Void> release();
 }
