@@ -22,7 +22,9 @@ package org.terracotta.entity;
  * The interface which describes the abstraction over the channel which sends message payloads to the passive version of an
  * entity, on a passive server in the stripe.
  * Note that the instance is always specific to a entity and concurrency key and also can't be held beyond the scope of the
- * method where it is provided.
+ * method where it is provided. The hashcode()/equals() contract should be implemented in
+ * terms of the underlying passives it is talking to, and the concurrency it is related to
+ *
  */
 public interface PassiveSynchronizationChannel<M extends EntityMessage> {
   /**
