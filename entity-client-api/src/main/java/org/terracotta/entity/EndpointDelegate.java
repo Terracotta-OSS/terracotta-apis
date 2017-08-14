@@ -24,7 +24,7 @@ package org.terracotta.entity;
  * The interface associated with an EntityClientEndpoint to handle the events which enter the system at that object.
  * Typically, the implementor is the Entity associated with the end-point (hence Entity extends this interface).
  */
-public interface EndpointDelegate {
+public interface EndpointDelegate<R extends EntityResponse> {
   /**
    * Handle a message coming from the clustered implementation of the Entity.
    * Note that the message comes back as an EntityResponse object, maintaining consistency with the normal message flow:
@@ -33,7 +33,7 @@ public interface EndpointDelegate {
    *
    * @param messageFromServer The EntityResponse object sent by the server
    */
-  public void handleMessage(EntityResponse messageFromServer);
+  public void handleMessage(R messageFromServer);
 
   /**
    * Called on the thread handling the reconnect to ask if any additional data should be provided to the server-side entity,
