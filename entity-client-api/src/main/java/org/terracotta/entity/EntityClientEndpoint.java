@@ -44,7 +44,7 @@ public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityR
    * 
    * @param delegate The delegate to use for events originating within the receiver.
    */
-  void setDelegate(EndpointDelegate delegate);
+  void setDelegate(EndpointDelegate<R> delegate);
 
   /**
    * Called to start formulating an invocation to send to the remote server-side entity.
