@@ -65,6 +65,7 @@ public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityR
    * Release the endpoint asynchronously.  The endpoint will be released some time in the future.
    * @return a future void that completes when all the endpoints invokes are flushed and the reference released from
    * the server
+   * <i>The returned future can throw ExecutionException with a wrapped exception if there was some problem closing the entity</i>
    *
    */
   Future<Void> release();
