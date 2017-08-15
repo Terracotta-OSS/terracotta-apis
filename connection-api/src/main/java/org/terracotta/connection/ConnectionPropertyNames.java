@@ -33,4 +33,6 @@ public interface ConnectionPropertyNames {
   String CONNECTION_UUID = "connection.uuid";  
   /*  requesting no reconnect handling, only server connection */
   String CONNECTION_DISABLE_RECONNECT = "connection.noreconnect";
+  /*  request a specific connection type */
+  String CONNECTION_TYPE = "connection.type";
 }
