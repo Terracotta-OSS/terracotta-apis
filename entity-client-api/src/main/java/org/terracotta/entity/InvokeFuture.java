@@ -28,9 +28,9 @@ import org.terracotta.exception.EntityException;
  * <p>Used to return the results of invocations to the server, asynchronously.  This allows the client to block on the
  * result at a later time.</p>
  * 
- * @param <T> The underlying type wrapped by the instance
+ * @param <R> The underlying type wrapped by the instance
  */
-public interface InvokeFuture<T> {
+public interface InvokeFuture<R extends EntityResponse> {
   /**
    * @return True if the invocation has returned, false if it is still waiting
    */
@@ -49,7 +49,7 @@ public interface InvokeFuture<T> {
    * @throws InterruptedException If the call was interrupted while blocked
    * @throws EntityException The underlying error in the invocation, if unsuccessful
    */
-  public T get() throws InterruptedException, EntityException;
+  public R get() throws InterruptedException, EntityException;
 
   /**
    * <p>Returns the underlying result or throws the underlying exception, if satisfied.  Otherwise, blocks until it has
@@ -64,7 +64,7 @@ public interface InvokeFuture<T> {
    * @throws EntityException The underlying error in the invocation, if unsuccessful
    * @throws TimeoutException The get timed out before a response was received
    */
-  public T getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, EntityException, TimeoutException;
+  public R getWithTimeout(long timeout, TimeUnit unit) throws InterruptedException, EntityException, TimeoutException;
 
   /**
    *<p> Interrupts the underlying {@link #get()} or {@link #getWithTimeout(long, TimeUnit)}, if blocked.  Will result in
