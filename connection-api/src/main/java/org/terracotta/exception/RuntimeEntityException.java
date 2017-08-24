@@ -52,6 +52,25 @@ public abstract class RuntimeEntityException extends RuntimeException {
    */
   protected RuntimeEntityException(String className, String entityName, String description, Throwable cause) {
     super("Entity: " + className + ":" + entityName + " " + description, cause);
+    if (className == null) {
+      throw new NullPointerException("Entity type");
+    }
+    if (entityName == null) {
+      throw new NullPointerException("Entity name");
+    }
+    this.className = className;
+    this.entityName = entityName;
+    this.description = description;
+  }
+
+  protected RuntimeEntityException(String className, String entityName, String description) {
+    super("Entity: " + className + ":" + entityName + " " + description);
+    if (className == null) {
+      throw new NullPointerException("Entity type");
+    }
+    if (entityName == null) {
+      throw new NullPointerException("Entity name");
+    }
     this.className = className;
     this.entityName = entityName;
     this.description = description;
