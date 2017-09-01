@@ -53,4 +53,10 @@ public interface InvokeContext {
    * @return
    */
   ClientSourceId makeClientSourceId(long opaque);
+
+  /**
+   * Return the concurrency key pertaining to this invoke.
+   * @return concurrency key of invoke. 
+   */
+  int getConcurrencyKey();
 }
