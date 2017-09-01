@@ -18,6 +18,9 @@
  */
 package org.terracotta.entity;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 
 /**
  * <p>Instances of this type are used to construct an invocation from the client to the server-side entity.  Each method
@@ -169,4 +172,18 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * @throws MessageCodecException if there is an issue with encoding {@link M}/decoding {@link R}
    */
   public InvokeFuture<R> invoke() throws MessageCodecException;
+
+  /**
+   * <p>Same as invoke with added timeout parameters.  This timeout is used to specify a time limit
+   * for the client to send the message to the server which is separate from {@link InvokeFuture#getWithTimeout} 
+   * which specifies the time limit for the response to received from the server</p>
+   * 
+   * @param time
+   * @param units
+   * @return The asynchronous result of the invocation
+   * @throws java.lang.InterruptedException
+   * @throws java.util.concurrent.TimeoutException
+   * @throws MessageCodecException if there is an issue with encoding {@link M}/decoding {@link R}
+   */
+  public InvokeFuture<R> invokeWithTimeout(long time, TimeUnit units) throws InterruptedException, TimeoutException, MessageCodecException;
 }
