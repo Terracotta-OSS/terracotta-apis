@@ -42,7 +42,7 @@ import org.terracotta.exception.PermanentEntityException;
  *
  * @param <T> The entity type underlying this reference.
  * @param <C> The configuration type to use when creating this entity.
- * @param <U> User-data type to be passed to the {@link #fetchEntity()}.
+ * @param <U> User-data type to be passed to the {@link #fetchEntity(Object)}.
  */
 public interface EntityRef<T extends Entity, C, U> {
   /**
@@ -51,7 +51,7 @@ public interface EntityRef<T extends Entity, C, U> {
    *   If the entity already exists, the {@link EntityAlreadyExistsException} is  thrown immediately, whether or not
    *   the entity is fetched on any client.
    * </P>
-   * <P>
+   *  
    *   If a {@code create} is invoked while another {@code create} is happening, it will block until either:
    *   <UL>
    *     <LI>the other create completes and then throw an {@code EntityAlreadyExistsException}</LI>
@@ -59,8 +59,8 @@ public interface EntityRef<T extends Entity, C, U> {
    *   </UL>
    *   The contract provides guarantee that when multiple clients race to {@code create}, and in the absence of any
    *   {@link #destroy()} or server failure, when the {@code create} method completes (returns or throws), a subsequent
-   *   {@link #fetchEntity()} will not throw an {@link EntityNotFoundException}.
-   * </P>
+   *   {@link #fetchEntity(Object)} will not throw an {@link EntityNotFoundException}.
+   * 
    *
    * @param configuration configuration to be applied to the entity
    *
@@ -75,6 +75,7 @@ public interface EntityRef<T extends Entity, C, U> {
    * reconfigure the entity with the given configuration.
    *
    * @param configuration configuration to be applied to the entity
+   * @return the old configuration that has been replaced
    * @throws EntityNotProvidedException The service providing T doesn't exist on either the client or the server
    * @throws EntityNotFoundException No entity with this type and name could be found
    * @throws EntityConfigurationException The entity could not be reconfigured with the given configuration.

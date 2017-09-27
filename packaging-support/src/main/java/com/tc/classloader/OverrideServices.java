@@ -19,21 +19,16 @@
 package com.tc.classloader;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Tagging a Service type with an override causes the classloader to ignore the 
- * overridden types for the type provided.  The value is a fully qualified class name 
- * which is to be overridden.
+ * Container for multiple OverrideServices.
  * 
  */
 @Target( ElementType.TYPE )
 @Retention( RetentionPolicy.RUNTIME )
-@Repeatable( OverrideServices.class )
-public @interface OverrideService {
-  String[] types() default {};
-  String value() default "";
+public @interface OverrideServices {
+  OverrideService[] value();
 }
