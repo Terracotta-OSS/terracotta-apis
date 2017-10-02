@@ -34,8 +34,8 @@ public class ConnectionClosedException extends RuntimeEntityException {
    * 
    * @param description The description of the exception.
    */
-  public ConnectionClosedException(String description) {
-    super(null, null, description, null);
+  public ConnectionClosedException(String className, String entityName, String description) {
+    super(className, entityName, description);
   }
 
   /**
@@ -44,7 +44,7 @@ public class ConnectionClosedException extends RuntimeEntityException {
    * @param description The description of the exception.
    * @param cause The underlying cause of the exception.
    */
-  public ConnectionClosedException(String description, Throwable cause) {
-    super(null, null, description, cause);
+  public ConnectionClosedException(String className, String entityName, String description, Throwable cause) {
+    super(className, entityName, description, cause);
   }
 }

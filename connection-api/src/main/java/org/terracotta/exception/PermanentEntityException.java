@@ -37,7 +37,7 @@ public class PermanentEntityException extends RuntimeEntityException {
    * @param entityName name of the entity being deleted
    */
   public PermanentEntityException(String className, String entityName) {
-    super(className, entityName, "permanent entity", null);
+    super(className, entityName, "permanent entity");
   }
 
   /**
