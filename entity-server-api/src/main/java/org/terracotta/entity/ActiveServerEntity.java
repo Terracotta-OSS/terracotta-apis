@@ -102,7 +102,18 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * 
    */
   void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData) throws ReconnectRejectedException;
-
+  /**
+   * <p>This method will be called in a nonblocking manner as a first step in synchronizing a key of a passive entity.</p>
+   * 
+   * <p>Note: this method is called in a completely nonblocking manner.  All messages associated with this key can run concurrently
+   * in invoke with this method call, however no other synchronization calls will run until this method completes.</p>
+   * 
+   * @param syncChannel The output channel to the passive
+   * @param concurrencyKey The key of the data to be synchronized
+   */
+  default void prepareKeyForSynchronizeOnPassive(PassiveSynchronizationChannel<M> syncChannel, int concurrencyKey) {
+    
+  }
   /**
    * <p>Passes any information required to describe all entity data/state associated with the given concurrency key to a
    *  passive instance being synchronized to be consistent with the receiver.</p>
