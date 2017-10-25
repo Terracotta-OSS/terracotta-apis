@@ -111,7 +111,13 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param concurrencyKey The key of the data to be synchronized
    */
   void synchronizeKeyToPassive(PassiveSynchronizationChannel<M> syncChannel, int concurrencyKey);
-  
+  /**
+   * Called at the start of reconnect of a new active entity.  The reconnect handler receives all reconnect data
+   * from the clients during a fail-over event.
+   * 
+   * @return a handler to receive arbitrary reconnect data from clients.  If null is returned, all reconnect attempts 
+   * will be rejected and the connection associated with this entity fetch will be rejected
+   */
   ReconnectHandler startReconnect();
   
   interface ReconnectHandler extends AutoCloseable {
@@ -129,10 +135,13 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
      * 
      */
     void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData) throws ReconnectRejectedException;
-
+    /**
+     * called after all clients that have reconnected to the entity.  Empty default implementation provided so a functional
+     * interface can be used if desired
+     */
     @Override
-    void close();
-    
-    
+    default void close() {
+      
+    }
   }
 }
