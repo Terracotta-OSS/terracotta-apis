@@ -58,7 +58,7 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param message The message from a client
    * @return possible return value
    */
-  default R invokeActive(ActiveInvokeContext context, M message) throws EntityUserException {
+  default R invokeActive(ActiveInvokeContext<R> context, M message) throws EntityUserException {
     return invoke(context.getClientDescriptor(), message);
   }
 

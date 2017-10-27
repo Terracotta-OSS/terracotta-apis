@@ -18,6 +18,7 @@
  */
 package org.terracotta.entity;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -125,7 +126,37 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * @return Itself
    */
   public InvocationBuilder<M, R> message(M message);
-
+  /**
+   * Set the response handler for the invocation.  Multiple responses to an invocation 
+   * can be sent by the server to the client via {@link org.terracotta.entity.ActiveInvokeChannel#sendResponse(EntityResponse)}.
+   * This handler is used to process those extra responses
+   * @param consumer a Response handler for the invocation
+   * @return Itself
+   */
+  public InvocationBuilder<M, R> monitor(InvokeMonitor<R> consumer);
+  /**
+   * An executor used to deliver messages to the InvokeMonitor.  The default delivery thread
+   * is a the platform thread used to report all message responses to all invocations.  As a 
+   * result, no blocking operations or message related operations can occur directly in the 
+   * handler or deadlock can occur.  Use the executor to specify the threading behavior for 
+   * callback delivery.
+   * @param useForMonitorDelivery Executor used for InvokeMonitor response delivery
+   * @return 
+   */
+  public InvocationBuilder<M, R> withExecutor(Executor useForMonitorDelivery);
+  /**
+   * Changes the response order of the invoke.  Normally, {@link InvokeFuture#get()} 
+   * will return only the result of the original message sent to the server as a result of 
+   * {@link org.terracotta.entity.ActiveServerEntity#invokeActive(ActiveInvokeContext, EntityMessage)}
+   * if this option is selected, the value of {@link InvokeFuture#get()} is completely 
+   * time order based.  The value returned by {@link InvokeFuture#get()} will be the last
+   * {@link EntityResponse} delivered to the invocation before the retire regardless of whether 
+   * the {@link EntityResponse} was the result of a return from {@link org.terracotta.entity.ActiveServerEntity#invokeActive(ActiveInvokeContext, EntityMessage)}
+   * or a {@link org.terracotta.entity.ActiveInvokeChannel#sendResponse(EntityResponse)} call.
+   * All other responses will be delivered to the {@link InvokeMonitor} if registered.
+   * @return 
+   */
+  public InvocationBuilder<M, R> asDeferredResponse();
   /**
    * <p>By default, the {@link get()} blocks until the RETIRED ack is received (meaning that this message will NOT be
    * re-sent).</p>
