@@ -80,67 +80,6 @@ public interface IEntityMessenger<M extends EntityMessage, R extends EntityRespo
    * @throws MessageCodecException The message could not be serialized.
    */
   void messageSelfAndDeferRetirement(M originalMessageToDefer, M newMessageToSchedule, Consumer<MessageResponse<R>> response) throws MessageCodecException;
-
-  /**
-   * Same as messageSelfAfterDelay with no callback.
-   * 
-   * @param message
-   * @param millisBeforeSend
-   * @return
-   * @throws MessageCodecException 
-   */
-  ScheduledToken messageSelfAfterDelay(M message, long millisBeforeSend) throws MessageCodecException;
-  /**
-   * Requests that the given message be send to the entity instance after millisBeforeSend have elapsed.The message will be sent once, and may arrive late but won't arrive before millisBeforeSend have elapsed.
-   * The message will not arrive if the server restarts or the entity is destroyed before it was due.
-   * 
-   * @param message The new message to send.
-   * @param response A callback used when the result of the invoke is available.  NOTE: callback delivered
-   * on the thread which the invoke occurs
-   * @param millisBeforeSend The minimum number of milliseconds which must pass before message should be delivered.
-   * @return A token to describe this delayed send which can be used to cancel it.
-   * @throws MessageCodecException The message could not be serialized.
-   */
-  ScheduledToken messageSelfAfterDelay(M message, Consumer<MessageResponse<R>> response, long millisBeforeSend) throws MessageCodecException;
-  /**
-   * Same as messageSelfPeriodically with no callback.
-   * 
-   * @param message
-   * @param millisBetweenSends
-   * @return
-   * @throws MessageCodecException 
-   */
-  ScheduledToken messageSelfPeriodically(M message, long millisBetweenSends) throws MessageCodecException;
-  /**
-   * Requests that the given message be send to the entity instance every millisBetweenSends milliseconds.The message will be sent continuously with the first arriving after millisBetweenSends and then again after each
-   * millisBetweenSends milliseconds.
-   * Note that drift in the actual delivery time will not change the scheduled time of
-   * each following message delivery at N*millisBetweenSends milliseconds from when this call was made.
-   * Note that any message send may arrive late but won't arrive before N*millisBetweenSends have elapsed.
-   * This message will continue to be re-sent until it is canceled, the server restarts, or the entity is destroyed.
-   * 
-   * @param message The new message to send.
-   * @param response A callback used when the result of the invoke is available.  NOTE: callback delivered
-   * on the thread which the invoke occurs
-   * @param millisBetweenSends The minimum number of milliseconds which must pass before each message should be delivered.
-   * @return A token to describe this delayed send which can be used to cancel it.
-   * @throws MessageCodecException The message could not be serialized.
-   */
-  ScheduledToken messageSelfPeriodically(M message, Consumer<MessageResponse<R>> response, long millisBetweenSends) throws MessageCodecException;
-
-  /**
-   * Called to cancel a previously scheduled delayed or periodic message.
-   * 
-   * @param token The token previously received for a scheduled message.
-   */
-  void cancelTimedMessage(ScheduledToken token);
-
-
-  /**
-   * An opaque interface used as the token type for canceling previously scheduled messages.
-   */
-  public interface ScheduledToken {
-  }
   /**
    * If a response callback is registered, the response will take this form.  
    * @param <T> type of the message response

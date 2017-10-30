@@ -18,11 +18,13 @@
  */
 package org.terracotta.entity;
 
-import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import org.terracotta.entity.IEntityMessenger.MessageResponse;
 
-public interface ExplicitRetirementHandle {
+public interface ExplicitRetirementHandle<R extends EntityResponse> {
   String getTag();
 
   void release() throws MessageCodecException;
 
+  void release(Consumer<MessageResponse<R>> consumer) throws MessageCodecException;
 }

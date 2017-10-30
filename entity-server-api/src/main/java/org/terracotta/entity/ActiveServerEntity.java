@@ -58,7 +58,7 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param message The message from a client
    * @return possible return value
    */
-  default R invokeActive(ActiveInvokeContext context, M message) throws EntityUserException {
+  default R invokeActive(ActiveInvokeContext<R> context, M message) throws EntityUserException {
     return invoke(context.getClientDescriptor(), message);
   }
 
@@ -89,20 +89,6 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
   void loadExisting();
   
   /**
-   * <p>Called during client reconnect to allow the client to pass arbitrary extra data to the server-side entity so it can
-   *  rebuild any in-memory state it had, related to the connected client.</p>
-   * <p>Note that this is called AFTER connected() is called for this clientDescriptor.</p>
-   * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
-   *  respect to all other messages enqueued for the entity.</p>
-   * 
-   * @param clientDescriptor The client-side instance which reconnected
-   * @param extendedReconnectData Arbitrary data sent by the client-side instance to rebuild the server-side in-memory state 
-   * @throws ReconnectRejectedException When a reconnect by the client is not supported by the server, throwing this exception
-   * forces the disconnect of the Connection associated with the entity attempting reconnect
-   * 
-   */
-  void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData) throws ReconnectRejectedException;
-  /**
    * <p>This method will be called in a nonblocking manner as a first step in synchronizing a key of a passive entity.</p>
    * 
    * <p>Note: this method is called in a completely nonblocking manner.  All messages associated with this key can run concurrently
@@ -125,4 +111,37 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
    * @param concurrencyKey The key of the data to be synchronized
    */
   void synchronizeKeyToPassive(PassiveSynchronizationChannel<M> syncChannel, int concurrencyKey);
+  /**
+   * Called at the start of reconnect of a new active entity.  The reconnect handler receives all reconnect data
+   * from the clients during a fail-over event.
+   * 
+   * @return a handler to receive arbitrary reconnect data from clients.  If null is returned, all reconnect attempts 
+   * will be rejected and the connection associated with this entity fetch will be rejected
+   */
+  ReconnectHandler startReconnect();
+  
+  interface ReconnectHandler extends AutoCloseable {
+    /**
+     * <p>Called during client reconnect to allow the client to pass arbitrary extra data to the server-side entity so it can
+     *  rebuild any in-memory state it had, related to the connected client.</p>
+     * <p>Note that this is called AFTER connected() is called for this clientDescriptor.</p>
+     * <p>Note that this call is made on the {@link ConcurrencyStrategy#MANAGEMENT_KEY}, meaning that it is serialized with
+     *  respect to all other messages enqueued for the entity.</p>
+     * 
+     * @param clientDescriptor The client-side instance which reconnected
+     * @param extendedReconnectData Arbitrary data sent by the client-side instance to rebuild the server-side in-memory state 
+     * @throws ReconnectRejectedException When a reconnect by the client is not supported by the server, throwing this exception
+     * forces the disconnect of the Connection associated with the entity attempting reconnect
+     * 
+     */
+    void handleReconnect(ClientDescriptor clientDescriptor, byte[] extendedReconnectData) throws ReconnectRejectedException;
+    /**
+     * called after all clients that have reconnected to the entity.  Empty default implementation provided so a functional
+     * interface can be used if desired
+     */
+    @Override
+    default void close() {
+      
+    }
+  }
 }

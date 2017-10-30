@@ -18,12 +18,21 @@
  */
 package org.terracotta.entity;
 
-public interface ActiveInvokeContext extends InvokeContext {
+public interface ActiveInvokeContext<R extends EntityResponse> extends InvokeContext {
   /**
    * source instance from which the invocation originates.
    *
    * @return descriptor
    */
   ClientDescriptor getClientDescriptor();
+  /**
+   * Opens a channel to consumer of this context.If the context is associated with a 
+   *  client side invoke, this will open a channel to the InvokeMonitor on the client.  If this context is associated with a server invoke, a channel is opened to the 
+   *  consumer of the message.  The channel MUST be closed or an exception set or the 
+   *  message will never be retired from the system and result in a resource leak.
+   *
+   * @return a channel to send messages to the originator of the message associated with this context
+   */
+  ActiveInvokeChannel<R> openInvokeChannel();
 
 }

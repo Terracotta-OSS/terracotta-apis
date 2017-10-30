@@ -19,8 +19,6 @@
 
 package org.terracotta.entity;
 
-import java.util.concurrent.Future;
-
 import com.tc.classloader.CommonComponent;
 
 
@@ -49,19 +47,4 @@ public interface ClientCommunicator {
    * @param clientDescriptor The client side instance the connection to be closed is associated with
    */
   void closeClientConnection(ClientDescriptor clientDescriptor);
-
-  /**
-   * Send a message getting an async completion back.
-   *
-   * NOTE: async completion back is extremely dangerous.  Any wait on the server
-   * for client completion can have disastrous effects on the server.  DO NOT USE
-   * THIS METHOD
-   * 
-   * @param clientDescriptor The client side instance to send to
-   * @param message The message to send
-   * @return Future representing when the client finishes with and acknowledges the sent message.
-   * @throws MessageCodecException If the message could not be serialized by the provided codec
-   */
-  @Deprecated
-  Future<Void> send(ClientDescriptor clientDescriptor, EntityResponse message) throws MessageCodecException;
 }
