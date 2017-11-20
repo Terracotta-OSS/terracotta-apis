@@ -19,6 +19,7 @@
 package org.terracotta.connection;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
@@ -36,6 +37,8 @@ public final class ConnectionFactory {
    * @throws ConnectionException if there is an error while attempting to connect
    */
   public static Connection connect(URI uri, Properties properties) throws ConnectionException {
+    validateURI(uri);
+
     ServiceLoader<ConnectionService> serviceLoader = ServiceLoader.load(ConnectionService.class,
         ConnectionFactory.class.getClassLoader());
     for (ConnectionService connectionService : serviceLoader) {
@@ -44,5 +47,13 @@ public final class ConnectionFactory {
       }
     }
     throw new IllegalArgumentException("Unknown URI " + uri);
+  }
+
+  private static void validateURI(URI uri) throws ConnectionException {
+    try {
+      URIUtils.validateTerracottaURI(uri);
+    } catch (URISyntaxException e) {
+      throw new ConnectionException(e);
+    }
   }
 }
