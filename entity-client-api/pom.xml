@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.terracotta.internal</groupId>
     <artifactId>terracotta-apis-root</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4.0-pre7</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
