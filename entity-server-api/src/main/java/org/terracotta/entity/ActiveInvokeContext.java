@@ -32,6 +32,8 @@ public interface ActiveInvokeContext<R extends EntityResponse> extends InvokeCon
    *  message will never be retired from the system and result in a resource leak.
    *
    * @return a channel to send messages to the originator of the message associated with this context
+   * 
+   * @throws java.lang.IllegalStateException if the message has already been retired
    */
   ActiveInvokeChannel<R> openInvokeChannel();
 
