@@ -51,7 +51,7 @@ public abstract class RuntimeEntityException extends RuntimeException {
    * @param cause The underlying cause of the exception, null if nothing appropriate
    */
   protected RuntimeEntityException(String className, String entityName, String description, Throwable cause) {
-    super("Entity: " + className + ":" + entityName + " " + description, cause);
+    super(className != null && entityName != null ? "Entity: " + className + ":" + entityName + " " + description : description, cause);
     this.className = className;
     this.entityName = entityName;
     this.description = description;
