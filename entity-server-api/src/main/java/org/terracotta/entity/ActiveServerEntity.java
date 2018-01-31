@@ -100,6 +100,21 @@ public interface ActiveServerEntity<M extends EntityMessage, R extends EntityRes
   default void prepareKeyForSynchronizeOnPassive(PassiveSynchronizationChannel<M> syncChannel, int concurrencyKey) {
     
   }
+
+  /**
+   * <p>This method will be called to determine the desired maximum concurrent threads to use for synchronizing the passive entity.
+   * This is a measure of the level and intensity of resources used by the active entity to do the passive sync and this gives
+   * a hint to the system on how to effectively balance resource usage for client activity on the active entity while doing the
+   * passive sync.</p>
+   *
+   * <p>Note: Setting this value only defines the desired upper limit for this concurrency that the entity can handle.
+   * Based on available resources, it may be decided to use a value that is lower than this. The lowest limit and the
+   * default is 1</p>
+   */
+  default int maxSyncConcurrency() {
+    return 1;
+  }
+
   /**
    * <p>Passes any information required to describe all entity data/state associated with the given concurrency key to a
    *  passive instance being synchronized to be consistent with the receiver.</p>
