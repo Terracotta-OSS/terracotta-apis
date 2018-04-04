@@ -19,16 +19,21 @@
 
 package org.terracotta.connection;
 
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Properties;
 
 /**
- * Service for establishing connections. The expectation is that these steps will be followed:
- *
- * 1. handlesURI() will be called with a candidate URI to see if this service handles it
- * 2. if handlesURI() returned true, connect() will be called passing in the URI again and user specified properties.
- *
- * If any error occurs during the connection process, a ConnectionException should be thrown.
+ * Service for establishing connections. The expectation is that either of the two ways will be used:
+ * <ul>
+ * <li> {@link #handlesURI(URI)} will be called with a candidate URI to see if this service handles it. If {@code handlesURI}
+ * returns true, {@code connect()} will be called passing in the URI again along with the user-specified properties. OR,</li>
+ * <li> {@link #handlesConnectionType(String)} will be called with a candidate connection type to see if this service handles it.
+ * If {@code handlesConnectionType} returns true, {@code connect()} will be called passing in the servers along with the
+ * user-specified properties.</li>
+ * </ul>
+ * <p>
+ * If any error occurs during the connection process, a {@link ConnectionException} will be thrown.
  *
  * @author twu
  */
@@ -43,6 +48,14 @@ public interface ConnectionService {
   boolean handlesURI(URI uri);
 
   /**
+   * Check if the connection with the given type is handled by this ConnectionService.
+   *
+   * @param connectionType connectionType to check
+   * @return true if supported
+   */
+  boolean handlesConnectionType(String connectionType);
+
+  /**
    * Establish a connection to the given URI and with the specified properties. handlesURI() must be called on the URI
    * prior to connect(). Calling connect() on an unverified URI can lead to unspecified behavior.
    *
@@ -52,4 +65,15 @@ public interface ConnectionService {
    * @throws ConnectionException on connection failure
    */
   Connection connect(URI uri, Properties properties) throws ConnectionException;
+
+  /**
+   * Establish a connection to the given servers using the specified properties. handlesConnectionType() must be
+   * called with the type prior to connect(). Calling connect() on an unverified type can lead to unspecified behavior.
+   *
+   * @param servers servers to connect to
+   * @param properties user specified implementation specific properties
+   * @return established connection
+   * @throws ConnectionException on connection failure
+   */
+  Connection connect(Iterable<InetSocketAddress> servers, Properties properties) throws ConnectionException;
 }
