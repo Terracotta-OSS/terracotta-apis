@@ -26,11 +26,26 @@ import java.util.Collection;
  */
 public interface PlatformConfiguration {
   /**
-   * Gets configured name for this server
+   * Gets the configured name for this server
    *
    * @return configured server name
    */
   String getServerName();
+
+  /**
+   * Gets the configured host for this server
+   *
+   * @return configured host
+   */
+  public String getHost();
+
+  /**
+   * Gets the configured tsa port for this server
+   *
+   * @return configured port
+   */
+  public int getTsaPort();
+
   /**
    * The extended configuration objects plugged into the server
    * 
