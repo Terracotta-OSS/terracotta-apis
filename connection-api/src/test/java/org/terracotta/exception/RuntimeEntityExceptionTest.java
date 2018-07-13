@@ -7,10 +7,14 @@ package org.terracotta.exception;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  *
@@ -44,8 +48,8 @@ public class RuntimeEntityExceptionTest {
   public void testEntityInfoNotProvided() {
     String description = "this is a test";
     RuntimeEntityExceptionImpl impl = new RuntimeEntityExceptionImpl(null, null, description);
-    Assertions.assertEquals(description, impl.getMessage());
-    Assertions.assertEquals(description, impl.getDescription());
+    assertEquals(description, impl.getMessage());
+    assertEquals(description, impl.getDescription());
   }
 
     /**
@@ -57,11 +61,11 @@ public class RuntimeEntityExceptionTest {
     String clz = "org.terracotta.SuperEntity";
     String name =  "test";
     RuntimeEntityExceptionImpl impl = new RuntimeEntityExceptionImpl(clz, name, description);
-    Assertions.assertNotEquals(description, impl.getMessage());
-    Assertions.assertEquals(clz, impl.getClassName());
-    Assertions.assertEquals(name, impl.getEntityName());
-    Assertions.assertTrue(impl.getMessage().contains(clz));
-    Assertions.assertTrue(impl.getMessage().contains(name));
+    assertNotEquals(description, impl.getMessage());
+    assertEquals(clz, impl.getClassName());
+    assertEquals(name, impl.getEntityName());
+    assertTrue(impl.getMessage().contains(clz));
+    assertTrue(impl.getMessage().contains(name));
   }
 
   public class RuntimeEntityExceptionImpl extends RuntimeEntityException {
