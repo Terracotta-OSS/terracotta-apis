@@ -31,6 +31,12 @@ public interface PlatformService {
    * Dumps platform state into logs
    */
   void dumpPlatformState();
+
+  /**
+   * Stops the server
+   */
+  void stopPlatform();
+
   /**
    * Provides the raw config file from server startup
    */
