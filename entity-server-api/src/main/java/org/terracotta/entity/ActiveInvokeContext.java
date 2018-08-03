@@ -18,6 +18,8 @@
  */
 package org.terracotta.entity;
 
+import java.util.Properties;
+
 public interface ActiveInvokeContext<R extends EntityResponse> extends InvokeContext {
   /**
    * source instance from which the invocation originates.
@@ -34,5 +36,12 @@ public interface ActiveInvokeContext<R extends EntityResponse> extends InvokeCon
    * @return a channel to send messages to the originator of the message associated with this context
    */
   ActiveInvokeChannel<R> openInvokeChannel();
+  /**
+   * Returns a map of client source information provided by the implementation.  Examples
+   * might be the remote IP address of the source or the type of connection used to issue 
+   * the command.
+   * @return a properties map with implementation provided information
+   */
+  Properties getClientSourceProperties();
 
 }
