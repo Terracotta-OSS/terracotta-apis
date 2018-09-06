@@ -19,8 +19,10 @@
 
 package org.terracotta.connection;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 /**
@@ -53,7 +55,9 @@ public interface ConnectionService {
    * @param connectionType connectionType to check
    * @return true if supported
    */
-  boolean handlesConnectionType(String connectionType);
+  default boolean handlesConnectionType(String connectionType) {
+      return true;
+  }
 
   /**
    * Establish a connection to the given URI and with the specified properties. handlesURI() must be called on the URI
@@ -75,5 +79,22 @@ public interface ConnectionService {
    * @return established connection
    * @throws ConnectionException on connection failure
    */
-  Connection connect(Iterable<InetSocketAddress> servers, Properties properties) throws ConnectionException;
+  default Connection connect(Iterable<InetSocketAddress> servers, Properties properties) throws ConnectionException {
+      StringBuilder b = new StringBuilder("terracotta://");
+      for (InetSocketAddress a : servers) {
+          b.append(a.getHostString());
+          b.append(':');
+          b.append(a.getPort());
+          b.append(',');
+      }
+      try {
+          if (b.length() > 0) {
+            return connect(new URI(b.substring(0, b.length()-1)), properties);
+          } else {
+              throw new ConnectionException(new IOException("no servers specified"));
+          }
+      } catch (URISyntaxException u) {
+          throw new ConnectionException(u);
+      }
+  }
 }

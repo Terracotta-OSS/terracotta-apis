@@ -42,6 +42,8 @@ public interface ActiveInvokeContext<R extends EntityResponse> extends InvokeCon
    * the command.
    * @return a properties map with implementation provided information
    */
-  Properties getClientSourceProperties();
+  default Properties getClientSourceProperties() {
+      return new Properties();
+  }
 
 }
