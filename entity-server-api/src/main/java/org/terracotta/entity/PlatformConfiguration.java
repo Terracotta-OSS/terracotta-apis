@@ -37,14 +37,18 @@ public interface PlatformConfiguration {
    *
    * @return configured host
    */
-  public String getHost();
+  default String getHost() {
+      return "localhost";
+  }
 
   /**
    * Gets the configured tsa port for this server
    *
    * @return configured port
    */
-  public int getTsaPort();
+  default int getTsaPort() {
+      return 9510;
+  }
 
   /**
    * The extended configuration objects plugged into the server
