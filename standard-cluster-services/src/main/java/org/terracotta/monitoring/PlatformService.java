@@ -36,6 +36,19 @@ public interface PlatformService {
    * Stops the server
    */
   void stopPlatform();
+  
+  /**
+   * A Fatal error has occurred.Server will exit.
+   * 
+   * @param description of the error
+   */
+  void fatalError(String description);
+  /**
+   * Server uptime.
+   * 
+   * @return the milliseconds that have passed since the server process was started
+   */
+  long uptime();
 
   /**
    * Provides the raw config file from server startup
