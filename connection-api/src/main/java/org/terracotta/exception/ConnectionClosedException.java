@@ -28,14 +28,16 @@ package org.terracotta.exception;
  */
 public class ConnectionClosedException extends RuntimeEntityException {
   private static final long serialVersionUID = 1L;
+  private final boolean wasSent;
 
   /**
    * Creates a new instance with the given description.
    * 
    * @param description The description of the exception.
    */
-  public ConnectionClosedException(String description) {
+  public ConnectionClosedException(boolean wasSent, String description) {
     super(null, null, description, null);
+    this.wasSent = wasSent;
   }
 
   /**
@@ -44,7 +46,18 @@ public class ConnectionClosedException extends RuntimeEntityException {
    * @param description The description of the exception.
    * @param cause The underlying cause of the exception.
    */
-  public ConnectionClosedException(String description, Throwable cause) {
+  public ConnectionClosedException(boolean wasSent, String description, Throwable cause) {
     super(null, null, description, cause);
+    this.wasSent = wasSent;
+  }
+  
+  /**
+   * Designates whether the message associated with this exception was sent to the cluster.
+   * 
+   * @return true of the message was sent to the server
+   */
+  
+  public boolean messageWasNotSent() {
+    return !this.wasSent;
   }
 }

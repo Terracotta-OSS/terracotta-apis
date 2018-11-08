@@ -32,6 +32,12 @@ import java.util.function.Consumer;
 @CommonComponent
 public interface IEntityMessenger<M extends EntityMessage, R extends EntityResponse> {
   /**
+   * Sends a message to delete the entity.  This method should be called from the 
+   * {@link org.terracotta.entity.ActiveServerEntity#disconnected(org.terracotta.entity.ClientDescriptor) disconnected}
+   * body or it will fail due to client references still on the entity.
+   */
+  void deleteSelf();
+  /**
    * Same as the messageSelf will no callback.
    * 
    * @param message
