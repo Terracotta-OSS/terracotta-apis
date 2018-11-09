@@ -29,32 +29,39 @@ package org.terracotta.exception;
 public class ConnectionClosedException extends RuntimeEntityException {
   private static final long serialVersionUID = 1L;
   private final boolean wasSent;
-
-  /**
-   * Creates a new instance with the given description.
-   * 
-   * @param description The description of the exception.
-   */
-  public ConnectionClosedException(boolean wasSent, String description) {
-    super(null, null, description, null);
-    this.wasSent = wasSent;
+  
+  public ConnectionClosedException(String description) {
+    this(null, null, description, true, null);
   }
 
-  /**
-   * Creates a new instance with the given description and underlying cause.
-   * 
-   * @param description The description of the exception.
-   * @param cause The underlying cause of the exception.
-   */
+  public ConnectionClosedException(boolean wasSent, String description) {
+    this(null, null, description, wasSent, null);
+  }
+
   public ConnectionClosedException(boolean wasSent, String description, Throwable cause) {
-    super(null, null, description, cause);
-    this.wasSent = wasSent;
+    this(null, null, description, wasSent, cause);
   }
   
+  public ConnectionClosedException(String description, Throwable cause) {
+    this(null, null, description, true, cause);
+  }  
+  /**
+   * Thrown went a connection was closed from under a message that has not yet returned an
+   * answer from the cluster
+   * @param type entity type
+   * @param name entity name
+   * @param description extra information about the exception
+   * @param wasSent was the message sent to the remote cluster
+   * @param cause the root cause of the exception
+   */
+  public ConnectionClosedException(String type, String name, String description, boolean wasSent, Throwable cause) {
+    super(type, name, description, cause);
+    this.wasSent = wasSent;
+  }
   /**
    * Designates whether the message associated with this exception was sent to the cluster.
    * 
-   * @return true of the message was sent to the server
+   * @return true of the message was sent not to the server
    */
   
   public boolean messageWasNotSent() {
