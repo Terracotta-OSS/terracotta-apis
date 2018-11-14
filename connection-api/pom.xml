@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.terracotta.internal</groupId>
     <artifactId>terracotta-apis-root</artifactId>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.6.0-pre1</version>
   </parent>
 
   <groupId>org.terracotta</groupId>
