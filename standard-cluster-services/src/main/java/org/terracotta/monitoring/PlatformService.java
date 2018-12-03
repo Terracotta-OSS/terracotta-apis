@@ -54,4 +54,42 @@ public interface PlatformService {
    * Provides the raw config file from server startup
    */
   InputStream getPlatformConfiguration();
+
+  /**
+   * Stops the server if it is in any of the passive states
+   * <p>
+   * Based on the {@code restartMode} argument, the server should either bounce or just halt.
+   * Currently, it is assumed that the halt may be abrupt and it may not clean up or empty any queues.
+   *
+   * @param restartMode mode in which the system needs to restart. STOP_ONLY means halt without restarting
+   *
+   * @throws PlatformStopException when platform stop fails for some reason
+   */
+  void stopPlatformIfPassive(RestartMode restartMode) throws PlatformStopException;
+
+  /**
+   * Stops the server if it is in any of the active states (including active suspended)
+   * <p>
+   * Based on the {@code restartMode} argument, the server should either bounce or just halt.
+   * Currently, it is assumed that the halt may be abrupt and it may not clean up or empty any queues.
+   *
+   * @param restartMode mode in which the system needs to restart. STOP_ONLY means halt without restarting
+   *
+   * @throws PlatformStopException when platform stop fails for some reason
+   */
+  void stopPlatformIfActive(RestartMode restartMode) throws PlatformStopException;
+
+  /**
+   * Stops the server.
+   * <p>
+   * Based on the {@code restartMode} argument, the server should either bounce or just halt.
+   * Currently, it is assumed that the halt may be abrupt and it may not clean up or empty any queues.
+   *
+   * @param restartMode mode in which the system needs to restart. STOP_ONLY means halt without restarting
+   */
+  void stopPlatform(RestartMode restartMode);
+
+  enum  RestartMode {
+    STOP_ONLY, STOP_AND_RESTART
+  }
 }
