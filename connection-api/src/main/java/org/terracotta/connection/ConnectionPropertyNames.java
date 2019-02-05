@@ -35,4 +35,6 @@ public interface ConnectionPropertyNames {
   String CONNECTION_DISABLE_RECONNECT = "connection.noreconnect";
   /*  request a specific connection type */
   String CONNECTION_TYPE = "connection.type";
+  /*  request a specific connection type */
+  String CONNECTION_ASYNC = "connection.async";
 }
