@@ -154,8 +154,15 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * the {@link EntityResponse} was the result of a return from {@link org.terracotta.entity.ActiveServerEntity#invokeActive(ActiveInvokeContext, EntityMessage)}
    * or a {@link org.terracotta.entity.ActiveInvokeChannel#sendResponse(EntityResponse)} call.
    * All other responses will be delivered to the {@link InvokeMonitor} if registered.
+   * 
+   * Update: This method has been deprecated as it does not provide a reasonable, predictable 
+   * method of handling multiple messages returned from an invoke.  Now, only the result of the 
+   * server invoke will be returned via {@link InvokeFuture#get()}.  Consider using 
+   * {@link #blockGetOnRetire(boolean)} if it is desired to have {@link InvokeFuture#get()}  
+   * return only after the {@link org.terracotta.entity.ActiveInvokeChannel} has been closed.
    * @return 
    */
+  @Deprecated
   public InvocationBuilder<M, R> asDeferredResponse();
   /**
    * <p>By default, the {@link get()} blocks until the RETIRED ack is received (meaning that this message will NOT be
