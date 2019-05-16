@@ -18,16 +18,14 @@
  */
 package org.terracotta.connection;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class URIUtilsTest {
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
 
   @Test
   public void allowSingleServerURI() throws Exception {
@@ -44,29 +42,33 @@ public class URIUtilsTest {
   @Test
   public void preventSingleServerURIWithPath() throws Exception {
     URI uri = new URI("terracotta://server:1234/path");
-    expectedException.expect(URISyntaxException.class);
-    URIUtils.validateTerracottaURI(uri);
+    assertThrows(URISyntaxException.class, () -> {
+      URIUtils.validateTerracottaURI(uri);
+    });
   }
 
   @Test
   public void preventSingleServerURIWithEmptyQuery() throws Exception {
     URI uri = new URI("terracotta://server:1234?");
-    expectedException.expect(URISyntaxException.class);
-    URIUtils.validateTerracottaURI(uri);
+    assertThrows(URISyntaxException.class, () -> {
+      URIUtils.validateTerracottaURI(uri);
+    });
   }
 
   @Test
   public void preventSingleServerURIWithQuery() throws Exception {
     URI uri = new URI("terracotta://server:1234?abc=def");
-    expectedException.expect(URISyntaxException.class);
-    URIUtils.validateTerracottaURI(uri);
+    assertThrows(URISyntaxException.class, () -> {
+      URIUtils.validateTerracottaURI(uri);
+    });
   }
 
   @Test
   public void preventSingleServerURIWithFragment() throws Exception {
     URI uri = new URI("terracotta://server:1234#fragment");
-    expectedException.expect(URISyntaxException.class);
-    URIUtils.validateTerracottaURI(uri);
+    assertThrows(URISyntaxException.class, () -> {
+      URIUtils.validateTerracottaURI(uri);
+    });
   }
 
   @Test
@@ -84,7 +86,8 @@ public class URIUtilsTest {
   @Test
   public void preventMultiServerURIWithPath() throws Exception {
     URI uri = new URI("terracotta://server1:1234,server2:5678/path");
-    expectedException.expect(URISyntaxException.class);
-    URIUtils.validateTerracottaURI(uri);
+    assertThrows(URISyntaxException.class, () -> {
+      URIUtils.validateTerracottaURI(uri);
+    });
   }
 }

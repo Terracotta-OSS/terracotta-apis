@@ -5,12 +5,16 @@
  */
 package org.terracotta.exception;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  *
@@ -21,19 +25,19 @@ public class RuntimeEntityExceptionTest {
   public RuntimeEntityExceptionTest() {
   }
   
-  @BeforeClass
+  @BeforeAll
   public static void setUpClass() {
   }
   
-  @AfterClass
+  @AfterAll
   public static void tearDownClass() {
   }
   
-  @Before
+  @BeforeEach
   public void setUp() {
   }
   
-  @After
+  @AfterEach
   public void tearDown() {
   }
 
@@ -44,8 +48,8 @@ public class RuntimeEntityExceptionTest {
   public void testEntityInfoNotProvided() {
     String description = "this is a test";
     RuntimeEntityExceptionImpl impl = new RuntimeEntityExceptionImpl(null, null, description);
-    Assert.assertEquals(description, impl.getMessage());
-    Assert.assertEquals(description, impl.getDescription());
+    assertEquals(description, impl.getMessage());
+    assertEquals(description, impl.getDescription());
   }
 
     /**
@@ -57,11 +61,11 @@ public class RuntimeEntityExceptionTest {
     String clz = "org.terracotta.SuperEntity";
     String name =  "test";
     RuntimeEntityExceptionImpl impl = new RuntimeEntityExceptionImpl(clz, name, description);
-    Assert.assertNotEquals(description, impl.getMessage());
-    Assert.assertEquals(clz, impl.getClassName());
-    Assert.assertEquals(name, impl.getEntityName());
-    Assert.assertTrue(impl.getMessage().contains(clz));
-    Assert.assertTrue(impl.getMessage().contains(name));
+    assertNotEquals(description, impl.getMessage());
+    assertEquals(clz, impl.getClassName());
+    assertEquals(name, impl.getEntityName());
+    assertTrue(impl.getMessage().contains(clz));
+    assertTrue(impl.getMessage().contains(name));
   }
 
   public class RuntimeEntityExceptionImpl extends RuntimeEntityException {
