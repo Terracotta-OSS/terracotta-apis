@@ -55,6 +55,8 @@ public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityR
    */
   InvocationBuilder<M, R> beginInvoke();
 
+  AsyncInvocationBuilder<M, R> beginAsyncInvoke();
+
   /**
    * The instance will be unusable after this call.
    */
