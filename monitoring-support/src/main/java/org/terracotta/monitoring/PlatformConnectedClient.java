@@ -38,12 +38,17 @@ public class PlatformConnectedClient implements Serializable {
   public long clientPID;
   public String uuid;
   public String name;
+  public String version;
 
   public PlatformConnectedClient() {
     // For Serializable.
   }
 
   public PlatformConnectedClient(String uuid, String name, InetAddress localAddress, int localPort, InetAddress remoteAddress, int remotePort, long clientPID) {
+    this(uuid, name, localAddress, localPort, remoteAddress, remotePort, clientPID, "UNKNOWN");
+  }
+
+  public PlatformConnectedClient(String uuid, String name, InetAddress localAddress, int localPort, InetAddress remoteAddress, int remotePort, long clientPID, String version) {
     this.uuid = uuid;
     this.name = name;
     this.localAddress = localAddress;
@@ -51,6 +56,7 @@ public class PlatformConnectedClient implements Serializable {
     this.remoteAddress = remoteAddress;
     this.remotePort = remotePort;
     this.clientPID = clientPID;
+    this.version = version;
   }
 
   @Override
@@ -63,6 +69,7 @@ public class PlatformConnectedClient implements Serializable {
     sb.append(", remotePort=").append(remotePort);
     sb.append(", uuid='").append(uuid).append('\'');
     sb.append(", name='").append(name).append('\'');
+    sb.append(", version='").append(version).append('\'');
     sb.append('}');
     return sb.toString();
   }
@@ -75,7 +82,8 @@ public class PlatformConnectedClient implements Serializable {
         ^ remotePort
         ^ (int)clientPID
         ^ this.uuid.hashCode()
-        ^ this.name.hashCode();
+        ^ this.name.hashCode()
+        ^ this.version.hashCode();
   }
 
   @Override
@@ -90,7 +98,8 @@ public class PlatformConnectedClient implements Serializable {
           && (this.remotePort == that.remotePort)
           && (this.clientPID == that.clientPID)
           && this.uuid.equals(that.uuid)
-          && this.name.equals(that.name);
+          && this.name.equals(that.name)
+          && this.version.equals(that.version);
     }
     return doesMatch;
   }
