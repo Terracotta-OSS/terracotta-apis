@@ -19,11 +19,15 @@
 package org.terracotta.entity;
 
 
+import java.util.concurrent.TimeUnit;
+
 public interface AsyncInvocationBuilder<M extends EntityMessage, R extends EntityResponse> {
 
   AsyncInvocationBuilder<M, R> replicate(boolean requiresReplication);
 
   AsyncInvocationBuilder<M, R> message(M message);
+
+  AsyncInvocationBuilder<M, R> blockEnqueuing(long time, TimeUnit unit);
 
   void invoke(InvocationCallback<R> callback);
 }
