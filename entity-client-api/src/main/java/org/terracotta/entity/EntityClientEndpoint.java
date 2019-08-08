@@ -47,7 +47,7 @@ public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityR
   void setDelegate(EndpointDelegate<R> delegate);
 
   /**
-   * Called to start formulating an invocation to send to the remote server-side entity.
+   * Called to start formulating an invocation to send to the remote server-side entity in a synchronous way.
    * Note that this doesn't actually send the invocation.  That is done by the returned InvocationBuilder instance, once the
    * invocation is fully formed.
    * 
@@ -55,6 +55,13 @@ public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityR
    */
   InvocationBuilder<M, R> beginInvoke();
 
+  /**
+   * Called to start formulating an invocation to send to the remote server-side entity in an asynchronous way.
+   * Note that this doesn't actually send the invocation.  That is done by the returned AsyncInvocationBuilder instance,
+   * once the invocation is fully formed.
+   *
+   * @return An AsyncInvocationBuilder instance to build a new invocation to send to the server-side instance
+   */
   AsyncInvocationBuilder<M, R> beginAsyncInvoke();
 
   /**
