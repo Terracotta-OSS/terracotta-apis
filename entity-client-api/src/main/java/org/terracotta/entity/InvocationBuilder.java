@@ -64,7 +64,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * 
    * <p>This method is not of use to most applications.</p>
    * 
-   * @return Itself
+   * @return this
    */
   public InvocationBuilder<M, R> ackSent();
 
@@ -77,7 +77,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * 
    * <p>This method is important for applications which need more direct visibility into global message ordering.</p>
    * 
-   * @return Itself
+   * @return this
    */
   public InvocationBuilder<M, R> ackReceived();
 
@@ -90,7 +90,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * <p>This method is not of use to most applications since configuring and using {@link InvokeFuture#get()} is
    * generally more useful and descriptive.</p>
    * 
-   * @return Itself
+   * @return this
    */
   public InvocationBuilder<M, R> ackCompleted();
 
@@ -102,7 +102,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * <p>This method is not of use to most applications since configuring and using {@link InvokeFuture#get()} is
    * generally more useful and descriptive (by default, it blocks until RETIRED).</p>
    * 
-   * @return Itself
+   * @return this
    */
   public InvocationBuilder<M, R> ackRetired();
 
@@ -115,7 +115,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * message flow.</p>
    * 
    * @param requiresReplication True if the message should be replicated, false otherwise
-   * @return Itself
+   * @return this
    */
   public InvocationBuilder<M, R> replicate(boolean requiresReplication);
 
@@ -123,7 +123,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * <p>Sets the message of the invocation.</p>
    * 
    * @param message A high-level {@link EntityMessage}
-   * @return Itself
+   * @return this
    */
   public InvocationBuilder<M, R> message(M message);
   /**
@@ -131,7 +131,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * can be sent by the server to the client via {@link org.terracotta.entity.ActiveInvokeChannel#sendResponse(EntityResponse)}.
    * This handler is used to process those extra responses
    * @param consumer a Response handler for the invocation
-   * @return Itself
+   * @return this
    */
   public InvocationBuilder<M, R> monitor(InvokeMonitor<R> consumer);
   /**
@@ -141,7 +141,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * handler or deadlock can occur.  Use the executor to specify the threading behavior for 
    * callback delivery.
    * @param useForMonitorDelivery Executor used for InvokeMonitor response delivery
-   * @return 
+   * @return this
    */
   public InvocationBuilder<M, R> withExecutor(Executor useForMonitorDelivery);
   /**
@@ -160,7 +160,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * server invoke will be returned via {@link InvokeFuture#get()}.  Consider using 
    * {@link #blockGetOnRetire(boolean)} if it is desired to have {@link InvokeFuture#get()}  
    * return only after the {@link org.terracotta.entity.ActiveInvokeChannel} has been closed.
-   * @return 
+   * @return this
    */
   @Deprecated
   public InvocationBuilder<M, R> asDeferredResponse();
@@ -193,7 +193,7 @@ public interface InvocationBuilder<M extends EntityMessage, R extends EntityResp
    * 
    * @param shouldBlock True if the get() should block on RETIRE (the default), false if it should only block on the
    * first COMPLETED ack.
-   * @return Itself
+   * @return this
    */
   public InvocationBuilder<M, R> blockGetOnRetire(boolean shouldBlock);
 
