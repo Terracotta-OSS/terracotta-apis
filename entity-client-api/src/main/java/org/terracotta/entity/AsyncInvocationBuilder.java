@@ -39,7 +39,7 @@ public interface AsyncInvocationBuilder<M extends EntityMessage, R extends Entit
    * <p>If this method call is omitted from builder, the default behavior is to replicate the message.</p>
    *
    * @param requiresReplication True if the message should be replicated, false otherwise
-   * @return Itself
+   * @return this
    */
   AsyncInvocationBuilder<M, R> replicate(boolean requiresReplication);
 
@@ -47,15 +47,17 @@ public interface AsyncInvocationBuilder<M extends EntityMessage, R extends Entit
    * <p>Sets the message of the invocation.</p>
    *
    * @param message A high-level {@link EntityMessage}
-   * @return Itself
+   * @return this
    */
   AsyncInvocationBuilder<M, R> message(M message);
 
   /**
-   * <p>Block the {@link #invoke(InvocationCallback)} call until the message was enqueued or until timeout.</p>
+   * <p>Block the {@link #invoke(InvocationCallback)} call until the message was enqueued or until timeout.
+   * By default, the enqueuing does not block which makes {@link #invoke(InvocationCallback)} throw
+   * {@link RejectedExecutionException} when the send queue is full.</p>
    * @param time the timeout value.
    * @param unit the timeout unit.
-   * @return Itself
+   * @return this
    */
   AsyncInvocationBuilder<M, R> blockEnqueuing(long time, TimeUnit unit);
 
