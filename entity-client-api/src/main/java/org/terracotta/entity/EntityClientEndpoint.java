@@ -62,7 +62,9 @@ public interface EntityClientEndpoint<M extends EntityMessage, R extends EntityR
    *
    * @return An AsyncInvocationBuilder instance to build a new invocation to send to the server-side instance
    */
-  AsyncInvocationBuilder<M, R> beginAsyncInvoke();
+  default AsyncInvocationBuilder<M, R> beginAsyncInvoke() {
+    throw new UnsupportedOperationException("async not supported");
+  }
 
   /**
    * The instance will be unusable after this call.
