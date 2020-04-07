@@ -36,6 +36,8 @@ public interface ExecutionStrategy<M extends EntityMessage> {
       }
     }, BOTH {
 
+    }, ALL {
+
     }, NONE {
       @Override
       public boolean runOnActive() {
