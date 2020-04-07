@@ -20,7 +20,6 @@ package org.terracotta.monitoring;
 
 import java.io.Serializable;
 
-import com.tc.classloader.CommonComponent;
 import org.terracotta.entity.ClientDescriptor;
 
 
@@ -30,7 +29,6 @@ import org.terracotta.entity.ClientDescriptor;
  * WARNING:  The clientDescriptor is marked as transient since it can't be meaningfully deserialized and the cases where this
  *  object will be used are also cases where it won't be serialized.  Be careful of using this object in these other cases.
  */
-@CommonComponent
 public class PlatformClientFetchedEntity implements Serializable {
   private static final long serialVersionUID = 4741752382657834201L;
 

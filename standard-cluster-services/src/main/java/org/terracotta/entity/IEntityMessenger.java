@@ -18,7 +18,6 @@
  */
 package org.terracotta.entity;
 
-import com.tc.classloader.CommonComponent;
 import java.util.function.Consumer;
 
 
@@ -29,7 +28,6 @@ import java.util.function.Consumer;
  * @param <M>
  * @param <R>
  */
-@CommonComponent
 public interface IEntityMessenger<M extends EntityMessage, R extends EntityResponse> {
   /**
    * Sends a message to delete the entity.  This method should be called from the 

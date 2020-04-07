@@ -20,8 +20,6 @@ package org.terracotta.monitoring;
 
 import java.io.Serializable;
 
-import com.tc.classloader.CommonComponent;
-
 
 /**
  * The interface exposed by a monitoring service, allowing entities to push statistics and structured data which can be
@@ -33,7 +31,6 @@ import com.tc.classloader.CommonComponent;
  * Note that the values used in these methods must be Serializable since the implementation may need to send them over a
  *  wire.
  */
-@CommonComponent
 public interface IMonitoringProducer {
   /**
    * Adds a node to the internal data registry tree or replaces an existing one.

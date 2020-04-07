@@ -20,10 +20,8 @@ package org.terracotta.monitoring;
 
 import java.io.Serializable;
 
-import com.tc.classloader.CommonComponent;
 
 
-@CommonComponent
 public class PlatformServer implements Serializable {
   private static final long serialVersionUID = 6603745920231301851L;
 

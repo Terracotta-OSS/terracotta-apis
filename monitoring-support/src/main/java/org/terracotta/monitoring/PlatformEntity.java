@@ -20,13 +20,10 @@ package org.terracotta.monitoring;
 
 import java.io.Serializable;
 
-import com.tc.classloader.CommonComponent;
-
 
 /**
  * A type which describes an entity in the stripe.
  */
-@CommonComponent
 public class PlatformEntity implements Serializable {
   private static final long serialVersionUID = 8775531936321210074L;
 

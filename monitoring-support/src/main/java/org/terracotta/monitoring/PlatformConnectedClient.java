@@ -21,13 +21,10 @@ package org.terracotta.monitoring;
 import java.io.Serializable;
 import java.net.InetAddress;
 
-import com.tc.classloader.CommonComponent;
-
 
 /**
  * A type which describes a client connected to the server.
  */
-@CommonComponent
 public class PlatformConnectedClient implements Serializable {
   private static final long serialVersionUID = -8750564835447846768L;
 

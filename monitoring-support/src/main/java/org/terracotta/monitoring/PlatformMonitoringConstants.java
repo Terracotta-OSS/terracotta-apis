@@ -18,15 +18,12 @@
  */
 package org.terracotta.monitoring;
 
-import com.tc.classloader.CommonComponent;
-
 
 /**
  * Constants associated with the data that a platform implementation is expected to provide via the IMonitoringProducer
  * interface.
  * These constants refer to the places in the tree where platform data is registered.
  */
-@CommonComponent
 public class PlatformMonitoringConstants {
   /**
    * The name of the top-level node in the tree, used for reporting platform data.
