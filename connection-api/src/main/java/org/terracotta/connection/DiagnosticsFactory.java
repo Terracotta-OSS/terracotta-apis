@@ -39,9 +39,9 @@ public class DiagnosticsFactory {
     if (props == null) {
       props = new Properties();
     }
+    props.setProperty(ConnectionPropertyNames.CONNECTION_TYPE, "diagnostic");
+    Connection connection = ConnectionFactory.connect(Collections.singleton(server), props);
     try {
-      props.setProperty(ConnectionPropertyNames.CONNECTION_TYPE, "diagnostic");
-      Connection connection = ConnectionFactory.connect(Collections.singleton(server), props);
       EntityRef<Diagnostics, Object, DiagnosticsConfig> d = connection.getEntityRef(Diagnostics.class, 1L, "root");
       Diagnostics handle = d.fetchEntity(new DiagnosticsConfig(props, ()->{
         try {
@@ -52,6 +52,11 @@ public class DiagnosticsFactory {
       }));
       return handle;
     } catch (EntityNotProvidedException | EntityNotFoundException | EntityVersionMismatchException e) {
+      try {
+        connection.close();
+      } catch (IOException c) {
+        throw new RuntimeException(c);
+      }
       throw new ConnectionException(e);
     }
   };

@@ -20,7 +20,7 @@ package org.terracotta.entity;
 
 /**
  *  ExecutionStrategy helps the stripe determine if a particular message should 
- *  be executed on the active server, passive server or both
+ *  be executed on the active server, passive server or both (all servers is a synonym to both)
  */
 public interface ExecutionStrategy<M extends EntityMessage> {
   enum Location {
@@ -34,9 +34,9 @@ public interface ExecutionStrategy<M extends EntityMessage> {
       public boolean runOnActive() {
         return false;
       }
-    }, BOTH {
+    }, BOTH { // execute on both the active and passive server
 
-    }, ALL {
+    }, ALL {  // synonym to BOTH
 
     }, NONE {
       @Override
