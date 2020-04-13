@@ -16,21 +16,37 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-package com.tc.classloader;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.terracotta.server;
 
 /**
- * Tagging a ServiceProvider implementation class with BuildIn tells the platform 
- * runtime that this service provider should be loaded into the runtime with no configuration.
- * ServiceProviders loaded in this fashion must first be designated as a loadable ServiceProvider
- * using the normal ServiceLoader mechanism.  @see java.util.ServiceLoader
+ *
  */
-@Target( ElementType.TYPE )
-@Retention( RetentionPolicy.RUNTIME )
-public @interface BuiltinService {
+public class ServerEnv {
 
+  private static Server defaultServer;
+  private static final ThreadLocal<Server> threadServer = new ThreadLocal<>();
+
+  public static void setDefaultServer(Server server) {
+    defaultServer = server;
+  }
+
+  public static Server getDefaultServer() {
+    return defaultServer;
+  }
+  
+  public static Server getServer() {
+    Server s = threadServer.get();
+    if (s == null) {
+      if (defaultServer == null) {
+        throw new RuntimeException("no server has been set");
+      }
+      return defaultServer;
+    } else {
+      return s;
+    }
+  }
+
+  public static void setServer(Server server) {
+    threadServer.set(server);
+  }
 }

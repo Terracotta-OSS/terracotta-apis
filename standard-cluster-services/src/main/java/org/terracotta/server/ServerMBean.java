@@ -16,24 +16,24 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-package com.tc.classloader;
+package org.terracotta.server;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 
 /**
- * Tagging a Service type with an override causes the classloader to ignore the 
- * overridden types for the type provided.  The value is a fully qualified class name 
- * which is to be overridden.
- * 
+ *
  */
-@Target( ElementType.TYPE )
-@Retention( RetentionPolicy.RUNTIME )
-@Repeatable( OverrideServices.class )
-public @interface OverrideService {
-  String[] types() default {};
-  String value() default "";
+public interface ServerMBean {
+
+  public static ObjectName createMBeanName(String name) throws MalformedObjectNameException {
+    return createMBeanName("org.terracotta", name);
+  }
+
+  public static ObjectName createMBeanName(String domain, String name) throws MalformedObjectNameException {
+    final StringBuilder objName = new StringBuilder(domain);
+    objName.append(':');
+    objName.append("name=").append(name);
+    return new ObjectName(objName.toString());
+  }
 }

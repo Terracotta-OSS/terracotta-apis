@@ -10,7 +10,7 @@
  *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  *  the specific language governing rights and limitations under the License.
  *
- *  The Covered Software is Terracotta Core.
+ *  The Covered Software is Terracotta API.
  *
  *  The Initial Developer of the Covered Software is
  *  Terracotta, Inc., a Software AG company
@@ -20,10 +20,8 @@ package org.terracotta.monitoring;
 
 import java.io.Serializable;
 
-import com.tc.classloader.CommonComponent;
 
 
-@CommonComponent
 public class PlatformServer implements Serializable {
   private static final long serialVersionUID = 6603745920231301851L;
 

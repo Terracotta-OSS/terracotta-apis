@@ -16,24 +16,10 @@
  *  Terracotta, Inc., a Software AG company
  *
  */
-package com.tc.classloader;
+package org.terracotta.entity;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.terracotta.connection.entity.Entity;
 
-/**
- * Tagging a Service type with an override causes the classloader to ignore the 
- * overridden types for the type provided.  The value is a fully qualified class name 
- * which is to be overridden.
- * 
- */
-@Target( ElementType.TYPE )
-@Retention( RetentionPolicy.RUNTIME )
-@Repeatable( OverrideServices.class )
-public @interface OverrideService {
-  String[] types() default {};
-  String value() default "";
+public interface EndpointConnector {
+  <T extends Entity, C, M extends EntityMessage, R extends EntityResponse, U> T connect(EntityClientEndpoint<M, R> endpoint, EntityClientService<T, C, M, R, U> entityClientService, U userData);
 }

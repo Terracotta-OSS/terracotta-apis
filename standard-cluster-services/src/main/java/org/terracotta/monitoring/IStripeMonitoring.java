@@ -20,8 +20,6 @@ package org.terracotta.monitoring;
 
 import java.io.Serializable;
 
-import com.tc.classloader.CommonComponent;
-
 
 /**
  * The interface which must be implemented by a monitoring component in order to receive the data entities passed into
@@ -32,7 +30,6 @@ import com.tc.classloader.CommonComponent;
  * 
  * Note that the values used in these methods are Serializable since they may have come over the wire.
  */
-@CommonComponent
 public interface IStripeMonitoring {
   /**
    * Called when a server first becomes active to notify its IStripeMonitoring implementation that it will now start to

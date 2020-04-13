@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import com.tc.classloader.CommonComponent;
 
 
 /**
@@ -37,7 +36,6 @@ import com.tc.classloader.CommonComponent;
  *  provide naturally high-performance paths through otherwise generically-structured data, backed by a simple
  *  implementation.
  */
-@CommonComponent
 public interface IPlatformPersistence {
   /**
    * Returns the data previously stored for name or null if no such data was stored.

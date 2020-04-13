@@ -18,14 +18,12 @@
  */
 package org.terracotta.monitoring;
 
-import com.tc.classloader.CommonComponent;
 import java.io.InputStream;
 
 
 /**
  * A Service for entities to interact with Platform
  */
-@CommonComponent
 public interface PlatformService {
   /**
    * Dumps platform state into logs
@@ -90,6 +88,6 @@ public interface PlatformService {
   void stopPlatform(RestartMode restartMode);
 
   enum  RestartMode {
-    STOP_ONLY, STOP_AND_RESTART
+    STOP_ONLY, STOP_AND_RESTART, ZAP_AND_RESTART, ZAP_AND_STOP;
   }
 }

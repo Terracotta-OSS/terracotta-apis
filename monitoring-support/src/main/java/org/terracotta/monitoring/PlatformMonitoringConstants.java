@@ -10,7 +10,7 @@
  *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  *  the specific language governing rights and limitations under the License.
  *
- *  The Covered Software is Terracotta Core.
+ *  The Covered Software is Terracotta API.
  *
  *  The Initial Developer of the Covered Software is
  *  Terracotta, Inc., a Software AG company
@@ -18,15 +18,12 @@
  */
 package org.terracotta.monitoring;
 
-import com.tc.classloader.CommonComponent;
-
 
 /**
  * Constants associated with the data that a platform implementation is expected to provide via the IMonitoringProducer
  * interface.
  * These constants refer to the places in the tree where platform data is registered.
  */
-@CommonComponent
 public class PlatformMonitoringConstants {
   /**
    * The name of the top-level node in the tree, used for reporting platform data.
