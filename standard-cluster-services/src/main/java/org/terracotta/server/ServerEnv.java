@@ -37,6 +37,9 @@ public class ServerEnv {
   public static Server getServer() {
     Server s = threadServer.get();
     if (s == null) {
+      if (defaultServer == null) {
+        throw new RuntimeException("no server has been set");
+      }
       return defaultServer;
     } else {
       return s;
