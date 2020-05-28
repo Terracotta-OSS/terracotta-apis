@@ -124,6 +124,12 @@ public interface Server {
    */
   int getServerPort();
   /**
+   * hostname used to configure the server
+   * 
+   * @return 
+   */
+  String getServerHostName();
+  /**
    * length in seconds for the reconnect window.
    *
    * @return
@@ -177,6 +183,8 @@ public interface Server {
    * @return
    */
   Properties getCurrentChannelProperties();
+
+  void console(String message, Object...sub);
 
   void warn(String warning, Object...event);
 }
