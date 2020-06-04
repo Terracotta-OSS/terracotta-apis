@@ -23,6 +23,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.ServiceLoader;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Factory for generating connections to stripe.
@@ -40,6 +42,7 @@ public final class ConnectionFactory {
    * @return an established connection
    * @throws ConnectionException if there is an error while attempting to connect
    * @see #connect(Iterable, Properties)
+   * @see #connect(Supplier, Properties)
    */
   public static Connection connect(URI uri, Properties properties) throws ConnectionException {
     validateURI(uri);
@@ -63,9 +66,32 @@ public final class ConnectionFactory {
    * @return an established connection
    * @throws ConnectionException if there is an error while attempting to connect
    * @see #connect(URI, Properties)
+   * @see #connect(Supplier, Properties)
    */
   public static Connection connect(Iterable<InetSocketAddress> servers, Properties properties) throws ConnectionException {
     return getConnectionService(properties).connect(servers, properties);
+  }
+
+  /**
+   * Establishes a connection to the set of servers provided by the supplier using the given properties.
+   *
+   * <p>
+   * The method will attempt to look for the first suitable implementation of a {@link org.terracotta.connection.ConnectionService}
+   * based on whether or not it handles the given connection type. Connection type can be specified using
+   * {@code properties} argument with key name {@link ConnectionPropertyNames#CONNECTION_TYPE}
+   *
+   * <p>
+   * This connect variant adds support for dynamic topologies. {@code serverAddressesSupplier} should return the latest
+   * set of servers and should not block, it is used for getting the set of servers during initial connection and
+   * failover reconnect.
+   *
+   * @param serverAddressesSupplier supplier that provides a set of servers to establish connection
+   * @param properties any configurations to be applied (implementation specific), including a connection type
+   * @return an established connection
+   * @throws ConnectionException if there is an error while attempting to connect
+   */
+  public static Connection connect(Supplier<Set<InetSocketAddress>> serverAddressesSupplier, Properties properties) throws ConnectionException {
+    return getConnectionService(properties).connect(serverAddressesSupplier, properties);
   }
 
   private static void validateURI(URI uri) throws ConnectionException {

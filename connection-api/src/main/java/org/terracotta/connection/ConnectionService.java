@@ -24,6 +24,8 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Service for establishing connections. The expectation is that either of the two ways will be used:
@@ -80,21 +82,35 @@ public interface ConnectionService {
    * @throws ConnectionException on connection failure
    */
   default Connection connect(Iterable<InetSocketAddress> servers, Properties properties) throws ConnectionException {
-      StringBuilder b = new StringBuilder("terracotta://");
-      for (InetSocketAddress a : servers) {
-          b.append(a.getHostString());
-          b.append(':');
-          b.append(a.getPort());
-          b.append(',');
+    StringBuilder b = new StringBuilder("terracotta://");
+    for (InetSocketAddress a : servers) {
+      b.append(a.getHostString());
+      b.append(':');
+      b.append(a.getPort());
+      b.append(',');
+    }
+    try {
+      if (b.length() > 0) {
+        return connect(new URI(b.substring(0, b.length() - 1)), properties);
+      } else {
+        throw new ConnectionException(new IOException("no servers specified"));
       }
-      try {
-          if (b.length() > 0) {
-            return connect(new URI(b.substring(0, b.length()-1)), properties);
-          } else {
-              throw new ConnectionException(new IOException("no servers specified"));
-          }
-      } catch (URISyntaxException u) {
-          throw new ConnectionException(u);
-      }
+    } catch (URISyntaxException u) {
+      throw new ConnectionException(u);
+    }
+  }
+
+  /**
+   * Establishes a connection to the set of servers provided by the supplier using the given properties.
+   * handlesConnectionType() must be called with the type prior to connect(). Calling connect() on an unverified
+   * type can lead to unspecified behavior.
+   *
+   * @param serverAddressesSupplier supplier that provides a set of servers to establish connection
+   * @param properties user specified implementation specific properties
+   * @return established connection
+   * @throws ConnectionException on connection failure
+   */
+  default Connection connect(Supplier<Set<InetSocketAddress>> serverAddressesSupplier, Properties properties) throws ConnectionException {
+    return connect(serverAddressesSupplier.get(), properties);
   }
 }
