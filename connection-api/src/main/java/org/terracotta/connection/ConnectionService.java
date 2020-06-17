@@ -69,7 +69,9 @@ public interface ConnectionService {
    * @param properties user specified implementation specific properties  @return established connection
    * @return established connection
    * @throws ConnectionException on connection failure
+   * @deprecated use {@link #connect(Supplier, Properties)} instead
    */
+  @Deprecated
   Connection connect(URI uri, Properties properties) throws ConnectionException;
 
   /**
@@ -80,7 +82,9 @@ public interface ConnectionService {
    * @param properties user specified implementation specific properties
    * @return established connection
    * @throws ConnectionException on connection failure
+   * @deprecated use {@link #connect(Supplier, Properties)} instead
    */
+  @Deprecated
   default Connection connect(Iterable<InetSocketAddress> servers, Properties properties) throws ConnectionException {
     StringBuilder b = new StringBuilder("terracotta://");
     for (InetSocketAddress a : servers) {

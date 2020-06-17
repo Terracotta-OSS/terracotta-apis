@@ -43,7 +43,9 @@ public final class ConnectionFactory {
    * @throws ConnectionException if there is an error while attempting to connect
    * @see #connect(Iterable, Properties)
    * @see #connect(Supplier, Properties)
+   * @deprecated use {@link #connect(Supplier, Properties)} instead
    */
+  @Deprecated
   public static Connection connect(URI uri, Properties properties) throws ConnectionException {
     validateURI(uri);
     return getConnectionService(uri).connect(uri, properties);
@@ -67,7 +69,9 @@ public final class ConnectionFactory {
    * @throws ConnectionException if there is an error while attempting to connect
    * @see #connect(URI, Properties)
    * @see #connect(Supplier, Properties)
+   * @deprecated use {@link #connect(Supplier, Properties)} instead
    */
+  @Deprecated
   public static Connection connect(Iterable<InetSocketAddress> servers, Properties properties) throws ConnectionException {
     return getConnectionService(properties).connect(servers, properties);
   }
