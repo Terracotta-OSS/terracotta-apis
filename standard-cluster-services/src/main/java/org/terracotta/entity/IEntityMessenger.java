@@ -36,6 +36,12 @@ public interface IEntityMessenger<M extends EntityMessage, R extends EntityRespo
    */
   void destroySelf();
   /**
+   * Sends a message to reconfigure the entity.  This method should be called from the
+   * {@link org.terracotta.entity.ActiveServerEntity#disconnected(org.terracotta.entity.ClientDescriptor) disconnected}
+   * body or it will fail due to client references still on the entity.
+   */
+  void reconfigureSelf(byte[] configuration);
+  /**
    * Same as the messageSelf will no callback.
    * 
    * @param message
