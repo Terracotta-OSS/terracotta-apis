@@ -30,6 +30,14 @@ import java.util.function.Consumer;
  */
 public interface IEntityMessenger<M extends EntityMessage, R extends EntityResponse> {
   /**
+   * Sends a message to create an unrelated entity.
+   * @param type string representation of the type of entity to be created
+   * @param name name of the entity
+   * @param version version of the entity
+   * @param configuration configuration of the entity
+   */
+  void create(String type, String name, long version, byte[] configuration);
+  /**
    * Sends a message to delete the entity.  This method should be called from the 
    * {@link org.terracotta.entity.ActiveServerEntity#disconnected(org.terracotta.entity.ClientDescriptor) disconnected}
    * body or it will fail due to client references still on the entity.
