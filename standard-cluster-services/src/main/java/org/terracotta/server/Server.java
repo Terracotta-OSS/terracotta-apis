@@ -183,8 +183,22 @@ public interface Server {
    * @return
    */
   Properties getCurrentChannelProperties();
-
+  /**
+   * log messages to the console of the server
+   * @param message message to send
+   * @param sub additional parameters
+   */
   void console(String message, Object...sub);
-
+  /**
+   * log messages to the warning of the server
+   * @param warning message to send
+   * @param event additional parameters
+   */
   void warn(String warning, Object...event);
+  /**
+   * log messages to the auditing of the server
+   * @param message message to send
+   * @param event additional parameters
+   */
+  void audit(String message, Properties additionalIdInfo);
 }
