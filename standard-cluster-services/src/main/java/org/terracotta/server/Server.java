@@ -138,9 +138,9 @@ public interface Server {
   /**
    * Wait for this server to shutdown.
    *
-   * @return
+   * @return true when the server should be restarted
    */
-  void waitUntilShutdown();
+  boolean waitUntilShutdown();
   /**
    * write the current cluster state to the logs.
    *

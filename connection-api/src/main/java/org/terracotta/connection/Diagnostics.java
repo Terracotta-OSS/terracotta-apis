@@ -36,6 +36,8 @@ public interface Diagnostics extends Entity, AutoCloseable {
 
   String terminateServer();
 
+  String restartServer();
+
   String forceTerminateServer();
 
   String get(String name, String attribute);
