@@ -43,4 +43,9 @@ public interface Connection extends Closeable {
    * @throws EntityNotProvidedException There is no client-side service providing entities of type T
    */
   <T extends Entity, C, U> EntityRef<T, C, U> getEntityRef(Class<T> cls, long version, String name) throws EntityNotProvidedException;
+  /**
+   *
+   * @return true if the connection is valid to remote resources
+   */
+  boolean isValid();
 }
