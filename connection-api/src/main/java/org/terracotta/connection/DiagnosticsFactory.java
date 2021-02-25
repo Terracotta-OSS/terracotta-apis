@@ -40,6 +40,8 @@ public class DiagnosticsFactory {
       props = new Properties();
     }
     props.setProperty(ConnectionPropertyNames.CONNECTION_TYPE, "diagnostic");
+    // try connection direct and only once
+    props.setProperty(ConnectionPropertyNames.CONNECTION_TIMEOUT, "-1");
     Connection connection = ConnectionFactory.connect(Collections.singleton(server), props);
     try {
       EntityRef<Diagnostics, Object, DiagnosticsConfig> d = connection.getEntityRef(Diagnostics.class, 1L, "root");

@@ -121,4 +121,9 @@ public interface EntityRef<T extends Entity, C, U> {
    * @return name
    */
   String getName();
+
+  /**
+   * @return true if reference is valid to remote resource
+   */
+  boolean isValid();
 }
