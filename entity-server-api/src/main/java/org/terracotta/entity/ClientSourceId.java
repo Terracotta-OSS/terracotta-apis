@@ -21,7 +21,7 @@ package org.terracotta.entity;
 /**
  * Represents a client, which may have multiple ClientDescriptors being used through it.
  * Implementations are required to implement equals()/hashcode() properly, and equality
- * of the opaque long must be equivalent to the equality of the instance objects. 
+ * of the opaque long must be equivalent to the equality of the instance objects.
  */
 public interface ClientSourceId {
   /**
@@ -29,6 +29,13 @@ public interface ClientSourceId {
    * @return long
    */
   long toLong();
+
+  /**
+   *
+   * @return true if this is a valid client reference and not associated with
+   * a server initiated request
+   */
+  boolean isValidClient();
 
   /**
    * Whether a specific ClientDescriptor is tied to this ClientSource

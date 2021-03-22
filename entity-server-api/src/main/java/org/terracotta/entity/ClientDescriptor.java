@@ -34,4 +34,10 @@ public interface ClientDescriptor {
    * @return
    */
   ClientSourceId getSourceId();
+  /**
+   *
+   * @return true if the @see ClientSourceId associated with this descriptor is a valid
+   * remote client and not associated with a server call
+   */
+  boolean isValidClient();
 }
