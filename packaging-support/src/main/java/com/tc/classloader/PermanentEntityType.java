@@ -34,7 +34,6 @@ import java.lang.annotation.Target;
 @Repeatable( PermanentEntityTypes.class )
 public @interface PermanentEntityType {
   Class<?> type();
-  String[] names() default {};
-  String name() default "";
+  String name();
   int version() default 1;
 }
