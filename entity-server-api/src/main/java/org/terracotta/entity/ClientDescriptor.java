@@ -18,8 +18,6 @@
  */
 package org.terracotta.entity;
 
-import java.io.Serializable;
-
 /**
  * An opaque token representing a specific entity instance on a specific client node.
  * This is used by server-side code to specifically communicate with or track connection
@@ -39,5 +37,7 @@ public interface ClientDescriptor {
    * @return true if the @see ClientSourceId associated with this descriptor is a valid
    * remote client and not associated with a server call
    */
-  boolean isValidClient();
+  default boolean isValidClient() {
+    return getSourceId().isValidClient();
+  }
 }

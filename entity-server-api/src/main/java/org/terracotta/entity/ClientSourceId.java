@@ -25,6 +25,11 @@ package org.terracotta.entity;
  */
 public interface ClientSourceId {
   /**
+   * invalid clients are negative numbers
+   */
+
+  long NULL_ID = -1L;
+  /**
    * Opaque long representation of this source.
    * @return long
    */
@@ -35,7 +40,9 @@ public interface ClientSourceId {
    * @return true if this is a valid client reference and not associated with
    * a server initiated request
    */
-  boolean isValidClient();
+  default boolean isValidClient() {
+    return toLong() > NULL_ID;
+  }
 
   /**
    * Whether a specific ClientDescriptor is tied to this ClientSource
