@@ -22,5 +22,5 @@ package org.terracotta.server;
  *
  */
 public enum StopAction {
-  ZAP,RESTART;
+  ZAP,RESTART,IMMEDIATE;
 }
