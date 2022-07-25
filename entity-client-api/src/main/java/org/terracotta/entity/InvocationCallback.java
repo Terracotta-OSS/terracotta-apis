@@ -11,6 +11,12 @@ package org.terracotta.entity;
  */
 public interface InvocationCallback<R> {
 
+  enum Types {
+    SENT, RECEIVED,
+    RESULT, FAILURE,
+    COMPLETE, RETIRED
+  }
+
   /**
    * <b>SENT</b> means that a message has become "in-flight", meaning that it will be re-sent in the event of a
    * server restart or fail-over to passive. Note that this message is not generally useful to applications.
