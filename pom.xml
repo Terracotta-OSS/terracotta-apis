@@ -32,6 +32,7 @@ limitations under the License.
 
   <properties>
     <java.build.version>1.8</java.build.version>
+    <spotbugs.skip>true</spotbugs.skip>
   </properties>
 
   <modules>

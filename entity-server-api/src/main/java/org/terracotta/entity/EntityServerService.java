@@ -78,6 +78,7 @@ public interface EntityServerService<M extends EntityMessage, R extends EntityRe
    * @return An entity instance influenced by the new configuration
    * @throws org.terracotta.entity.ConfigurationException
    */
+  @SuppressWarnings("unchecked")
   default <AP extends CommonServerEntity<M, R>> AP reconfigureEntity(ServiceRegistry registry, AP oldEntity, byte[] configuration) throws ConfigurationException {
     if (oldEntity instanceof PassiveServerEntity) {
       return (AP)createPassiveEntity(registry, configuration);
